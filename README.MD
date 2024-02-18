@@ -9,7 +9,7 @@ This blog is hosted on [Vercel](https://vercel.com/), built with [Next.js](https
 
 [![Next][Next.js]][Next-url] [![MDX][MDX]][MDX-url] [![Vercel][Vercel]][Vercel-url] [![React][React]][React-url] [![Typescript][Typescript]][Typescript-url] [![Tailwind CSS][Tailwind CSS]][Tailwind CSS-url] 
 
-This blog site takes inspiration from . I appreciate  and [Timothy Lin](https://twitter.com/timlrxx) for their contribution to this minimal, lightweight, and highly customizable blog starter.
+This blog site takes inspiration from [Karhdo](https://github.com/Karhdo/karhdo.dev). I appreciate [Karhdo](https://github.com/Karhdo) and [Timothy Lin](https://twitter.com/timlrxx) for their contribution to this minimal, lightweight, and highly customizable blog starter.
 
 ## Image Credits
 

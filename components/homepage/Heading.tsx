@@ -5,10 +5,10 @@ import { Twemoji } from '@/components/Twemoji';
 const Heading = () => {
   return (
     <h1 className="font-medium text-neutral-900 dark:text-neutral-200">
-      I'm <span>{siteMetadata.fullName}</span> - a dedicated <span>Fullstack Engineer</span> in{' '}
-      <span className="hidden">Ho Chi Minh, VN</span>
+      Namaku <span>{siteMetadata.fullName}</span> - seorang <span>mahasiswa</span> di{' '}
+      <span className="hidden">Bogor, Indonesia</span>
       <span className="absolute ml-1.5 inline-flex pt-[3px]">
-        <Twemoji emoji="viet-nam-vietnam-flag" />
+        <Twemoji emoji="indonesia-flag" />
       </span>
     </h1>
   );

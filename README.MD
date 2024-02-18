@@ -1,5 +1,5 @@
 <h1 align="center">Raihanpk.com</h1>
-<p align="center"><i>My desire to practice my skills and share my acquired knowledge fuels my endeavors.</i></p>
+<p align="center"><i></i></p>
 
 ## Website
 
@@ -13,9 +13,7 @@ This blog site takes inspiration from [Karhdo](https://github.com/Karhdo/karhdo.
 
 ## Image Credits
 
-The images utilized within this blog originate from [Unsplash](https://unsplash.com/), GIFs are sourced from [GIPHY](https://giphy.com/), and illustrations are from [Storyset](https://storyset.com/).
-
-Extending sincere thanks for these exceptional resources 🙏
+The images utilized within this blog originate from [Unsplash](https://unsplash.com/), GIFs are sourced from [GIPHY](https://giphy.com/), and icons are from [FontAwesome](https://fontawesome.com/).
 
 ---
 

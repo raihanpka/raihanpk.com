@@ -65,14 +65,12 @@ export default function Home({ posts }: InferGetStaticPropsType<typeof getStatic
             <BlogLinks />
             <SpotifyNowPlaying />
             <p className="flex">
-              <span className="mr-2">Happy reading</span>
+              <span className="mr-2">Selamat membaca</span>
               <Twemoji emoji="clinking-beer-mugs" />
             </p>
           </div>
         </div>
       </div>
-
-      <PopularTags />
 
       {/* List all post */}
       <div className="divide-y divide-gray-200 dark:divide-gray-700">

@@ -7,14 +7,14 @@ import { PageSEO } from '@/components/SEO';
 export default function Projects() {
   const { title, headerTitle } = siteMetadata;
 
-  const description = 'My open-source side projects and stuff that I built with my colleagues at work';
+  const description = 'My side projects and stuff that I built with my colleagues at work';
 
-  const workProjects = projectsData.filter(({ type }) => type === 'work');
+  const workProjects = projectsData.filter(({ type }) => type === 'other');
   const sideProjects = projectsData.filter(({ type }) => type === 'self');
 
   return (
     <>
-      <PageSEO title={`Projects - ${headerTitle} - ${title}`} description={description} />
+      <PageSEO title={`Projects - ${headerTitle} - ${title}`} />
 
       <div className="dark:divide-gray divide-y divide-gray-200">
         <div className="space-y-2 pb-8 pt-6 md:space-y-5">
@@ -26,7 +26,7 @@ export default function Projects() {
 
         <div className="container py-12">
           <h3 className="mb-4 text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100">
-            Work
+            Other
           </h3>
           <div className="-m-4 flex flex-wrap">
             {workProjects.map((project) => (

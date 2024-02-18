@@ -19,7 +19,7 @@ Extending sincere thanks for these exceptional resources 🙏
 
 ---
 
-<p align="center"><b>Copyright © 2023 - Do Trong Khanh (Karhdo)</b></p>
+<p align="center"><b>Copyright © 2023</b></p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->

@@ -45,7 +45,6 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
           <p className="prose mb-3 max-w-none text-gray-500 dark:text-gray-400">
             {repository?.description || description}
           </p>
-          
           {repository ? (
             <GithubRepo repo={repository} />
           ) : (

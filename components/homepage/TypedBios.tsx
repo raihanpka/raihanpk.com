@@ -30,11 +30,12 @@ const TypedBios = () => {
         <li>
           Aku juga tinggal di <b className="font-medium">Bogor, Jawa Barat</b>.
         </li>
-        <li>Aku sangat tertarik dengan dunia teknologi.</li>
+        <li>Aku tertarik dengan dunia teknologi sejak kecil.</li>
         <li>
           Bahasa pemrograman pertamaku adalah <b className="font-medium">JS</b>.
         </li>
         <li>Aku suka musik bergenre Jazz dan Pop.</li>
+        <li>Aku juga suka <Twemoji emoji="camera-with-flash" />.</li>
       </ul>
       <span ref={el} className="text-neutral-900 dark:text-neutral-200" />
     </div>

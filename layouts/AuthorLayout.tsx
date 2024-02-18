@@ -29,7 +29,7 @@ export default function AuthorLayout({ children, content }: Props) {
             About
           </h1>
           <p className="text-base text-gray-500 dark:text-gray-400 md:text-lg md:leading-7">
-            Further insights into who I am and the purpose of this blog.
+            Mengenal lebih lanjut tentang siapa saya dan tujuan dari blog ini.
           </p>
         </div>
 

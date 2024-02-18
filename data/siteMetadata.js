@@ -6,7 +6,7 @@ const siteMetadata = {
   author: 'Raihan Putra',
   fullName: 'Raihan Putra Kirana',
   headerTitle: "PK's Blog",
-  description: 'Keep your expectations low and you\'ll never be disappointed.',
+  description: 'Your thoughts shape your vision.',
   language: 'en-US',
   theme: 'system',
   siteUrl: 'https://raihanpk.com',

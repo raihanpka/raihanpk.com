@@ -4,9 +4,10 @@ const projectsData: Project[] = [
   {
     type: 'work',
     title: 'Buy me a coffee',
-    description: `Traktir saya kopi di sini. Bisa pakai Gopay, OVO, DANA, dan lainnya, loh.`,
+    description: 'Traktir saya kopi di sini. Bisa pakai Gopay, OVO, DANA, dan lainnya, loh.',
     imgSrc: '/static/images/buymeacoffee.png',
     url: 'https://sociabuzz.com/raihanpk/tribe',
+    builtWith: []
   },
 ];
 

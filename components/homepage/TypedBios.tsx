@@ -35,7 +35,9 @@ const TypedBios = () => {
           Bahasa pemrograman pertamaku adalah <b className="font-medium">JS</b>.
         </li>
         <li>Aku suka musik bergenre Jazz dan Pop.</li>
-        <li>Aku juga suka <Twemoji emoji="camera-with-flash" />.</li>
+        <li>
+          Aku juga suka <Twemoji emoji="camera-with-flash" />.
+        </li>
       </ul>
       <span ref={el} className="text-neutral-900 dark:text-neutral-200" />
     </div>

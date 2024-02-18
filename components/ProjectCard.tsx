@@ -45,19 +45,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
           <p className="prose mb-3 max-w-none text-gray-500 dark:text-gray-400">
             {repository?.description || description}
           </p>
-
-          <div className="mb-3 flex flex-wrap space-x-1.5">
-            <span className="shrink-0">Built with: </span>
-            {builtWith?.map((tool, index) => {
-              return (
-                <span key={index} className="font-semibold text-gray-600 dark:text-gray-300">
-                  {tool}
-                  {index !== builtWith.length - 1 && ','}
-                </span>
-              );
-            })}
-            .
-          </div>
+          
           {repository ? (
             <GithubRepo repo={repository} />
           ) : (

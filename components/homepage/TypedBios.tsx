@@ -25,17 +25,18 @@ const TypedBios = () => {
           Aku biasa dipanggil dengan sebutan <b className="font-medium">Han atau Peka</b>.
         </li>
         <li>
-          Aku tinggal di <b className="font-medium">Bogor, Indonesia</b>.
+          Aku lahir di <b className="font-medium">Bogor, Jawa Barat</b>.
         </li>
         <li>
-          Bahasa pemrograman yang pertama Aku pelajari adalah <b className="font-medium">JavaScript</b>.
+          Aku juga tinggal di <b className="font-medium">Bogor, Jawa Barat</b>.
         </li>
-        <li>Aku sangat tertarik dengan dunia teknologi.</li>
-        <li>
-          Aku suka mendengarkan musik Jazz dan Pop.
+        <li>Aku sangat tertarik dengan dunia teknologi.
         </li>
         <li>
-          Aku senang bermain game <Twemoji emoji="video-game" />, Pokemon dan RDR2 adalah game favoritku.
+          Bahasa pemrograman pertamaku adalah <b className="font-medium">JS</b>.
+        </li>
+        <li>
+          Aku suka musik bergenre Jazz dan Pop.
         </li>
       </ul>
       <span ref={el} className="text-neutral-900 dark:text-neutral-200" />

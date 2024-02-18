@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import Link from 'next/link';
 import type { Authors } from 'contentlayer/generated';
-import { Mail, Linkedin, Github, Twitter } from 'lucide-react';
+import { Mail, Linkedin, Github, Twitter, Instagram } from 'lucide-react';
 
 import siteMetadata from '@/data/siteMetadata';
 import Image from '@/components/Image';
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function AuthorLayout({ children, content }: Props) {
-  const { name, avatar, occupation, company, email, twitter, linkedin, github } = content;
+  const { name, avatar, occupation, company, email, twitter, linkedin, github, instagram } = content;
 
   const { title, headerTitle } = siteMetadata;
 
@@ -53,6 +53,9 @@ export default function AuthorLayout({ children, content }: Props) {
               </Link>
               <Link href={twitter} target="_blank">
                 <Twitter size={24} strokeWidth={1} />
+              </Link>
+              <Link href={instagram} target="_blank">
+                <Instagram size={24} strokeWidth={1} />
               </Link>
             </div>
           </div>

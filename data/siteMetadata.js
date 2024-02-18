@@ -2,19 +2,20 @@
 /** @type {import("pliny/config").PlinyConfig } */
 
 const siteMetadata = {
-  title: "Raihan PK",
+  title: "Raihan Digital Home",
   author: 'Raihan Putra',
   fullName: 'Raihan Putra Kirana',
   headerTitle: "PK's Blog",
   description: 'Keep your expectations low and you\'ll never be disappointed.',
-  language: 'id-ID',
+  language: 'en-US',
   theme: 'system',
   siteUrl: 'https://raihanpk.com',
   analyticsURL:
-    "https://cloud.umami.is/share/0iIEFvXLr8JDtJX0/raihanpk.com",
+    "https://analytics.us.umami.is/websites/d5f41f5f-8925-4e9a-91a1-b7226a775f8a",
   siteRepo: 'https://github.com/raihanpka/raihanpk.com',
   siteLogo: '/static/images/avatar.png',
   image: '/static/images/avatar.png',
+  socialBanner: '/static/images/blogs/newblog.jpg',
   email: 'me@raihanpk.com',
   github: 'https://github.com/raihanpka',
   linkedin: 'https://www.linkedin.com/in/raihanpk',

@@ -9,7 +9,7 @@ export default function Projects() {
 
   const description = 'My side projects and stuff that I built with my colleagues at work';
 
-  const workProjects = projectsData.filter(({ type }) => type === 'other');
+  const workProjects = projectsData.filter(({ type }) => type === 'work');
   const sideProjects = projectsData.filter(({ type }) => type === 'self');
 
   return (

@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import siteMetadata from '@/data/siteMetadata';
 import headerNavLinks from '@/data/headerNavLinks';
 
-import Logo from 'public/static/images/logo.svg';
+import Logo from 'public/static/images/newlogo.svg';
 
 import Link from './Link';
 import MobileNav from './MobileNav';

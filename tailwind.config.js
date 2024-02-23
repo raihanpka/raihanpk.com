@@ -85,11 +85,11 @@ module.exports = {
           css: {
             color: theme('colors.gray.700'),
             a: {
-              color: theme('colors.primary'),
+              color: theme('colors.blue.400'),
               '&:hover': {
-                color: `${theme('colors.sky.600')} !important`,
+                color: `${theme('colors.blue.300')} !important`,
               },
-              code: { color: theme('colors.sky.400') },
+              code: { color: theme('colors.blue.400') },
             },
             h1: {
               fontWeight: '700',
@@ -109,11 +109,11 @@ module.exports = {
               color: theme('colors.gray.900'),
             },
             pre: {
-              backgroundColor: '#24283b',
+              backgroundColor: theme('colors.gray.800'),
             },
             code: {
-              color: '#BB9AF7',
-              backgroundColor: '#24283b',
+              color: theme('colors.sky.400'),
+              backgroundColor: theme('colors.gray.100'),
               paddingLeft: '4px',
               paddingRight: '4px',
               paddingTop: '2px',
@@ -147,17 +147,33 @@ module.exports = {
               color: theme('colors.gray.900'),
               borderLeftColor: theme('colors.gray.200'),
             },
+            '.content-header-link-placeholder': {
+              opacity: 0,
+              marginLeft: '-20px',
+              paddingRight: '4px',
+            },
+            '.content-header-link-placeholder:hover': {
+              opacity: 100,
+            },
+            '.content-header:hover .content-header-link-placeholder': {
+              opacity: 100,
+            },
+            '.octicon': {
+              display: 'inline',
+              verticalAlign: 'middle',
+              overflow: 'visible',
+            },
           },
         },
         dark: {
           css: {
             color: theme('colors.gray.300'),
             a: {
-              color: theme('colors.primary'),
+              color: theme('colors.blue.400'),
               '&:hover': {
-                color: `${theme('colors.sky.400')} !important`,
+                color: `${theme('colors.blue.300')} !important`,
               },
-              code: { color: theme('colors.sky.400') },
+              code: { color: theme('colors.blue.400') },
             },
             h1: {
               fontWeight: '700',
@@ -177,10 +193,10 @@ module.exports = {
               color: theme('colors.gray.100'),
             },
             pre: {
-              backgroundColor: '#24283b',
+              backgroundColor: theme('colors.gray.800'),
             },
             code: {
-              backgroundColor: '#24283b',
+              backgroundColor: theme('colors.gray.800'),
             },
             details: {
               backgroundColor: theme('colors.gray.800'),

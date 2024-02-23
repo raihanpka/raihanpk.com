@@ -2,6 +2,7 @@ import '@/css/tailwind.css';
 import '@/css/twemoji.css';
 import '@/css/about.css';
 import '@/css/prism.css';
+import '@/css/app.css';
 import 'katex/dist/katex.css';
 // import '@/css/docsearch.css' // Uncomment if using algolia docsearch
 // import '@docsearch/css' // Uncomment if using algolia docsearch

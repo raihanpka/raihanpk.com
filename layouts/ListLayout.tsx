@@ -73,7 +73,7 @@ export default function ListLayout({ posts, title, initialDisplayPosts = [], pag
             {title}
           </h1>
           <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
-            I primarily cover web development and tech topics, occasionally sharing insights into my personal life.
+            Membahas seputar teknologi dan topik lainnya, sesekali juga berbagi cerita tentang kehidupan saya.
           </p>
           <div className="relative max-w-lg">
             <label>

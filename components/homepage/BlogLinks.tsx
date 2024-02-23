@@ -11,7 +11,7 @@ const BlogLinks = () => {
             Tulisanku
           </span>
         </Link>
-        <Link href="/projects" className="hover:underline">
+        <Link href="https://gallery.raihanpk.com" className="hover:underline">
           <Twemoji emoji="camera-with-flash" />
           <span data-umami-event="home-link-projects" className="ml-1.5">
             Galeri

@@ -12,7 +12,7 @@ const BlogLinks = () => {
           </span>
         </Link>
         <Link href="/projects" className="hover:underline">
-          <Twemoji emoji="hammer-and-wrench" />
+          <Twemoji emoji="camera-with-flash" />
           <span data-umami-event="home-link-projects" className="ml-1.5">
             Galeri
           </span>
@@ -20,7 +20,7 @@ const BlogLinks = () => {
       </div>
       <div className="flex flex-col space-y-1.5">
         <Link href="/about" className="hover:underline">
-          <Twemoji emoji="face-with-monocle" />
+          <Twemoji emoji="smiling-face-with-smiling-eyes" />
           <span data-umami-event="home-link-about" className="ml-1.5">
             Selebihnya tentang diriku
           </span>

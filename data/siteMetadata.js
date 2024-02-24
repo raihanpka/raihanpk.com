@@ -44,7 +44,7 @@ const siteMetadata = {
       mapping: 'title',
       reactions: '1',
       metadata: '0',
-      theme: 'light',
+      theme: 'preferred_color_scheme',
       darkTheme: 'transparent_dark',
       themeURL: '',
       lang: 'en',

@@ -16,12 +16,20 @@ import remarkEmoji from 'remark-emoji'
 import remarkMath from 'remark-math'
 import remarkToc from 'remark-toc'
 import sectionize from '@hbsnow/rehype-sectionize'
-
 import icon from 'astro-icon'
+import vercel from '@astrojs/vercel'
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://astro-erudite.vercel.app',
+  site: 'https://raihanpk.com',
+  output: 'static',
+  adapter: vercel({
+    webAnalytics: {
+      enabled: true,
+    },
+    imageService: true,
+    devImageService: 'sharp',
+  }),
   integrations: [
     tailwind({
       applyBaseStyles: false,

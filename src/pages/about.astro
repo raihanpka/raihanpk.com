@@ -17,37 +17,26 @@ const projects = await getCollection('projects')
     <section>
       <div class="min-w-full">
         <div class="prose prose-neutral mb-8 dark:prose-invert">
+          <h2 class="mb-4 text-2xl font-semibold">Hello, I'm Raihan.</h2>
           <p class="mb-4">
-            astro-erudite is an opinionated, no-frills static blogging template
-            that prioritizes simplicity and performance, built with <Link
-              href="https://astro.build"
+            My name is Raihan Putra Kirana, but my friends often called me "Peka". 
+            I am currently a second-year student majoring in Computer Science at 
+            <Link
+              href="https://ipb.ac.id"
               class="text-foreground"
               external
-              underline>Astro</Link
-            >, <Link
-              href="https://tailwindcss.com"
-              class="text-foreground"
-              external
-              underline>Tailwind</Link
-            >, and <Link
-              href="https://ui.shadcn.com"
-              class="text-foreground"
-              external
-              underline>shadcn/ui</Link
-            >. It provides a clean foundation for your content while being
-            extremely easy to customize.
+              underline>IPB University</Link>. 
+            My primary interests are Computer Vision, Deep Learning, and Blockchain Technology.
           </p>
           <p>
-            To learn more about the philosophy behind this template, check out
-            the following blog post: <Link
-              href="/blog/the-state-of-static-blogs"
-              class="text-foreground"
-              underline>The State of Static Blogs in 2024</Link
-            >.
+            My passion for technology has been growing since I was 5 years old and that was when 
+            I tried installing some apps on my dad's laptop. From then on, I would often operate 
+            my dad's laptop and also started tinkering with other tech stuff. Maybe that's one of my reasons, why 
+            I chose this major.
           </p>
         </div>
 
-        <h2 class="mb-4 text-2xl font-semibold">Example Projects Listing</h2>
+        <h2 class="mb-4 text-2xl font-semibold">My Projects Listing</h2>
         <div class="flex flex-col gap-4">
           {projects.map((project) => <ProjectCard project={project} />)}
         </div>

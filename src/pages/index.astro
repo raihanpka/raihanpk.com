@@ -13,6 +13,7 @@ import {
 import { SITE } from '@/consts'
 import Layout from '@/layouts/Layout.astro'
 import { getCollection } from 'astro:content'
+import SpotifyPresence from '@/components/SpotifyPresence.tsx'
 
 const blog = (await getCollection('blog'))
   .filter((post) => !post.data.draft)
@@ -25,53 +26,34 @@ const blog = (await getCollection('blog'))
     <section>
       <Card>
         <CardHeader>
-          <CardTitle className="text-3xl">er·u·dite</CardTitle>
+          <CardTitle className="text-3xl">raihan pk</CardTitle>
           <CardDescription
-            >/ˈer(y)əˌdīt/ &bull; <span class="font-semibold">adjective</span
+            >/ˈraɪ.han.peˈka/ &bull; <span class="font-semibold">person</span
             ></CardDescription
           >
         </CardHeader>
         <CardContent>
           <p class="mb-2 text-sm text-muted-foreground">
-            astro-erudite is an opinionated, no-frills static blogging template
-            built with <Link
-              href="https://astro.build"
+            Welcome to my digital home. 
+            <br>
+            <Link
+              href="https://raihanpk.com"
               class="text-foreground"
-              external
-              underline>Astro</Link
-            >, <Link
-              href="https://tailwindcss.com"
-              class="text-foreground"
-              external
-              underline>Tailwind</Link
-            >, and <Link
-              href="https://ui.shadcn.com"
-              class="text-foreground"
-              external
-              underline>shadcn/ui</Link
-            >. Extraordinarily loosely based on the <Link
-              href="https://astro-micro.vercel.app/"
-              class="text-foreground"
-              external
-              underline>Astro Micro</Link
-            > theme.
-          </p>
-          <p class="text-sm text-muted-foreground">
-            To use this template, check out the <Link
-              href="https://github.com/jktrn/astro-erudite"
-              class="text-foreground"
-              underline
-              external>GitHub</Link
-            > repository. To learn more about why this template exists, read this
-            blog post: <Link
-              href="/blog/the-state-of-static-blogs"
-              class="text-foreground"
-              underline>The State of Static Blogs in 2024</Link
-            >.
+              underline>raihanpk.com</Link
+            >
+            is not just a digital home, this is a space to connect and grow. 
+            Links open doors, words build bridges, and every click sparks a conversation. 
+            <b>Explore, engage, and let’s share ideas</b>.
           </p>
         </CardContent>
       </Card>
     </section>
+
+    <section role="region" aria-label="Spotify Section"
+      class="flex h-[170px] min-w-[500px] flex-1 flex-col items-start whitespace-nowrap rounded-lg border px-2 py-2 text-xs leading-loose text-white max-md:w-full max-md:min-w-full">
+      <SpotifyPresence client:load/>
+    </section>
+
     <section class="flex flex-col gap-y-4">
       <h2 class="text-2xl font-bold">Latest posts</h2>
       <ul class="not-prose flex flex-col gap-y-4">

@@ -9,39 +9,43 @@ authors: ['raihanpk']
 
 # Halo, Gaes!
 
-Sudah lama sekali dari terakhir kali aku post sesuatu di website ini ya...
+Sudah lama banget ya dari terakhir kali aku *posting* sesuatu di website ini...
 
-Sepertinya aku lagi seneng-senengnya menjelajah dunia *web development* (lagi) deh. Soalnya, baru saja aku melakukan *revamp* total website pribadi—yang tadinya menggunakan *Next.js*, sekarang migrasi 100% ke Astro! *Wait, why?*  Kamu cuma perlu 3 menit untuk baca postingan blog ini, karena aku akan bocorkan alasan di balik perubahan website ini!
+Sepertinya aku lagi seneng-senengnya menjelajah dunia *web development* (lagi) deh, wkwkwk. Soalnya, baru saja aku melakukan *revamp* total website pribadi—yang tadinya menggunakan *Next.js*, sekarang migrasi 100% ke Astro! *Wait, why?* intinya cuma perlu 3 menit untuk baca postingan blog ini, karena aku akan bocorkan alasan di balik perubahan website ini!
 
 ## *Next.js* vs Astro: Battle of Frameworks
 
-Sebelum Astro, aku setia dengan *Next.js*. *Framework* keren, apalagi fitur *SSR (Server-Side Rendering)*-nya yang *powerful* untuk web dinamis. Tapi, masalahnya… website aku adalah blog statis! I mean, untuk apa menggunakan *heavy framework* seperti *Next.js* kalau hanya untuk menampilkan artikel dan portofolio? *Overkill*, bukan?
+Sebelum Astro, aku biasanya pakai *Next.js*. *Framework* yang keren, apalagi fitur *SSR (Server-Side Rendering)*-nya yang *powerful* untuk web dinamis. Tapi, masalahnya… website aku adalah blog statis! I mean, untuk apa menggunakan *heavy framework* seperti *Next.js* kalau hanya untuk menampilkan artikel dan portofolio? *Overkill*, nggak sih?
 
-Nah, saat scroll-scroll *GitHub*, aku menemukan Astro. [Astro.build](https://astro.build), *framework* baru yang tidak ikut arus *JS* terlalu berat. Intinya? Astro adalah *static site generator* yang fokus pada performa tanpa ribet. Inilah alasan yang buat aku langsung suka sama framework ini!
+Nah, saat aku buka grup komunitas Web Development di kampus, ada salah satu alumni yang sharing tentang Astro ini. Intinya waktu itu, saat Astro pertama kali rilis dan review dari alumni itu yang aku ingat banget adalah Astro iru enteng dan ngebut. 
+
+Baru deh dikesempatan kali ini, saat aku iseng-iseng scroll *GitHub*, aku menemukan banyak template blog Astro. Nah [Astro.build](https://astro.build) ini, *framework* baru yang tidak ikut arus *JS* yang dibilang cukup berat. Intinya? Astro adalah *static site generator* yang fokus pada performa tanpa ribet. Inilah salah satu alasan yang buat aku langsung suka sama framework ini!
 
 ## Alasan aku Move On ke Astro 🚀
 
 ### 1. Zero *JavaScript* by Default
 
-Astro itu pure magic: semua komponen di-*render* menjadi *HTML* statis di sisi server. *JavaScript* hanya di-*load* jika memang dibutuhkan (*partial hydration*). Bandingkan dengan *Next.js* yang secara default mengirim *bundle JS* besar, membuat *loading time* lambat seperti menonton *YouTube* di jaringan 2G. Hasilnya? Skor *Lighthouse* website aku mencapai **98/100** (dari sebelumnya hanya 80-an)! [Referensi](https://web.dev/performance-scoring/)
+Astro itu pure magic (agak lebay, tapi serius): intinya semua komponen di-*render* menjadi *HTML* statis di sisi server. *JavaScript* hanya di-*load* jika memang dibutuhkan (*partial hydration*). Bandingkan dengan *Next.js* yang secara default mengirim *bundle JS* besar, membuat *loading time* lambat seperti menonton *YouTube* di jaringan 2G. Hasilnya? Skor *Lighthouse* website rata-rata aku sekarang mencapai **97/100**...
 
 ### 2. Multi-*Framework* Freedom
 
-Masih nyaman dengan *React*? Tenang aja! Astro bisa *mix and match* komponen *React*, *Vue*, *Svelte*, bahkan *vanilla JS* dalam satu proyek. aku bisa menggunakan *React* untuk bagian yang membutuhkan interaktivitas, sementara sisanya murni *HTML-CSS*. Fleksibel sekali, bukan? *Next.js*? Ya, hanya *React*.
+Masih nyaman dengan *React*? Tenang aja kok! Astro bisa *mix and match* komponen *React*, *Vue*, *Svelte*, bahkan *vanilla JS* dalam satu proyek. Aku bisa menggunakan base komponen dari *React* untuk bagian yang membutuhkan interaktivitas, sementara sisanya murni *HTML-CSS*. Fleksibel sekali, bukan? Kalau *Next.js*? Ya, hanya *React*.
 
-### 3. *Markdown* Jadi Raja
+### 3. *Markdown* Jadi Sarana Utama Untuk Nulis
 
-Karena aku suka menulis blog, Astro membuat hidup aku lebih mudah dengan dukungan *built-in Markdown*. Tinggal buat file `.md`, selesai! *Next.js*? Harus setup *plugin* atau *library* tambahan seperti `gray-matter`. Ribet, bukan?
+Karena aku adalah mahasiswa Ilmu Komputer, rasanya kalau jarang membuka dokumentasi kode ataupun informasi README.md ini adalah hal yang aneh. Tapi apa hubungannya sama Astro? Jadi, Astro membuat aku lebih familiar dengan Markdown karena punya dukungan *built-in Markdown*. Nyatanya tulisan ini itu ditulis dengan format file `.md`. Sebenarnya, sama seperti Next.js yang support Markdown juga, tetapi Next.js tuh masih perlu setup plugin atau library tambahan seperti gray-matter. Ribet, bukan?
 
-### 4. Speed is The Key
+Intinya saat aku menulis blog menggunakan sintaks atau aturan Markdown ini, secara nggak langsung aku juga jadi belajar untuk membuat dokumentasi yang baik untuk kedepannya. Coba bayangin deh, kalau punya Repositori *Open Source* atau Aplikasi yang bagus tapi dokumentasi nya jelek banget. 
 
-Menurut data dari *HTTP Archive*, **90% website gagal mengoptimalkan kecepatan**. [Referensi](https://httparchive.org/reports/state-of-the-web#bytesTotal). Astro tidak mau ikut-ikutan! Dengan output file statis dan *caching* yang smooth, akhirnya website aku *loading*-nya jadi secepat balapan F1.
+### 4. Speed is The Key (Kecepatan adalah Kunci)
+
+Menurut data dari *HTTP Archive*, **90% website gagal mengoptimalkan kecepatan**. [Referensi](https://httparchive.org/reports/state-of-the-web#bytesTotal). Astro ini tidak mau ikut-ikutan! Dengan output file statis dan *caching* yang smooth, akhirnya website aku *loading*-nya jadi secepat balapan F1 (du-du-du-du).
 
 ## *Next.js* Tidak Jelek, Tapi…
 
-Jangan salah, *Next.js* tetap *framework* terbaik untuk web dinamis seperti e-commerce atau aplikasi real-time. Tapi untuk blog statis seperti punya aku? Astro lebih masuk akal. **Less code, less complexity, more speed!**
+Jangan salah, menurutku *Next.js* tetap *framework* terbaik untuk web dinamis seperti *e-commerce* atau aplikasi real-time. Tapi untuk blog statis atau website minimal seperti punya aku? Astro lebih masuk akal. **Less code, less complexity, more speed!**
 
-> Fun fact: *Netlify* aja pakai Astro untuk dokumentasi mereka loh...
+> Fun fact: *Netlify* aja pakai Astro untuk bagian website dokumentasi mereka loh...
 
 ## Closing Statement
 

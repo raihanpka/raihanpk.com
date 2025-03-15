@@ -33,5 +33,5 @@ export const SOCIAL_LINKS: Link[] = [
   { href: 'https://linkedin.com/in/raihanpk', label: 'LinkedIn' },
   { href: 'https://instagram.com/raihanpka', label: 'Instagram' },
   { href: 'me@raihanpk.com', label: 'Email' },
-  { href: './rss.xml', label: 'RSS' },
+  { href: '/rss.xml', label: 'RSS' },
 ]

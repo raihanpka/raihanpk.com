@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { FaSpotify } from 'react-icons/fa'
+import { FaSpotify, FaHeadphonesAlt } from 'react-icons/fa'
 import { Skeleton } from '../components/ui/skeleton'
 import { MoveUpRight } from 'lucide-react'
 
@@ -68,13 +68,8 @@ const SpotifyPresence = () => {
         />
         <div className="flex min-w-0 flex-1 flex-col justify-end overflow-hidden">
           <div className="flex flex-col">
-            <span className="mb-2 flex gap-2">
-              {/* <img
-                src="/static/bento/bento-now-playing.svg"
-                alt="Now playing"
-                width={16}
-                height={16}
-              /> */}
+            <span className="mb-1 flex gap-2 text-primary">
+              <FaHeadphonesAlt size={16} />
               <span className="text-sm text-primary">
                 {displayData['@attr']?.nowplaying === 'true'
                   ? 'Now playing...'
@@ -99,7 +94,7 @@ const SpotifyPresence = () => {
           </div>
         </div>
       </div>
-      <div className="absolute right-0 top-0 m-3 hidden text-accent md:block ">
+      <div className="absolute right-0 top-0 m-3 hidden text-primary md:block">
         <FaSpotify size={32} />
       </div>
       <a

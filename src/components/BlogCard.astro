@@ -7,6 +7,7 @@ import { formatDate, readingTime } from '@/lib/utils'
 import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 import Link from './Link.astro'
+import SpeedInsights from '@vercel/speed-insights/astro'
 
 type Props = {
   entry: CollectionEntry<'blog'>
@@ -86,3 +87,4 @@ const authors = await parseAuthors(entry.data.authors ?? [])
     </div>
   </Link>
 </div>
+<SpeedInsights />

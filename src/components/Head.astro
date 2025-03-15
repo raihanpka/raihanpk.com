@@ -4,6 +4,7 @@ import '../styles/katex.css'
 
 import { SITE } from '@/consts'
 import { ClientRouter } from 'astro:transitions'
+import SpeedInsights from '@vercel/speed-insights/astro'
 
 interface Props {
   title: string
@@ -86,3 +87,10 @@ const { title, description, image = '/static/twitter-card.png' } = Astro.props
     setDarkMode(ev.newDocument)
   })
 </script>
+<script is:inline type="text/partytown">
+  function speedInsightsBeforeSend(data){
+    console.log("Speed Insights before send", data)
+    return data;
+  }
+</script>
+<SpeedInsights />

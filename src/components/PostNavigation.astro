@@ -3,6 +3,7 @@ import Link from '@/components/Link.astro'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { Icon } from 'astro-icon/components'
+import SpeedInsights from '@vercel/speed-insights/astro'
 
 const { prevPost, nextPost } = Astro.props
 ---
@@ -54,3 +55,4 @@ const { prevPost, nextPost } = Astro.props
     </div>
   </Link>
 </div>
+<SpeedInsights />

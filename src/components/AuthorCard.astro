@@ -5,6 +5,7 @@ import type { Link as SocialLink } from '@/consts'
 import { cn } from '@/lib/utils'
 import type { CollectionEntry } from 'astro:content'
 import SocialIcons from './SocialIcons.astro'
+import SpeedInsights from '@vercel/speed-insights/astro'
 
 type Props = {
   author: CollectionEntry<'authors'>
@@ -68,3 +69,4 @@ const socialLinks: SocialLink[] = [
     </div>
   </div>
 </div>
+<SpeedInsights />

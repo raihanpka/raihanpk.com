@@ -2,6 +2,7 @@
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Icon } from 'astro-icon/components'
 import TableOfContentsHeading from './TableOfContentsHeading.astro'
+import SpeedInsights from '@vercel/speed-insights/astro'
 
 export interface Heading {
   depth: number
@@ -115,3 +116,10 @@ function buildToc(headings: Heading[]): Heading[] {
   document.addEventListener('astro:page-load', setupToc)
   document.addEventListener('astro:after-swap', setupToc)
 </script>
+<script is:inline type="text/partytown">
+  function speedInsightsBeforeSend(data){
+    console.log("Speed Insights before send", data)
+    return data;
+  }
+</script>
+<SpeedInsights />

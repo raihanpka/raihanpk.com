@@ -8,6 +8,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { Icon } from 'astro-icon/components'
+import SpeedInsights from '@vercel/speed-insights/astro'
 
 export interface BreadcrumbItem {
   href?: string
@@ -56,3 +57,4 @@ const { items, class: className } = Astro.props
     }
   </BreadcrumbList>
 </Breadcrumb>
+<SpeedInsights />

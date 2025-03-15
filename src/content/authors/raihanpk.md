@@ -7,5 +7,6 @@ website: 'https://raihanpk.com'
 twitter: 'https://twitter.com/theycallmepeka'
 github: 'https://github.com/raihanpka'
 linkedin: 'https://linkedin.com/in/raihanpk'
+instagram: 'https://instagram.com/raihanpka'
 mail: 'me@raihanpk.com'
 ---

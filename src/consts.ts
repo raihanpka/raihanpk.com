@@ -15,7 +15,7 @@ export type Link = {
 export const SITE: Site = {
   TITLE: 'pk.',
   DESCRIPTION:
-    'pk is a nickname. raihanpk.com is his digital home.',
+    'pk is his nickname. raihanpk.com is his digital home.',
   EMAIL: 'me@raihanpk.com',
   NUM_POSTS_ON_HOMEPAGE: 2,
   POSTS_PER_PAGE: 3,
@@ -30,8 +30,8 @@ export const NAV_LINKS: Link[] = [
 ]
 
 export const SOCIAL_LINKS: Link[] = [
-  { href: 'https://github.com/raihanpka', label: 'GitHub' },
   { href: 'https://linkedin.com/in/raihanpk', label: 'LinkedIn' },
+  { href: 'https://instagram.com/raihanpka', label: 'Instagram' },
   { href: 'me@raihanpk.com', label: 'Email' },
-  { href: '/rss.xml', label: 'RSS' },
+  { href: './rss.xml', label: 'RSS' },
 ]

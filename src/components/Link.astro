@@ -1,6 +1,5 @@
 ---
 import { cn } from '@/lib/utils'
-import SpeedInsights from '@vercel/speed-insights/astro'
 
 type Props = {
   href: string
@@ -26,4 +25,3 @@ const { href, external, class: className, underline, ...rest } = Astro.props
 >
   <slot />
 </a>
-<SpeedInsights />

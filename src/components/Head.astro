@@ -87,10 +87,4 @@ const { title, description, image = '/static/twitter-card.png' } = Astro.props
     setDarkMode(ev.newDocument)
   })
 </script>
-<script is:inline type="text/partytown">
-  function speedInsightsBeforeSend(data){
-    console.log("Speed Insights before send", data)
-    return data;
-  }
-</script>
 <SpeedInsights />

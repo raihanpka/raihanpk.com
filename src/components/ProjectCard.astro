@@ -3,7 +3,6 @@ import Link from '@/components/Link.astro'
 import { Badge } from '@/components/ui/badge'
 import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
-import SpeedInsights from '@vercel/speed-insights/astro'
 
 type Props = {
   project: CollectionEntry<'projects'>
@@ -54,4 +53,3 @@ const { project } = Astro.props
     </div>
   </Link>
 </div>
-<SpeedInsights />

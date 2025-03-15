@@ -4,7 +4,6 @@ import { buttonVariants } from '@/components/ui/button'
 import type { Link as SocialLink } from '@/consts'
 import { cn } from '@/lib/utils'
 import { Icon } from 'astro-icon/components'
-import SpeedInsights from '@vercel/speed-insights/astro'
 
 interface Props {
   links: SocialLink[]
@@ -50,4 +49,3 @@ const getSocialLink = ({ href, label }: SocialLink) => ({
     })
   }
 </ul>
-<SpeedInsights />

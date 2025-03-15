@@ -2,7 +2,6 @@
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Icon } from 'astro-icon/components'
 import TableOfContentsHeading from './TableOfContentsHeading.astro'
-import SpeedInsights from '@vercel/speed-insights/astro'
 
 export interface Heading {
   depth: number
@@ -122,4 +121,3 @@ function buildToc(headings: Heading[]): Heading[] {
     return data;
   }
 </script>
-<SpeedInsights />

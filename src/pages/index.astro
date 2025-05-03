@@ -13,7 +13,8 @@ import {
 import { SITE } from '@/consts'
 import Layout from '@/layouts/Layout.astro'
 import { getCollection } from 'astro:content'
-import SpotifyPresence from '@/components/SpotifyPresence.tsx'
+import SpotifyPresence from '@/components/features/SpotifyPresence.tsx'
+import WakatimeBox from '@/components/features/WakatimeBox.tsx'
 
 const blog = (await getCollection('blog'))
   .filter((post) => !post.data.draft)
@@ -49,9 +50,16 @@ const blog = (await getCollection('blog'))
       </Card>
     </section>
 
-    <section role="region" aria-label="Spotify Section"
-      class="flex h-[170px] min-w-[500px] flex-1 flex-col items-start whitespace-nowrap rounded-lg border px-2 py-2 text-xs leading-loose text-white max-md:w-full max-md:min-w-full">
-      <SpotifyPresence client:load/>
+    <section class="flex flex-wrap gap-4">
+      <div role="region" aria-label="Wakatime Section"
+      class="flex h-[170px] w-[calc(50%-0.5rem)] flex-col items-start whitespace-nowrap rounded-lg border px-2 py-2 text-xs leading-loose text-white max-md:w-full">
+      <WakatimeBox omitLanguages={['Markdown', 'JSON']} client:load />
+      </div>
+
+      <div role="region" aria-label="Spotify Section"
+      class="flex h-[170px] w-[calc(50%-0.5rem)] flex-col items-start whitespace-nowrap rounded-lg border px-2 py-2 text-xs leading-loose text-white max-md:w-full">
+      <SpotifyPresence client:load />
+      </div>
     </section>
 
     <section class="flex flex-col gap-y-4">

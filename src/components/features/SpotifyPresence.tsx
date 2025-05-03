@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { FaSpotify, FaHeadphonesAlt } from 'react-icons/fa'
-import { Skeleton } from '../components/ui/skeleton'
+import { Skeleton } from '../ui/skeleton'
 import { MoveUpRight } from 'lucide-react'
 
 interface Track {
@@ -33,22 +33,21 @@ const SpotifyPresence = () => {
 
     if (isLoading) {
         return (
-            <div className="relative flex h-full w-full justify-between gap-4 rounded-3xl pb-2">
-                <Skeleton className="mb-2 rounded-xl w-28 h-28 max-h-32 max-w-32" />
-                <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-                    <div className="flex flex-col gap-2">
-                        <Skeleton className="h-4 w-3/4" />
-                        <Skeleton className="h-6 w-2/3" />
-                        <Skeleton className="h-2 w-1/3" />
-            <Skeleton className="h-2 w-1/3" />
-
-          </div>
+        <div className="relative flex h-full w-full justify-between gap-4 rounded-3xl pb-2">
+            <Skeleton className="mb-2 rounded-xl w-28 h-28 max-h-32 max-w-32 mb-2 w-28 max-w-32" />
+              <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+                <div className="flex flex-col gap-2">
+                  <Skeleton className="h-4 w-3/4" />
+                  <Skeleton className="h-6 w-2/3" />
+                  <Skeleton className="h-2 w-1/3" />
+                  <Skeleton className="h-2 w-1/3" />
+                </div>
+              </div>
+            <div className="absolute right-0 top-0 m-3 text-accent">
+              <FaSpotify size={16} />
+            </div>
+          <Skeleton className="absolute bottom-0 right-0 m-3 h-10 w-10 rounded-full" />
         </div>
-        <div className="absolute right-0 top-0 m-3 text-accent">
-          <FaSpotify size={32} />
-        </div>
-        <Skeleton className="absolute bottom-0 right-0 m-3 h-10 w-10 rounded-full" />
-      </div>
     )
   }
 
@@ -72,7 +71,7 @@ const SpotifyPresence = () => {
               <FaHeadphonesAlt size={16} />
               <span className="text-sm text-primary">
                 {displayData['@attr']?.nowplaying === 'true'
-                  ? 'Now playing...'
+                  ? 'Listening to...'
                   : 'Last played...'}
               </span>
             </span>
@@ -94,8 +93,8 @@ const SpotifyPresence = () => {
           </div>
         </div>
       </div>
-      <div className="absolute right-0 top-0 m-3 hidden text-primary md:block">
-        <FaSpotify size={32} />
+      <div className="absolute right-0 top-0 m-2 hidden text-primary md:block">
+        <FaSpotify size={16} />
       </div>
       <a
         href={url}

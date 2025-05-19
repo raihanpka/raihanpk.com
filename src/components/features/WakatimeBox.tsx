@@ -26,6 +26,7 @@ import {
   SiTypescript,
   SiYaml,
   SiScala,
+  SiCodecrafters,
 } from 'react-icons/si'
 
 const languageIcons: { [key: string]: IconType } = {
@@ -43,6 +44,7 @@ const languageIcons: { [key: string]: IconType } = {
   yaml: SiYaml,
   tex: SiLatex,
   scala: SiScala,
+  other: SiCodecrafters,
 }
 
 const getLanguageIcon = (language: string): JSX.Element | null => {
@@ -169,7 +171,7 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
         accessibilityLayer
         data={languages}
         layout="vertical"
-        margin={{ left: -10, right: 20 }}
+        margin={{ left: -10, right: 30 }}
       >
         <CartesianGrid horizontal={false} />
         <YAxis

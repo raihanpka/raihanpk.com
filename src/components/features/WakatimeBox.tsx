@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import * as React from 'react'
+import { useState, useEffect } from 'react'
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from 'recharts'
 import {
   type ChartConfig,
@@ -112,7 +113,7 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
           }))
         setLanguages(filteredLanguages)
         setIsLoading(false)
-      })  
+      })
       .catch((err) => {
         setError(err instanceof Error ? err.message : 'An error occurred')
         setIsLoading(false)
@@ -132,7 +133,7 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
             <text
               x={8}
               y={12}
-              fill="var(--primary)"
+              fill="hsl(var(--primary))"
               fontSize="12"
               textAnchor="middle"
               dominantBaseline="central"
@@ -149,13 +150,13 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
     return (
       <div className="size-full rounded-3xl p-4">
         <div className="space-y-1.5">
-          {[...Array(3)].map((_, index) => (
-            <div key={index} className="flex items-center gap-x-4">
-              <Skeleton className="size-7 rounded-full" />
+          {[...Array(4)].map((_, index) => (
+            <div key={index} className="flex items-center gap-x-2">
+              <Skeleton className="h-6 w-6 rounded-full" />
               <div className="flex-1">
                 <Skeleton
-                  className="h-8 w-full rounded-lg"
-                  style={{ width: `${100 * Math.pow(0.8, index)}%` }}
+                  className="h-6 rounded-md"
+                  style={{ width: `${90 * Math.pow(0.8, index)}%` }}
                 />
               </div>
             </div>
@@ -171,7 +172,7 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
         accessibilityLayer
         data={languages}
         layout="vertical"
-        margin={{ left: -10, right: 30 }}
+        margin={{ left: -10, right: 10 }}
       >
         <CartesianGrid horizontal={false} />
         <YAxis
@@ -183,12 +184,12 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
           tick={<CustomYAxisTick />}
         />
         <XAxis type="number" hide />
-        {/* <ChartTooltip cursor={false} content={<ChartTooltipContent />} /> */}
+        <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
         <Bar
           dataKey="hours"
           fill="var(--color-hours)"
           radius={[8, 8, 8, 8]}
-          isAnimationActive={false}
+          isAnimationActive={true}
         >
           <LabelList
             dataKey="hours"

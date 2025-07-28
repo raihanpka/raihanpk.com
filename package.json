@@ -1,7 +1,7 @@
 {
   "name": "raihanpk.com",
   "type": "module",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "scripts": {
     "dev": "astro dev",
@@ -20,7 +20,7 @@
     "@astrojs/rss": "^4.0.11",
     "@astrojs/sitemap": "^3.2.1",
     "@astrojs/tailwind": "^6.0.0",
-    "@astrojs/vercel": "^8.1.2",
+    "@astrojs/vercel": "^8.0.4",
     "@hbsnow/rehype-sectionize": "^1.0.7",
     "@iconify-json/lucide": "^1.2.20",
     "@radix-ui/react-avatar": "^1.1.2",

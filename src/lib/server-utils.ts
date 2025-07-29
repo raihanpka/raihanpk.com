@@ -9,7 +9,7 @@ export async function parseAuthors(authors: string[]) {
       return {
         id,
         name: author?.data?.name || id,
-        avatar: author?.data?.avatar || '/static/logo.svg',
+        avatar: author?.data?.avatar || '/static/notion-avatar.svg',
         isRegistered: !!author,
       }
     } catch (error) {
@@ -17,7 +17,7 @@ export async function parseAuthors(authors: string[]) {
       return {
         id,
         name: id,
-        avatar: '/static/logo.svg',
+        avatar: '/static/notion-avatar.svg',
         isRegistered: false,
       }
     }

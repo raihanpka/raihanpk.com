@@ -71,7 +71,17 @@ const SpotifyPresence = () => {
         <div className="flex min-w-0 flex-1 flex-col justify-end overflow-hidden">
           <div className="flex flex-col">
             <span className="mb-1 flex gap-2 text-primary">
-              <FaHeadphonesAlt size={16} />
+              {displayData['@attr']?.nowplaying === 'true' ? (
+                <div className="flex items-center space-x-1">
+                  <div className="w-0.5 h-1.5 bg-primary/90 rounded-full animate-pulse" style={{ animationDelay: '0ms', animationDuration: '1.5s' }}></div>
+                  <div className="w-0.5 h-2 bg-primary/70 rounded-full animate-pulse" style={{ animationDelay: '150ms', animationDuration: '1.2s' }}></div>
+                  <div className="w-0.5 h-3 bg-primary/60 rounded-full animate-pulse" style={{ animationDelay: '300ms', animationDuration: '1.5s' }}></div>
+                  <div className="w-0.5 h-2 bg-primary/90 rounded-full animate-pulse" style={{ animationDelay: '450ms', animationDuration: '1.2s' }}></div>
+                  <div className="w-0.5 h-2.5 bg-primary/80 rounded-full animate-pulse" style={{ animationDelay: '600ms', animationDuration: '1.5s' }}></div>
+                </div>
+              ) : (
+                <FaHeadphonesAlt size={16} />
+              )}
               <span className="text-sm text-primary">
                 {displayData['@attr']?.nowplaying === 'true'
                   ? 'Listening to...'
@@ -96,7 +106,7 @@ const SpotifyPresence = () => {
           </div>
         </div>
       </div>
-      <div className="absolute right-0 top-0 m-2 text-primary">
+      <div className="absolute right-1 top-1 m-2 text-primary">
         {isLoading ? (
           <Skeleton className="h-4 w-4 rounded-full" />
         ) : (

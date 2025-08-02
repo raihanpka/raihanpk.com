@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { Menu } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -7,7 +8,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { NAV_LINKS } from '@/consts'
-import { Menu } from 'lucide-react'
 
 const MobileMenu = () => {
   const [isOpen, setIsOpen] = useState(false)

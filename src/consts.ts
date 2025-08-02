@@ -14,8 +14,7 @@ export type Link = {
 
 export const SITE: Site = {
   TITLE: 'pk.',
-  DESCRIPTION:
-    'pk is his nickname. raihanpk.com is his digital home.',
+  DESCRIPTION: 'pk is his nickname. raihanpk.com is his digital home.',
   EMAIL: 'me@raihanpk.com',
   NUM_POSTS_ON_HOMEPAGE: 2,
   POSTS_PER_PAGE: 3,

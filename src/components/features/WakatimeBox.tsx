@@ -1,20 +1,12 @@
 'use client'
 
 import * as React from 'react'
-import { useState, useEffect } from 'react'
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from 'recharts'
-import {
-  type ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from '@/components/ui/chart'
-import { Skeleton } from '@/components/ui/skeleton'
-
-import { type IconType } from 'react-icons/lib'
+import { useEffect, useState } from 'react'
+import type { IconType } from 'react-icons/lib'
 import {
   SiAstro,
   SiC,
+  SiCodecrafters,
   SiCplusplus,
   SiCss3,
   SiHtml5,
@@ -24,11 +16,18 @@ import {
   SiMarkdown,
   SiMdx,
   SiPython,
+  SiScala,
   SiTypescript,
   SiYaml,
-  SiScala,
-  SiCodecrafters,
 } from 'react-icons/si'
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from 'recharts'
+import {
+  type ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '@/components/ui/chart'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const languageIcons: { [key: string]: IconType } = {
   astro: SiAstro,
@@ -118,7 +117,7 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
         setError(err instanceof Error ? err.message : 'An error occurred')
         setIsLoading(false)
       })
-  }, [])
+  }, [omitLanguages.includes])
 
   const CustomYAxisTick = ({ x, y, payload }: any) => {
     const icon = getLanguageIcon(payload.value.toLowerCase())
@@ -156,7 +155,7 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
               <div className="flex-1">
                 <Skeleton
                   className="h-6 rounded-md"
-                  style={{ width: `${90 * Math.pow(0.8, index)}%` }}
+                  style={{ width: `${90 * 0.8 ** index}%` }}
                 />
               </div>
             </div>

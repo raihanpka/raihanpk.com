@@ -146,7 +146,7 @@ export default function FloatingChatButton() {
         >
           <div className="relative">
             <div className="whitespace-nowrap rounded-lg bg-black dark:bg-white px-3 py-2 text-sm text-white dark:text-black shadow-lg">
-              Chat with AI
+              Chat with me
             </div>
             {/* Tooltip arrow */}
             <div className="absolute left-1/2 top-full -translate-x-1/2 transform">

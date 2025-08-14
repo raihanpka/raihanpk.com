@@ -50,7 +50,6 @@ export default function ChatInterface() {
     setIsLoading(true)
 
     try {
-      // Prepare messages for API (convert to AI SDK format)
       const apiMessages = [...messages, userMessage].map(msg => ({
         role: msg.sender === 'user' ? 'user' : 'assistant',
         content: msg.content,
@@ -64,7 +63,6 @@ export default function ChatInterface() {
         body: JSON.stringify({ messages: apiMessages }),
       })
 
-      // Handle daily quota exceeded
       if (response.status === 429) {
         try {
           const data = await response.json()
@@ -103,7 +101,6 @@ export default function ChatInterface() {
       const botMessageId = (Date.now() + 1).toString()
       let botContent = ''
 
-      // Add initial bot message placeholder
       const initialBotMessage: Message = {
         id: botMessageId,
         content: '',
@@ -245,14 +242,14 @@ export default function ChatInterface() {
               onChange={e => setInputValue(e.target.value)}
               onKeyUp={handleKeyPress}
               placeholder="Write your message..."
-              className="flex-1 min-h-[48px] max-h-40 px-3 py-2 text-sm border border-input bg-background rounded-lg resize-y focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+              className="flex-1 min-h-[44px] max-h-10 px-3 py-2 text-sm border border-input bg-background rounded-lg resize-y focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
               disabled={isLoading || rateLimited}
             />
             <Button
               onClick={() => handleSendMessage()}
               disabled={!inputValue.trim() || isLoading || rateLimited}
               size="sm"
-              className="px-3 py-2 min-h-[44px] h-full bg-primary"
+              className="px-3 py-2 min-h-[44px] max-h-10 bg-primary"
             >
               <Send className="h-5 w-5" />
             </Button>

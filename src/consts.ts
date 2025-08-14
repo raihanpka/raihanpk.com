@@ -35,3 +35,28 @@ export const SOCIAL_LINKS: Link[] = [
   { href: 'me@raihanpk.com', label: 'Email' },
   { href: '/rss.xml', label: 'RSS' },
 ]
+
+// Chatbot example messages
+import {
+  Gamepad,
+  Computer,
+  GraduationCap,
+} from 'lucide-react'
+
+export const EXAMPLE_MESSAGES = [
+  {
+    heading: 'Hobbies',
+    message: 'What do you do for fun?',
+    icon: Gamepad,
+  },
+  {
+    heading: 'Background',
+    message: 'What did you study?',
+    icon: GraduationCap,
+  },
+  {
+    heading: 'Skills',
+    message: "What is a skill you're proud of?",
+    icon: Computer,
+  },
+] as const;

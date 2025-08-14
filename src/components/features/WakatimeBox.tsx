@@ -171,7 +171,7 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
         accessibilityLayer
         data={languages}
         layout="vertical"
-        margin={{ left: -10, right: 10 }}
+        margin={{ left: -10, right: 20 }}
       >
         <CartesianGrid horizontal={false} />
         <YAxis

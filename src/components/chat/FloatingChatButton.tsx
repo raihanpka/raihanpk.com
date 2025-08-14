@@ -37,6 +37,15 @@ const jarvisStyles = `
       box-shadow: 0 0 30px rgba(0, 0, 0, 0.6), 0 0 60px rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(255, 255, 255, 0.2);
     }
   }
+
+  @keyframes glow-pulse-dark {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.4), 0 0 40px rgba(255, 255, 255, 0.2), inset 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.6), 0 0 60px rgba(255, 255, 255, 0.4), inset 0 0 30px rgba(0, 0, 0, 0.2);
+    }
+  }
 `
 
 export default function FloatingChatButton() {
@@ -68,7 +77,9 @@ export default function FloatingChatButton() {
         )}
         aria-label="Open AI Chat"
         style={{
-          animation: 'glow-pulse 3s ease-in-out infinite'
+          animation: isDarkMode
+            ? 'glow-pulse-dark 6s ease-in-out infinite'
+            : 'glow-pulse 3s ease-in-out infinite'
         }}
       >
         {/* Outer rotating ring */}

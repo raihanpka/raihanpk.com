@@ -183,15 +183,18 @@ const authors = await parseAuthors(post.data.authors ?? [])
       
       if (!scrollToTopButton || !footer) return
 
+      // Cache footer position
       let footerTop = footer.offsetTop
       let windowHeight = window.innerHeight
       
+      // Update cached values on resize with debounce
       let resizeTimeout: number | null = null
       const updateSizes = () => {
         footerTop = footer.offsetTop
         windowHeight = window.innerHeight
       }
       
+      // Debounced resize handler
       const handleResize = () => {
         if (resizeTimeout !== null) {
           window.clearTimeout(resizeTimeout)
@@ -199,8 +202,10 @@ const authors = await parseAuthors(post.data.authors ?? [])
         resizeTimeout = window.setTimeout(updateSizes, 100)
       }
       
+      // Initial setup
       updateSizes()
       
+      // Throttled scroll handler
       let ticking = false
       const handleScroll = () => {
         if (!ticking) {
@@ -215,13 +220,17 @@ const authors = await parseAuthors(post.data.authors ?? [])
         }
       }
       
+      // Add event listeners
       window.addEventListener('scroll', handleScroll, { passive: true })
       window.addEventListener('resize', handleResize, { passive: true })
       
+      // Cleanup
       return () => {
         window.removeEventListener('scroll', handleScroll)
         window.removeEventListener('resize', handleResize)
-        clearTimeout(resizeTimeout)
+        if (resizeTimeout !== null) {
+          window.clearTimeout(resizeTimeout)
+        }
       }
     })
   </script>

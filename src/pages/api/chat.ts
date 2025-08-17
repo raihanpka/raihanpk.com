@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro'
-import { LlamaCloudIndex, ContextChatEngine, Settings } from 'llamaindex'
+import { LlamaCloudIndex } from 'llama-cloud-services'
+import { ContextChatEngine, Settings } from 'llamaindex'
 import { OpenAI } from '@llamaindex/openai'
 
 export const prerender = false
@@ -113,7 +114,8 @@ export const POST: APIRoute = async ({ request }) => {
                     - If there's no answer to a question, clarify that without making up a conclusion.
                     - If a user's question isn't related to Raihan, explain that the chat is focused on him and can't answer unrelated questions, this is important!
                     - Inappropriate questions will not be answered, with a clear statement that such questions won't be addressed.
-                    - You only can answer the question in Indonesian or English, if the question is in Indonesian, you must answer in Indonesian, if the question is in English or other language (except Indonesian), you must answer in English. 
+                    - You only can answer the question in Indonesian or English, if the question is in Indonesian, you must answer in Indonesian.
+                    - Otherwise, if the question is in English or other language (except Indonesian), first you must translate the knowledge base and then answer in English. 
                     All of this rule are strict!
                     `
     })

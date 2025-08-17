@@ -188,7 +188,7 @@ const authors = await parseAuthors(post.data.authors ?? [])
       let windowHeight = window.innerHeight
       
       // Update cached values on resize with debounce
-      let resizeTimeout
+      let resizeTimeout: ReturnType<typeof setTimeout> | null = null
       const updateSizes = () => {
         footerTop = footer.offsetTop
         windowHeight = window.innerHeight
@@ -196,7 +196,7 @@ const authors = await parseAuthors(post.data.authors ?? [])
       
       // Debounced resize handler
       const handleResize = () => {
-        clearTimeout(resizeTimeout)
+        if (resizeTimeout) clearTimeout(resizeTimeout)
         resizeTimeout = setTimeout(updateSizes, 100)
       }
       

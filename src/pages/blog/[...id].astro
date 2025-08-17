@@ -52,6 +52,7 @@ const post = Astro.props
 const { Content, headings } = await render(post)
 
 const authors = await parseAuthors(post.data.authors ?? [])
+
 ---
 
 <Layout
@@ -179,21 +180,53 @@ const authors = await parseAuthors(post.data.authors ?? [])
     document.addEventListener('astro:page-load', () => {
       const scrollToTopButton = document.getElementById('scroll-to-top')
       const footer = document.querySelector('footer')
+      
+      if (!scrollToTopButton || !footer) return
 
-      if (scrollToTopButton && footer) {
-        scrollToTopButton.addEventListener('click', () => {
-          window.scrollTo({ top: 0, behavior: 'smooth' })
-        })
-
-        window.addEventListener('scroll', () => {
-          const footerRect = footer.getBoundingClientRect()
-          const isFooterVisible = footerRect.top <= window.innerHeight
-
-          scrollToTopButton.classList.toggle(
-            'hidden',
-            window.scrollY <= 300 || isFooterVisible,
-          )
-        })
+      // Cache footer position
+      let footerTop = footer.offsetTop
+      let windowHeight = window.innerHeight
+      
+      // Update cached values on resize with debounce
+      let resizeTimeout
+      const updateSizes = () => {
+        footerTop = footer.offsetTop
+        windowHeight = window.innerHeight
+      }
+      
+      // Debounced resize handler
+      const handleResize = () => {
+        clearTimeout(resizeTimeout)
+        resizeTimeout = setTimeout(updateSizes, 100)
+      }
+      
+      // Initial setup
+      updateSizes()
+      
+      // Throttled scroll handler
+      let ticking = false
+      const handleScroll = () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            const isFooterVisible = footerTop <= (window.scrollY + windowHeight)
+            const shouldShow = window.scrollY > 300 && !isFooterVisible
+            
+            scrollToTopButton.classList.toggle('hidden', !shouldShow)
+            ticking = false
+          })
+          ticking = true
+        }
+      }
+      
+      // Add event listeners
+      window.addEventListener('scroll', handleScroll, { passive: true })
+      window.addEventListener('resize', handleResize, { passive: true })
+      
+      // Cleanup
+      return () => {
+        window.removeEventListener('scroll', handleScroll)
+        window.removeEventListener('resize', handleResize)
+        clearTimeout(resizeTimeout)
       }
     })
   </script>

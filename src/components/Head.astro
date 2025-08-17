@@ -5,6 +5,7 @@ import '../styles/katex.css'
 import { SITE } from '@/consts'
 import { ClientRouter } from 'astro:transitions'
 import SpeedInsights from '@vercel/speed-insights/astro'
+import { getCriticalCSS } from '../lib/critical-css'
 
 interface Props {
   title: string
@@ -13,13 +14,62 @@ interface Props {
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
-
 const { title, description, image = '/static/twitter-card.png' } = Astro.props
+
+// Inline critical CSS
+const criticalCSS = await getCriticalCSS()
 ---
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="generator" content={Astro.generator} />
+
+{/* Preconnect to external domains */}
+<link rel="preconnect" href="https://cloud.umami.is" />
+<link rel="preconnect" href="https://vitals.vercel-insights.com" />
+<link rel="dns-prefetch" href="https://cloud.umami.is" />
+<link rel="dns-prefetch" href="https://vitals.vercel-insights.com" />
+
+{/* Preload critical fonts with font-display: swap */}
+<link 
+  rel="preload" 
+  href="/fonts/GeistVF.woff2" 
+  as="font" 
+  type="font/woff2" 
+  crossorigin
+  onload="this.onload=null;this.rel='font'"
+/>
+<link 
+  rel="preload" 
+  href="/fonts/GeistMonoVF.woff2" 
+  as="font" 
+  type="font/woff2" 
+  crossorigin
+  onload="this.onload=null;this.rel='font'"
+/>
+
+{/* Add font-face with font-display: swap */}
+<style is:inline>
+  @font-face {
+    font-family: 'Geist';
+    src: url('/fonts/GeistVF.woff2') format('woff2');
+    font-display: swap;
+    font-weight: 100 900;
+  }
+  @font-face {
+    font-family: 'Geist Mono';
+    src: url('/fonts/GeistMonoVF.woff2') format('woff2');
+    font-display: swap;
+    font-weight: 100 900;
+  }
+</style>
+
+{/* Inline critical CSS */}
+<style is:inline>{criticalCSS}</style>
+
+{/* Defer non-critical CSS */}
+<link rel="preload" href="/styles/global.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+<noscript><link rel="stylesheet" href="/styles/global.css" /></noscript>
 
 <link rel="canonical" href={canonicalURL} />
 <link rel="sitemap" href="/sitemap-index.xml" />
@@ -51,18 +101,36 @@ const { title, description, image = '/static/twitter-card.png' } = Astro.props
 
 <ClientRouter />
 
+{/* Defer non-critical scripts */}
+<script is:inline src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/theme-change.min.js" defer></script>
+
 <script is:inline>
+  // Load non-critical CSS
+  function loadCSS(href) {
+    const link = document.createElement('link');
+    link.href = href;
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+  }
+  
+  // Load non-critical CSS after page load
+  if (window.requestIdleCallback) {
+    window.requestIdleCallback(() => {
+      loadCSS('/styles/katex.css');
+    });
+  } else {
+    window.addEventListener('load', () => {
+      loadCSS('/styles/katex.css');
+    });
+  }
+
+  // Theme handling
   function setDarkMode(document) {
     const getThemePreference = () => {
-      if (
-        typeof localStorage !== 'undefined' &&
-        localStorage.getItem('theme')
-      ) {
+      if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
         return localStorage.getItem('theme')
       }
-      return window.matchMedia('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'theme-light'
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'theme-light'
     }
     const isDark = getThemePreference() === 'dark'
     document.documentElement.classList[isDark ? 'add' : 'remove']('dark')
@@ -82,8 +150,30 @@ const { title, description, image = '/static/twitter-card.png' } = Astro.props
   setDarkMode(document)
 
   document.addEventListener('astro:before-swap', (ev) => {
-    // Pass the incoming document to set the theme on it
     setDarkMode(ev.newDocument)
   })
 </script>
-<SpeedInsights />
+
+{/* Load analytics and speed insights after page is interactive */}
+<script is:inline>
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadNonCritical);
+  } else {
+    loadNonCritical();
+  }
+  
+  function loadNonCritical() {
+    // Load Umami Analytics
+    const umamiScript = document.createElement('script');
+    umamiScript.src = 'https://cloud.umami.is/script.js';
+    umamiScript.setAttribute('data-website-id', 'd5f41f5f-8925-4e9a-91a1-b7226a775f8a');
+    umamiScript.async = true;
+    document.head.appendChild(umamiScript);
+    
+    // Load Vercel Speed Insights
+    const speedInsightsScript = document.createElement('script');
+    speedInsightsScript.src = 'https://vitals.vercel-insights.com/v1/script.js';
+    speedInsightsScript.defer = true;
+    document.head.appendChild(speedInsightsScript);
+  }
+</script>

@@ -15,28 +15,47 @@ const { title, description, image } = Astro.props
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
   <head>
-    <!-- Umami Analytics -->
-    <script 
-      is:inline type="text/partytown" 
-      defer src="https://cloud.umami.is/script.js" 
-      data-website-id="d5f41f5f-8925-4e9a-91a1-b7226a775f8a">
-    </script>
+    <link 
+      rel="preload" 
+      href="https://cloud.umami.is/script.js" 
+      as="script"
+      fetchpriority="low"
+    >
     <Head
       title={`${title} | ${SITE.TITLE}`}
       description={description}
       image={image}
     />
   </head>
-  <body>
-    <div class="box-border flex h-fit min-h-screen flex-col gap-y-6 font-sans antialiased">
+  <body class="min-h-screen bg-background text-foreground antialiased">
+    <div class="flex min-h-screen flex-col">
       <Header />
-      <main class="flex-grow">
-        <slot />
+      <main class="flex-1">
+        <div class="container mx-auto px-4 py-8">
+          <slot />
+        </div>
       </main>
       {Astro.url.pathname === '/' && <FloatingChatButton client:load />}
       <Footer />
     </div>
+    
+    <!-- Load analytics after main content is interactive -->
+    <script is:inline>
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(loadAnalytics, { timeout: 2000 });
+      } else {
+        window.addEventListener('load', loadAnalytics);
+      }
+      
+      function loadAnalytics() {
+        const script = document.createElement('script');
+        script.src = 'https://cloud.umami.is/script.js';
+        script.setAttribute('data-website-id', 'd5f41f5f-8925-4e9a-91a1-b7226a775f8a');
+        script.async = true;
+        document.body.appendChild(script);
+      }
+    </script>
   </body>
 </html>

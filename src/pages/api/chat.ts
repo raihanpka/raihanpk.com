@@ -5,7 +5,7 @@ import { OpenAI } from '@llamaindex/openai'
 
 export const prerender = false
 
-const DAILY_LIMIT = 20
+const DAILY_LIMIT = 15
 const QUOTA_COOKIE = 'chat_quota'
 
 function getTodayUTC() {
@@ -76,7 +76,7 @@ export const POST: APIRoute = async ({ request }) => {
     if (count >= DAILY_LIMIT) {
       const payload = {
         error: 'rate_limited',
-        message: `Batas penggunaan chat harian tercapai (25/hari). Coba lagi besok.`,
+        message: `Limit daily chat reached (15 per day). Try again tomorrow.`,
         limit: DAILY_LIMIT,
         remaining: 0,
       }
@@ -115,7 +115,7 @@ export const POST: APIRoute = async ({ request }) => {
                     - If a user's question isn't related to Raihan, explain that the chat is focused on him and can't answer unrelated questions, this is important!
                     - Inappropriate questions will not be answered, with a clear statement that such questions won't be addressed.
                     - You only can answer the question in Indonesian or English, if the question is in Indonesian, you must answer in Indonesian.
-                    - Otherwise, if the question is in English or other language (except Indonesian), first you must translate the knowledge base and then answer in English. 
+                    - Otherwise, if the question is in English or other language (except Indonesian), first you must translate the knowledge base from Indonesian to English and then answer in English. 
                     All of this rule are strict!
                     `
     })

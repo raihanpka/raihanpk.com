@@ -11,5 +11,5 @@ Fitur tambahan yang telah dikembangkan dari fitur built in yang telah ada dari p
 - Spotify Status: Menampilkan status musik yang sedang aku putar dan terakhir diputar di platform [Spotify](https://spotify.com) dengan menggunakan API dari [Spotify](https://spotify.com) dan [Last.fm](https://last.fm).
 - Wakatime Status: Integrasi dengan [Wakatime](https://wakatime.com) untuk menampilkan perkembangan waktu penggunaan kode dalam beberapa bahasa pemrograman. Dengan integrasi ini, website aku bisa menampilkan empat bahasa pemrograman yang paling sering digunakan.
 
-# 📌 Rencana Pengembangan Lanjutan
+## 📌 Rencana Pengembangan Lanjutan
 - Blog: Migrasi dari Markdown ke CMS dengan menggunakan [Sanity CMS](https://sanity.io).

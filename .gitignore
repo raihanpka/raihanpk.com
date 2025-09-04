@@ -1,6 +1,7 @@
 # build output
 dist/
-# generated types
+
+# generated astro
 .astro/
 
 # dependencies
@@ -16,9 +17,12 @@ pnpm-debug.log*
 .env
 .env.production
 .env.local
+*.env*
+
+# prisma
+*generated/
 
 # macOS-specific files
 .DS_Store
-
-# jetbrains setting folder
-.idea/
+/generated/prisma
+.vercel

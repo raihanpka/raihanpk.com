@@ -12,6 +12,9 @@ import { formatDate, readingTime } from '@/lib/utils'
 import { Icon } from 'astro-icon/components'
 import { Image } from 'astro:assets'
 import { type CollectionEntry, getCollection, render } from 'astro:content'
+import { BookOpen, Eye } from 'lucide-react'
+import prisma from '@/lib/prisma'
+
 
 export async function getStaticPaths() {
   const posts = (await getCollection('blog'))
@@ -52,6 +55,21 @@ const post = Astro.props
 const { Content, headings } = await render(post)
 
 const authors = await parseAuthors(post.data.authors ?? [])
+
+let pageViews: any
+const slug = post.id
+
+try {
+  pageViews = await prisma.views.upsert({
+    where: { slug },
+    create: { slug, count: 1 },
+    update: { count: { increment: 1 } },
+    select: { slug: true, count: true },
+  })
+} catch (error) {
+  console.error(error)
+  pageViews = { slug, count: 1 }
+}
 
 ---
 
@@ -125,6 +143,10 @@ const authors = await parseAuthors(post.data.authors ?? [])
             <span>{formatDate(post.data.date)}</span>
             <Separator orientation="vertical" className="h-4" />
             <span>{readingTime(post.body!)}</span>
+            <Separator orientation="vertical" className="h-4" />
+            <span class="flex items-center gap-1">
+              <Eye /> {pageViews?.count ?? 0} views
+            </span>
           </div>
         </div>
         <div class="flex flex-wrap justify-center gap-2">

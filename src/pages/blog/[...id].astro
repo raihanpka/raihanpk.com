@@ -237,5 +237,23 @@ const authors = await parseAuthors(post.data.authors ?? [])
         }
       }
     })
+
+    // Reload server islands (misal: ViewCounter) setelah navigasi client-side
+    document.addEventListener('astro:after-swap', () => {
+      // Ganti selector sesuai island kamu, misal: [data-island="view-counter"]
+      const viewCounter = document.querySelector('[data-island="view-counter"]');
+      if (viewCounter) {
+        fetch(window.location.pathname)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newIsland = doc.querySelector('[data-island="view-counter"]');
+            if (newIsland) {
+              viewCounter.replaceWith(newIsland);
+            }
+          });
+      }
+    });
   </script>
 </Layout>

@@ -12,9 +12,7 @@ import { formatDate, readingTime } from '@/lib/utils'
 import { Icon } from 'astro-icon/components'
 import { Image } from 'astro:assets'
 import { type CollectionEntry, getCollection, render } from 'astro:content'
-import { Eye } from 'lucide-react'
 import ViewCounter from '@/components/ViewCounter.astro'
-
 
 export async function getStaticPaths() {
   const posts = (await getCollection('blog'))
@@ -128,7 +126,7 @@ const authors = await parseAuthors(post.data.authors ?? [])
             <span>{formatDate(post.data.date)}</span>
             <Separator orientation="vertical" className="h-4" />
             <span>{readingTime(post.body!)}</span>
-            <ViewCounter server:defer slug={post.id}>views</ViewCounter>
+            <ViewCounter server:defer slug={post.id} />
           </div>
         </div>
         <div class="flex flex-wrap justify-center gap-2">
@@ -238,21 +236,25 @@ const authors = await parseAuthors(post.data.authors ?? [])
       }
     })
 
-    // Reload server islands (misal: ViewCounter) setelah navigasi client-side
-    document.addEventListener('astro:after-swap', () => {
-      // Ganti selector sesuai island kamu, misal: [data-island="view-counter"]
-      const viewCounter = document.querySelector('[data-island="view-counter"]');
-      if (viewCounter) {
-        fetch(window.location.pathname)
-          .then(res => res.text())
-          .then(html => {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            const newIsland = doc.querySelector('[data-island="view-counter"]');
-            if (newIsland) {
-              viewCounter.replaceWith(newIsland);
-            }
-          });
+    // Reload ViewCounter setelah navigasi
+    document.addEventListener('astro:after-swap', async () => {
+      const viewCounters = Array.from(document.querySelectorAll('[data-island="view-counter"]'));
+      
+      for (const counter of viewCounters) {
+        try {
+          // Re-fetch page untuk mendapatkan ViewCounter terbaru
+          const response = await fetch(window.location.pathname);
+          const html = await response.text();
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          const newCounter = doc.querySelector('[data-island="view-counter"]');
+          
+          if (newCounter) {
+            counter.replaceWith(newCounter);
+          }
+        } catch (error) {
+          console.error('Failed to reload view counter:', error);
+        }
       }
     });
   </script>

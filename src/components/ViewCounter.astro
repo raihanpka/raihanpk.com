@@ -1,24 +1,29 @@
 ---
-import prisma from '@/lib/prisma'
 import { Eye } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
+interface Props {
+  slug: string
+}
 
-let pageViews: any;
-const slug = Astro.props.slug;
+const { slug } = Astro.props
 
+let pageViews = 0
 try {
-    pageViews = await prisma.views.upsert({
-        where: { slug },
-        create: { slug, count: 1 },
-        update: { count: { increment: 1 } },
-        select: { slug: true, count: true },
-    });
+  const pageViewsResponse = await fetch(`${Astro.url.origin}/api/viewcounter`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ slug }),
+  })
+  const result = await pageViewsResponse.json()
+  pageViews = result.count || 0
 } catch (error) {
-    console.error(error);
-    pageViews = { slug, count: 1 };
+  console.error('ViewCounter error:', error)
+  pageViews = 0
 }
 ---
 <Separator orientation="vertical" className="h-4" />
 <span class="flex items-center gap-1">
-    <Eye /> {pageViews.count} views
+    <Eye /> {pageViews} views
 </span>

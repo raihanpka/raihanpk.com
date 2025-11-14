@@ -64,6 +64,19 @@
     --chart-2: 0 0% 96%;
     --chart-3: 0 0% 94%;
     --chart-4: 0 0% 92%;
+
+    /* Priority override: ensure project border color wins over third-party CSS imports
+    Some third-party CSS (e.g. @devnomic/marquee) includes global rules that can
+    override border colors. Force our intended border color for common bordered
+    elements so the site visuals remain consistent. */
+    :where(.border, .rounded, .rounded-lg, .rounded-xl, .card, [data-has-border], .badge) {
+      border-color: hsl(var(--border)) !important;
+    }
+
+    /* Also ensure border utilities (like border-2) use the same color */
+    *:where(.border, .border-2, .border-t, .border-b, .border-l, .border-r) {
+      border-color: hsl(var(--border)) !important;
+    }
   }
 
   *,

@@ -55,7 +55,7 @@ const blog = (await getCollection('blog'))
 
       <div role="region" aria-label="Tech Stack"
         class="flex-1 h-[270px] min-w-[160px] flex flex-col items-start whitespace-nowrap rounded-lg border px-2 py-4 text-xs leading-loose text-white">
-        <TechStackSlider client:only="react" />
+        <TechStackSlider client:load />
       </div>
     </section>
 

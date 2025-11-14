@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import Marquee from 'react-fast-marquee'
+import { Marquee } from "@devnomic/marquee";
+import "@devnomic/marquee/dist/index.css";
 import { 
   SiReact, SiNextdotjs, SiAstro, SiTailwindcss, SiDjango, SiStreamlit, SiVite, SiExpo,
   SiNodedotjs, SiBun, SiExpress, SiFastapi, SiMysql, SiPostgresql, SiMongodb, SiPrisma, SiSupabase, SiFirebase,
@@ -61,6 +62,7 @@ const StackIcon: React.FC<StackIconProps> = ({ name, size = "2em" }) => {
 export default function TechStackSlider() {
   const [hoveredKey, setHoveredKey] = useState<string | null>(null)
   const [isDesktop, setIsDesktop] = useState(false)
+  const [marqueeKey, setMarqueeKey] = useState(0)
 
   const stacksList = [
     // Frontend
@@ -119,8 +121,17 @@ export default function TechStackSlider() {
     const handle = (e: MediaQueryListEvent | MediaQueryList) => setIsDesktop(e.matches)
     handle(mq)
     mq.addEventListener('change', handle as any)
+
+    const rerun = () => {
+      setHoveredKey(null)
+      // bump key to force remount of Marquee rows
+      setMarqueeKey((p) => p + 1)
+    }
+    window.addEventListener('astro:page-load', rerun)
+
     return () => {
       mq.removeEventListener('change', handle as any)
+      window.removeEventListener('astro:page-load', rerun)
     }
   }, [])
 
@@ -128,12 +139,12 @@ export default function TechStackSlider() {
     <div className="relative mx-auto w-full overflow-hidden rounded-xl p-4" style={{ background: 'transparent' }}>
       {/* Row 1 */}
       <Marquee
-        speed={25}
-        autoFill={true}
+        key={`row1-${marqueeKey}`}
+        fade={true}
         direction="left"
         pauseOnHover={isPaused || isDesktop}
-        pauseOnClick={!isDesktop}
         className="mb-4 transform rotate-1"
+        innerClassName="gap-2"
       >
         {row1.map((stack, index) => (
           <div
@@ -157,12 +168,13 @@ export default function TechStackSlider() {
 
       {/* Row 2 */}
       <Marquee
-        speed={25}
-        autoFill={true}
-        direction="right"
+        key={`row2-${marqueeKey}`}
+        fade={true}
+        direction="left"
+        reverse={true}
         pauseOnHover={isPaused || isDesktop}
-        pauseOnClick={!isDesktop}
         className="mb-4 transform rotate-1"
+        innerClassName="gap-2"
       >
         {row2.map((stack, index) => (
           <div
@@ -186,12 +198,12 @@ export default function TechStackSlider() {
 
       {/* Row 3 */}
       <Marquee
-        speed={25}
-        autoFill={true}
+        key={`row3-${marqueeKey}`}
+        fade={true}
         direction="left"
         pauseOnHover={isPaused || isDesktop}
-        pauseOnClick={!isDesktop}
         className="mb-4 transform rotate-1"
+        innerClassName="gap-2"
       >
         {row3.map((stack, index) => (
           <div

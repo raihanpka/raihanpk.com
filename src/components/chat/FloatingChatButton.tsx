@@ -51,13 +51,19 @@ const jarvisStyles = `
 export default function FloatingChatButton() {
   const [isHovered, setIsHovered] = useState(false)
 
-  // Inject custom styles
+  // Inject custom styles (guarded for safety)
   React.useEffect(() => {
+    if (typeof document === 'undefined') return
     const styleElement = document.createElement('style')
     styleElement.textContent = jarvisStyles
     document.head.appendChild(styleElement)
     return () => {
-      document.head.removeChild(styleElement)
+      try {
+        // use remove() to avoid exceptions if element already detached
+        styleElement.remove()
+      } catch (err) {
+        // swallow cleanup errors
+      }
     }
   }, [])
 
@@ -65,7 +71,8 @@ export default function FloatingChatButton() {
     window.location.href = '/chat'
   }
 
-  const { isDarkMode } = useTheme()
+  const theme = useTheme()
+  const isDarkMode = theme?.isDarkMode ?? false
   return (
     <div className="fixed bottom-10 right-5 z-50 md:bottom-20 md:right-20">
       <button

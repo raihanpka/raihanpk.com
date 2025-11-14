@@ -17,18 +17,25 @@ const { title, description, image } = Astro.props
 <!doctype html>
 <html lang="en" class="scroll-smooth">
   <head>
-    <link 
-      rel="preload" 
-      href="https://cloud.umami.is/script.js" 
-      as="script"
-      fetchpriority="low"
-    >
     <Head
       title={`${title} | ${SITE.TITLE}`}
       description={description}
       image={image}
     />
   </head>
+  <style is:inline>
+    body {
+      visibility: hidden;
+      opacity: 0;
+    }
+  </style>
+  <style is:global>
+    body {
+      visibility: visible;
+      opacity: 1;
+      transition: visibility 0.2s linear, opacity 0.2s linear;
+    }
+  </style>
   <body class="min-h-screen bg-background text-foreground antialiased">
     <div class="flex min-h-screen flex-col">
       <Header />
@@ -40,22 +47,5 @@ const { title, description, image } = Astro.props
       {Astro.url.pathname === '/' && <FloatingChatButton client:load />}
       <Footer />
     </div>
-    
-    <!-- Load analytics after main content is interactive -->
-    <script is:inline>
-      if ('requestIdleCallback' in window) {
-        window.requestIdleCallback(loadAnalytics, { timeout: 2000 });
-      } else {
-        window.addEventListener('load', loadAnalytics);
-      }
-      
-      function loadAnalytics() {
-        const script = document.createElement('script');
-        script.src = 'https://cloud.umami.is/script.js';
-        script.setAttribute('data-website-id', 'd5f41f5f-8925-4e9a-91a1-b7226a775f8a');
-        script.async = true;
-        document.body.appendChild(script);
-      }
-    </script>
   </body>
 </html>

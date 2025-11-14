@@ -15,6 +15,7 @@ import Layout from '@/layouts/Layout.astro'
 import { getCollection } from 'astro:content'
 import SpotifyPresence from '@/components/features/SpotifyPresence.tsx'
 import WakatimeBox from '@/components/features/WakatimeBox.tsx'
+import TechStackSlider from '@/components/features/TechStackSlider.tsx'
 
 const blog = (await getCollection('blog'))
   .filter((post) => !post.data.draft)
@@ -27,24 +28,15 @@ const blog = (await getCollection('blog'))
     <section>
       <Card>
         <CardHeader>
-          <CardTitle className="text-3xl">raihan pk</CardTitle>
-          <CardDescription
-            >/ˈraɪ.han.peˈka/ &bull; <span class="font-semibold">person</span
-            ></CardDescription
+          <CardTitle className="text-3xl"><span class="font-mono">Raihan Putra Kirana</span></CardTitle>
+          <CardDescription>/ˈraɪ.han.peˈka/ &bull; 
+            <span class="font-bold font-mono">Systems-led builder working across Software, AI/ML, and Cloud.</span
+          ></CardDescription
           >
         </CardHeader>
         <CardContent>
           <p class="mb-2 text-sm text-muted-foreground">
-            Welcome to my digital home. 
-            <br>
-            <Link
-              href="https://raihanpk.com"
-              class="text-foreground"
-              underline>raihanpk.com</Link
-            >
-            is not just a digital home, this is a space to connect and grow. 
-            Links open doors, words build bridges, and every click sparks a conversation. 
-            <b>Explore, engage, and let’s share ideas</b>.
+            Crafting Software, AI/ML, and DevOps solution. With LLM-ML experiments to scalable cloud & system automation, while leading teams to real product wins.
           </p>
         </CardContent>
       </Card>
@@ -59,6 +51,11 @@ const blog = (await getCollection('blog'))
       <div role="region" aria-label="Spotify Section"
       class="flex h-[170px] w-[calc(50%-0.5rem)] flex-col items-start whitespace-nowrap rounded-lg border px-2 py-2 text-xs leading-loose text-white max-md:w-full">
       <SpotifyPresence client:load />
+      </div>
+
+      <div role="region" aria-label="Tech Stack"
+        class="flex-1 h-[270px] min-w-[160px] flex flex-col items-start whitespace-nowrap rounded-lg border px-2 py-4 text-xs leading-loose text-white">
+        <TechStackSlider client:only="react" />
       </div>
     </section>
 

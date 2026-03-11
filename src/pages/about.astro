@@ -1,22 +1,48 @@
 ---
+import { AuthorCardClient } from '@/components/AuthorCardClient'
 import Breadcrumbs from '@/components/Breadcrumbs.astro'
 import Container from '@/components/Container.astro'
 import Link from '@/components/Link.astro'
-import ProjectCard from '@/components/ProjectCard.astro'
 import { SITE } from '@/consts'
 import Layout from '@/layouts/Layout.astro'
 import { getCollection } from 'astro:content'
 
-const projects = await getCollection('projects')
+const authors = await getCollection('authors')
 ---
 
 <Layout title="About" description={SITE.DESCRIPTION}>
   <Container class="flex flex-col gap-y-6">
     <Breadcrumbs items={[{ label: 'About', icon: 'lucide:info' }]} />
 
+    {
+      authors.length > 0 ? (
+        <ul class="not-prose flex flex-col gap-4">
+          {authors.map((author) => (
+            <li>
+              <AuthorCardClient
+                client:load
+                id={author.id}
+                name={author.data.name}
+                avatar={author.data.avatar}
+                bio={author.data.bio}
+                pronouns={author.data.pronouns}
+                github={author.data.github}
+                linkedin={author.data.linkedin}
+                instagram={author.data.instagram}
+                website={author.data.website}
+                mail={author.data.mail}
+              />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="text-center text-muted-foreground">No authors found.</p>
+      )
+    }
+
     <section>
       <div class="min-w-full">
-        <div class="prose prose-neutral mb-8 dark:prose-invert">
+        <div class="prose prose-neutral max-w-none mb-8 text-justify dark:prose-invert">
           <h2 class="mb-4 text-2xl font-semibold">Hello, I'm Raihan.</h2>
           <p class="mb-4">
             My name is Raihan Putra Kirana, but my friends often called me "Peka". 
@@ -34,11 +60,6 @@ const projects = await getCollection('projects')
             my dad's laptop and also started tinkering with other tech stuff. Maybe that's one of my reasons, why 
             I chose this major.
           </p>
-        </div>
-
-        <h2 class="mb-4 text-2xl font-semibold">Project Listings</h2>
-        <div class="flex flex-col gap-4">
-          {projects.map((project) => <ProjectCard project={project} />)}
         </div>
       </div>
     </section>

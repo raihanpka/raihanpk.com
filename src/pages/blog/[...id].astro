@@ -53,7 +53,6 @@ const post = Astro.props
 const { Content, headings } = await render(post)
 
 const authors = await parseAuthors(post.data.authors ?? [])
-
 ---
 
 <Layout
@@ -61,15 +60,12 @@ const authors = await parseAuthors(post.data.authors ?? [])
   description={post.data.description}
   image={post.data.image?.src ?? '/static/1200x630.jpg'}
 >
-  <section
-    class="grid grid-cols-[minmax(0px,1fr)_min(768px,100%)_minmax(0px,1fr)] gap-y-6 *:px-4"
-  >
+  <div class="mx-auto max-w-screen-lg px-4 flex flex-col gap-y-6">
     <Breadcrumbs
       items={[
         { href: '/blog', label: 'Blog', icon: 'lucide:archive' },
         { label: post.data.title, icon: 'lucide:file-text' },
       ]}
-      class="col-start-2"
     />
     {
       post.data.image && (
@@ -78,11 +74,11 @@ const authors = await parseAuthors(post.data.authors ?? [])
           alt={post.data.title}
           width={1200}
           height={630}
-          class="col-span-full mx-auto w-full max-w-[1000px] object-cover"
+          class="mx-auto w-full rounded-xl object-cover"
         />
       )
     }
-    <section class="col-start-2 flex flex-col gap-y-6 text-center">
+    <section class="flex flex-col gap-y-6 text-center">
       <div class="flex flex-col gap-y-4">
         <h1 class="text-4xl font-bold leading-tight sm:text-5xl">
           {post.data.title}
@@ -153,16 +149,19 @@ const authors = await parseAuthors(post.data.authors ?? [])
       <PostNavigation prevPost={prevPost} nextPost={nextPost} />
     </section>
 
-    {headings.length > 0 && <TableOfContents headings={headings} />}
+    {headings.length > 0 && <TableOfContents headings={headings} mobileOnly />}
 
-    <article
-      class="prose prose-neutral col-start-2 max-w-none dark:prose-invert"
-    >
-      <Content />
-    </article>
+    <div class="flex items-start gap-8">
+      <article class="prose prose-neutral max-w-none dark:prose-invert flex-1 min-w-0">
+        <Content />
+      </article>
+      {headings.length > 0 && (
+        <TableOfContents headings={headings} desktopOnly />
+      )}
+    </div>
 
     <PostNavigation prevPost={prevPost} nextPost={nextPost} />
-  </section>
+  </div>
 
   <Button
     variant="outline"

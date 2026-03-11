@@ -1,7 +1,7 @@
 ---
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { Icon } from 'astro-icon/components'
-import TableOfContentsHeading from './TableOfContentsHeading.astro'
+import TableOfContentsHeading from '@/components/TableOfContentsHeading.astro'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 export interface Heading {
   depth: number
@@ -10,7 +10,7 @@ export interface Heading {
   subheadings: Heading[]
 }
 
-const { headings } = Astro.props
+const { headings, mobileOnly = false, desktopOnly = false } = Astro.props
 const toc = buildToc(headings)
 
 function buildToc(headings: Heading[]): Heading[] {
@@ -39,7 +39,7 @@ function buildToc(headings: Heading[]): Heading[] {
 
 <details
   open
-  class="group col-start-2 mx-4 block rounded-xl border p-4 xl:hidden"
+  class:list={['group rounded-xl border p-4 xl:hidden', desktopOnly && 'hidden']}
 >
   <summary
     class="flex cursor-pointer items-center justify-between text-xl font-semibold group-open:pb-4"
@@ -53,7 +53,6 @@ function buildToc(headings: Heading[]): Heading[] {
   <ScrollArea
     client:load
     className="flex max-h-64 flex-col overflow-y-auto"
-    type="always"
   >
     <nav>
       <ul></ul>
@@ -63,21 +62,19 @@ function buildToc(headings: Heading[]): Heading[] {
 </details>
 
 <nav
-  class="sticky top-[5.5rem] col-start-1 hidden h-[calc(100vh-5.5rem)] text-xs leading-4 xl:block"
+  class:list={['sticky top-[5.5rem] hidden w-64 shrink-0 text-xs leading-4 xl:block', mobileOnly && 'xl:hidden']}
 >
-  <div class="flex justify-end">
-    <ScrollArea client:load className="max-h-[calc(100vh-8rem)]" type="always">
-      <ul
-        class="flex flex-col justify-end gap-y-2 overflow-y-auto px-8"
-        id="toc-container"
-      >
-        <li>
-          <h2 class="mb-2 text-lg font-semibold">Table of Contents</h2>
-        </li>
-        {toc.map((heading) => <TableOfContentsHeading heading={heading} />)}
-      </ul>
-    </ScrollArea>
-  </div>
+  <ScrollArea client:load className="max-h-[calc(100vh-8rem)]" type="always">
+    <ul
+      class="flex flex-col gap-y-2"
+      id="toc-container"
+    >
+      <li>
+        <h2 class="mb-2 text-base font-semibold">Table of Contents</h2>
+      </li>
+      {toc.map((heading) => <TableOfContentsHeading heading={heading} />)}
+    </ul>
+  </ScrollArea>
 </nav>
 
 <script>

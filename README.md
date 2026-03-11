@@ -1,15 +1,16 @@
-# 👨🏻‍💻 Personal Website - raihanpk.com
+# Personal Website - raihanpk.com
 
-Source code untuk website raihanpk.com ini yang dibuat dengan menggunakan Astro. Situs ini menampilkan portofolio, blog, chatbot, dan beberapa fitur tambahan seperti status spotify dan status wakatime.
+Source code for raihanpk.com built with Astro. This website showcases a portfolio, blog, chatbot, and additional features such as Spotify status and Wakatime status.
 
 [![raihanpk.com](https://raihanpk.com/static/twitter-card.png)](https://raihanpk.com)
 
-## ✨ Fitur
-Fitur tambahan yang telah dikembangkan dari fitur built in yang telah ada dari public template [Astro Erudite](https://github.com/jktrn/astro-erudite) dari [jktrn](https://github.com/jktrn)
+## Features
+Additional features developed from built-in features of the public template [Astro Erudite](https://github.com/jktrn/astro-erudite) by [jktrn](https://github.com/jktrn)
 
-- Chatbot: Personal chatbot yang dapat menjawab pertanyaan yang berkaitan dengan diri saya dengan Retrieval Augmented Generation (RAG). Dibangun dengan [LlamaIndex](https:/llamaindex.ai) dan [OpenAI API](https://openai.com).
-- Spotify Status: Menampilkan status musik yang sedang aku putar dan terakhir diputar di platform [Spotify](https://spotify.com) dengan menggunakan API dari [Spotify](https://spotify.com) dan [Last.fm](https://last.fm).
-- Wakatime Status: Integrasi dengan [Wakatime](https://wakatime.com) untuk menampilkan perkembangan waktu penggunaan kode dalam beberapa bahasa pemrograman. Dengan integrasi ini, website aku bisa menampilkan empat bahasa pemrograman yang paling sering digunakan.
+- Chatbot: Personal chatbot that can answer questions about me using Retrieval Augmented Generation (RAG). Built with [LlamaIndex](https://llamaindex.ai) and [OpenAI API](https://openai.com).
+- Spotify Status: Displays currently playing and recently played music on [Spotify](https://spotify.com) using the [Spotify](https://spotify.com) and [Last.fm](https://last.fm) APIs.
+- Wakatime Status: Integration with [Wakatime](https://wakatime.com) to display coding time analytics across programming languages. This integration allows the website to showcase my four most-used programming languages.
 
-## 📌 Rencana Pengembangan Lanjutan
-- Blog: Migrasi dari Markdown ke CMS dengan menggunakan [Sanity CMS](https://sanity.io).
+## Future Development Plans
+- Blog: Migration from Markdown to CMS using [Sanity CMS](https://sanity.io).
+

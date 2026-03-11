@@ -1,15 +1,15 @@
 {
-  "extends": "astro/tsconfigs/strict",
+  "extends": "astro/tsconfigs/base",
   "compilerOptions": {
-    "allowImportingTsExtensions": true,
     "strictNullChecks": true,
-    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
     "paths": {
+      "*": ["./"],
       "@/*": ["./src/*"]
     },
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "moduleResolution": "bundler", // or "nodenext" | "node16" | "node"
-    "lib": ["DOM.AsyncIterable"],
+    "moduleResolution": "bundler",
+    "lib": ["DOM.AsyncIterable"]
   }
 }

@@ -69,7 +69,15 @@
     Some third-party CSS (e.g. @devnomic/marquee) includes global rules that can
     override border colors. Force our intended border color for common bordered
     elements so the site visuals remain consistent. */
-    :where(.border, .rounded, .rounded-lg, .rounded-xl, .card, [data-has-border], .badge) {
+    :where(
+        .border,
+        .rounded,
+        .rounded-lg,
+        .rounded-xl,
+        .card,
+        [data-has-border],
+        .badge
+      ) {
       border-color: hsl(var(--border)) !important;
     }
 

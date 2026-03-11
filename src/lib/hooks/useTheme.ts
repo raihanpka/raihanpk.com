@@ -6,8 +6,9 @@ export function useTheme() {
   useEffect(() => {
     // Check initial theme
     const checkTheme = () => {
-      const isDark = document.documentElement.classList.contains('dark') ||
-        (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      const isDark =
+        document.documentElement.classList.contains('dark') ||
+        window.matchMedia?.('(prefers-color-scheme: dark)').matches
       setIsDarkMode(isDark)
     }
 
@@ -17,7 +18,7 @@ export function useTheme() {
     const observer = new MutationObserver(checkTheme)
     observer.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ['class']
+      attributeFilter: ['class'],
     })
 
     // Listen for system theme changes

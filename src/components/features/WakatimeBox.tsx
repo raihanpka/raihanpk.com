@@ -27,6 +27,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
+import { motion } from 'framer-motion'
 import { Skeleton } from '@/components/ui/skeleton'
 
 const languageIcons: { [key: string]: IconType } = {
@@ -166,6 +167,12 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
   if (error) return <div>Error: {error}</div>
 
   return (
+    <motion.div
+      className="h-full w-full"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
     <ChartContainer config={chartConfig} className="h-full w-full p-4">
       <BarChart
         accessibilityLayer
@@ -200,6 +207,7 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
         </Bar>
       </BarChart>
     </ChartContainer>
+    </motion.div>
   )
 }
 

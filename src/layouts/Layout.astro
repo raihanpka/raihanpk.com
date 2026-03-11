@@ -9,16 +9,17 @@ type Props = {
   title: string
   description: string
   image?: string
+  fullTitle?: string
 }
 
-const { title, description, image } = Astro.props
+const { title, description, image, fullTitle } = Astro.props
 ---
 
 <!doctype html>
 <html lang="en" class="scroll-smooth">
   <head>
     <Head
-      title={`${title} | ${SITE.TITLE}`}
+      title={fullTitle ?? `${title} | ${SITE.TITLE}`}
       description={description}
       image={image}
     />
@@ -40,7 +41,7 @@ const { title, description, image } = Astro.props
     <div class="flex min-h-screen flex-col">
       <Header />
       <main class="flex-1">
-        <div class="container mx-auto px-4 py-8">
+        <div class="py-8">
           <slot />
         </div>
       </main>

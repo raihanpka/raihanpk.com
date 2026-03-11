@@ -1,5 +1,5 @@
 ---
-import AuthorCard from '@/components/AuthorCard.astro'
+import { AuthorCardClient } from '@/components/AuthorCardClient'
 import BlogCard from '@/components/BlogCard.astro'
 import Breadcrumbs from '@/components/Breadcrumbs.astro'
 import Container from '@/components/Container.astro'
@@ -41,7 +41,20 @@ const authorPosts = allPosts
     />
 
     <section>
-      <AuthorCard author={author} linkDisabled />
+      <AuthorCardClient
+        client:load
+        id={author.id}
+        name={author.data.name}
+        avatar={author.data.avatar}
+        bio={author.data.bio}
+        pronouns={author.data.pronouns}
+        github={author.data.github}
+        linkedin={author.data.linkedin}
+        instagram={author.data.instagram}
+        website={author.data.website}
+        mail={author.data.mail}
+        linkDisabled
+      />
     </section>
     <section class="flex flex-col gap-y-4">
       <h2 class="text-2xl font-semibold">Posts by {author.data.name}</h2>

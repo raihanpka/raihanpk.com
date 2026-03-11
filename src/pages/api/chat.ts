@@ -62,12 +62,10 @@ export const POST: APIRoute = async ({ request }) => {
     const raw = cookies[QUOTA_COOKIE]
     const today = getTodayUTC()
     let count = 0
-    let cookieDate = today
 
     if (raw) {
       const [d, c] = raw.split(':')
       if (d === today) {
-        cookieDate = d
         const n = Number(c)
         if (!Number.isNaN(n)) count = n
       }
@@ -132,7 +130,7 @@ export const POST: APIRoute = async ({ request }) => {
     const encoder = new TextEncoder()
     const stream = new ReadableStream({
       start(controller) {
-        const content = response.response
+        const content = response.message.content as string
         const chunks = content.split(' ')
         
         chunks.forEach((chunk, index) => {

@@ -13,7 +13,7 @@ export type Link = {
 }
 
 export const SITE: Site = {
-  TITLE: 'pk.',
+  TITLE: 'pk',
   DESCRIPTION: 'pk is his nickname. raihanpk.com is his digital home.',
   EMAIL: 'me@raihanpk.com',
   NUM_POSTS_ON_HOMEPAGE: 2,
@@ -25,7 +25,6 @@ export const NAV_LINKS: Link[] = [
   { href: '/about', label: 'about' },
   { href: '/blog', label: 'blog' },
   { href: '/chat', label: 'chat' },
-  { href: '/authors', label: 'contact' },
   { href: 'https://gallery.raihanpk.com', label: 'gallery' },
 ]
 
@@ -37,11 +36,7 @@ export const SOCIAL_LINKS: Link[] = [
 ]
 
 // Chatbot example messages
-import {
-  Gamepad,
-  Computer,
-  GraduationCap,
-} from 'lucide-react'
+import { Computer, Gamepad, GraduationCap } from 'lucide-react'
 
 export const EXAMPLE_MESSAGES = [
   {
@@ -59,4 +54,4 @@ export const EXAMPLE_MESSAGES = [
     message: "What is a skill you're proud of?",
     icon: Computer,
   },
-] as const;
+] as const

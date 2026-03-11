@@ -2,6 +2,10 @@
 import BlogCard from '@/components/BlogCard.astro'
 import Container from '@/components/Container.astro'
 import Link from '@/components/Link.astro'
+import { ProjectsShowcase } from '@/components/features/ProjectsShowcase.tsx'
+import SpotifyPresence from '@/components/features/SpotifyPresence.tsx'
+import TechStackSlider from '@/components/features/TechStackSlider.tsx'
+import WakatimeBox from '@/components/features/WakatimeBox.tsx'
 import { buttonVariants } from '@/components/ui/button'
 import {
   Card,
@@ -13,30 +17,46 @@ import {
 import { SITE } from '@/consts'
 import Layout from '@/layouts/Layout.astro'
 import { getCollection } from 'astro:content'
-import SpotifyPresence from '@/components/features/SpotifyPresence.tsx'
-import WakatimeBox from '@/components/features/WakatimeBox.tsx'
-import TechStackSlider from '@/components/features/TechStackSlider.tsx'
 
 const blog = (await getCollection('blog'))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, SITE.NUM_POSTS_ON_HOMEPAGE)
+
+const rawProjects = (await getCollection('projects'))
+  .sort((a, b) => {
+    // date is 'Month Year' string e.g. 'May 2025' — parse to Date for comparison
+    const toDate = (d?: string) => d ? new Date(d) : new Date(0)
+    return toDate(b.data.date).valueOf() - toDate(a.data.date).valueOf()
+  })
+const projectsData = rawProjects.map((p) => ({
+  name: p.data.name,
+  description: p.data.description,
+  tags: p.data.tags,
+  type: p.data.type ?? [],
+  asset: p.data.asset,
+  fallback: p.data.fallback,
+  link: p.data.link,
+  github: p.data.github,
+  date: p.data.date,
+  techStack: p.data.techStack,
+}))
 ---
 
-<Layout title="Home" description={SITE.DESCRIPTION}>
+<Layout title="Home" description={SITE.DESCRIPTION} fullTitle="Raihan Putra Kirana">
   <Container class="flex flex-col gap-y-6">
     <section>
       <Card>
         <CardHeader>
           <CardTitle className="text-3xl"><span class="font-mono">Raihan Putra Kirana</span></CardTitle>
           <CardDescription>/ˈraɪ.han.peˈka/ &bull; 
-            <span class="font-bold font-mono">Systems-led builder working across Software, AI/ML, and Cloud.</span
+            <span class="font-bold font-mono">SWE & AI Engineer &bull; 3rd Year CS @ IPB</span
           ></CardDescription
           >
         </CardHeader>
         <CardContent>
-          <p class="mb-2 text-sm text-muted-foreground">
-            Crafting Software, AI/ML, and DevOps solution. With LLM-ML experiments to scalable cloud & system automation, while leading teams to real product wins.
+          <p class="mb-2 text-md text-foreground">
+            From software solutions, automation, to cloud pipelines. I engineer end-to-end systems transforming my expertise into scalable applications, leading teams to deliver real product wins.
           </p>
         </CardContent>
       </Card>
@@ -44,23 +64,30 @@ const blog = (await getCollection('blog'))
 
     <section class="flex flex-wrap gap-4">
       <div role="region" aria-label="Wakatime Section"
-      class="flex h-[170px] w-[calc(50%-0.5rem)] flex-col items-start whitespace-nowrap rounded-lg border px-2 py-2 text-xs leading-loose text-white max-md:w-full">
+      class="flex h-[200px] w-[calc(50%-0.5rem)] flex-col items-start whitespace-nowrap rounded-lg border shadow-sm px-2 py-2 text-xs leading-loose text-white max-md:w-full">
       <WakatimeBox omitLanguages={['Markdown', 'JSON']} client:load />
       </div>
 
       <div role="region" aria-label="Spotify Section"
-      class="flex h-[170px] w-[calc(50%-0.5rem)] flex-col items-start whitespace-nowrap rounded-lg border px-2 py-2 text-xs leading-loose text-white max-md:w-full">
+      class="flex h-[200px] w-[calc(50%-0.5rem)] flex-col items-start whitespace-nowrap rounded-lg border shadow-sm px-2 py-2 text-xs leading-loose text-white max-md:w-full">
       <SpotifyPresence client:load />
       </div>
 
       <div role="region" aria-label="Tech Stack"
-        class="flex-1 h-[270px] min-w-[160px] flex flex-col items-start whitespace-nowrap rounded-lg border px-2 py-4 text-xs leading-loose text-white">
+        class="flex-1 h-[300px] min-w-[160px] flex flex-col items-start whitespace-nowrap rounded-lg border shadow-sm px-2 py-4 text-xs leading-loose text-white">
         <TechStackSlider client:load />
       </div>
     </section>
 
     <section class="flex flex-col gap-y-4">
-      <h2 class="text-2xl font-bold">Latest posts</h2>
+      <ProjectsShowcase projects={projectsData} client:load />
+    </section>
+
+    <section class="flex flex-col gap-y-4">
+      <div class="flex items-center gap-4">
+        <h2 class="shrink-0 text-2xl font-bold">Latest posts</h2>
+        {/* <div className="h-px flex-1 bg-border" /> */}
+      </div>
       <ul class="not-prose flex flex-col gap-y-4">
         {
           blog.map((post) => (

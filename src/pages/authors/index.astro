@@ -1,5 +1,5 @@
 ---
-import AuthorCard from '@/components/AuthorCard.astro'
+import { AuthorCardClient } from '@/components/AuthorCardClient'
 import Breadcrumbs from '@/components/Breadcrumbs.astro'
 import Container from '@/components/Container.astro'
 import Layout from '@/layouts/Layout.astro'
@@ -16,7 +16,19 @@ const authors = await getCollection('authors')
         <ul class="not-prose flex flex-col gap-4">
           {authors.map((author) => (
             <li>
-              <AuthorCard author={author} />
+              <AuthorCardClient
+                client:load
+                id={author.id}
+                name={author.data.name}
+                avatar={author.data.avatar}
+                bio={author.data.bio}
+                pronouns={author.data.pronouns}
+                github={author.data.github}
+                linkedin={author.data.linkedin}
+                instagram={author.data.instagram}
+                website={author.data.website}
+                mail={author.data.mail}
+              />
             </li>
           ))}
         </ul>

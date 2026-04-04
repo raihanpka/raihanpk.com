@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { FaHeadphonesAlt, FaSpotify } from 'react-icons/fa'
 import { motion } from 'framer-motion'
 import {
-  getCachedData,
+  getStaleWhileRevalidate,
   setCachedData,
   CACHE_TTL,
   CACHE_KEYS,
@@ -23,27 +23,28 @@ const SpotifyPresence = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Check cache first for faster loading
-    const cached = getCachedData<Track>(CACHE_KEYS.LASTFM)
+    // Stale-While-Revalidate: show cached data instantly, refresh in background
+    const { data: cached, isStale } = getStaleWhileRevalidate<Track>(CACHE_KEYS.LASTFM)
+
     if (cached) {
       setDisplayData(cached)
       setIsLoading(false)
-      return
     }
 
-    // Fetch fresh data if cache miss
-    fetch('https://lastfm-last-played.biancarosa.com.br/raihanpka/latest-song')
-      .then((response) => response.json())
-      .then((data) => {
-        // Cache the result for faster subsequent loads
-        setCachedData(CACHE_KEYS.LASTFM, data.track, CACHE_TTL.LASTFM)
-        setDisplayData(data.track)
-        setIsLoading(false)
-      })
-      .catch((error) => {
-        console.error('Error fetching latest song:', error)
-        setIsLoading(false)
-      })
+    // Fetch fresh data if stale or no cache
+    if (isStale) {
+      fetch('https://lastfm-last-played.biancarosa.com.br/raihanpka/latest-song')
+        .then((response) => response.json())
+        .then((data) => {
+          setCachedData(CACHE_KEYS.LASTFM, data.track, CACHE_TTL.LASTFM)
+          setDisplayData(data.track)
+          setIsLoading(false)
+        })
+        .catch((error) => {
+          console.error('Error fetching latest song:', error)
+          setIsLoading(false)
+        })
+    }
   }, [])
 
   if (isLoading) {

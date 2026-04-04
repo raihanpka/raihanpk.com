@@ -38,6 +38,28 @@ export function getCachedData<T>(key: string): T | null {
 }
 
 /**
+ * Get cached data even if stale (for SWR pattern)
+ * Returns { data, isStale } - data even if expired, isStale indicates if refresh needed
+ */
+export function getStaleWhileRevalidate<T>(key: string): { data: T | null; isStale: boolean } {
+  if (typeof window === 'undefined') return { data: null, isStale: true }
+
+  try {
+    const cached = localStorage.getItem(CACHE_PREFIX + key)
+    if (!cached) return { data: null, isStale: true }
+
+    const entry: CacheEntry<T> = JSON.parse(cached)
+    const now = Date.now()
+    const isStale = now - entry.timestamp > entry.ttl
+
+    // Return data even if stale, let caller decide to revalidate
+    return { data: entry.data, isStale }
+  } catch {
+    return { data: null, isStale: true }
+  }
+}
+
+/**
  * Set data in localStorage cache with TTL
  */
 export function setCachedData<T>(key: string, data: T, ttlMs: number): void {

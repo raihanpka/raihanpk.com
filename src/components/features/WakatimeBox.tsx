@@ -108,7 +108,7 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
 
     // Fetch fresh data if cache miss
     fetch(
-      'https://wakatime.com/share/@raihanpk/5313bb35-0b69-4080-9b36-87d958bf7730.json',
+      'https://wakatime.com/share/@raihanpka/5313bb35-0b69-4080-9b36-87d958bf7730.json',
     )
       .then((response) => {
         if (!response.ok) throw new Error('Failed to fetch data')

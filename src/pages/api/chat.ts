@@ -2,40 +2,9 @@ import type { APIRoute } from 'astro'
 import { LlamaCloudIndex } from 'llama-cloud-services'
 import { ContextChatEngine, Settings } from 'llamaindex'
 import { OpenAI } from '@llamaindex/openai'
+import { checkRateLimit } from '@/lib/ratelimit'
 
 export const prerender = false
-
-const DAILY_LIMIT = 15
-const QUOTA_COOKIE = 'chat_quota'
-
-function getTodayUTC() {
-  return new Date().toISOString().slice(0, 10)
-}
-
-function parseCookies(header: string | null) {
-  const out: Record<string, string> = {}
-  if (!header) return out
-  for (const part of header.split(/;\s*/)) {
-    const eq = part.indexOf('=')
-    if (eq > -1) {
-      const k = part.slice(0, eq).trim()
-      const v = part.slice(eq + 1).trim()
-      out[k] = decodeURIComponent(v)
-    }
-  }
-  return out
-}
-
-function serializeCookie(name: string, value: string, maxAgeSeconds: number) {
-  const attrs = [
-    `${name}=${encodeURIComponent(value)}`,
-    'Path=/',
-    `Max-Age=${maxAgeSeconds}`,
-    'SameSite=Lax',
-    'HttpOnly',
-  ]
-  return attrs.join('; ')
-}
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -43,7 +12,7 @@ export const POST: APIRoute = async ({ request }) => {
     if (!body) {
       throw new Error('Empty request body')
     }
-    
+
     const { messages } = JSON.parse(body)
 
     // Check if API keys are available
@@ -57,40 +26,26 @@ export const POST: APIRoute = async ({ request }) => {
       model: 'gpt-4o-mini',
     })
 
-    // Per-browser quota check (cookie-based)
-    const cookies = parseCookies(request.headers.get('cookie'))
-    const raw = cookies[QUOTA_COOKIE]
-    const today = getTodayUTC()
-    let count = 0
+    // Rate limiting with signed cookies (privacy-friendly, no IP stored)
+    const rateLimit = checkRateLimit(request)
 
-    if (raw) {
-      const [d, c] = raw.split(':')
-      if (d === today) {
-        const n = Number(c)
-        if (!Number.isNaN(n)) count = n
-      }
-    }
-
-    if (count >= DAILY_LIMIT) {
+    if (!rateLimit.allowed) {
       const payload = {
         error: 'rate_limited',
-        message: `Limit daily chat reached (15 per day). Try again tomorrow.`,
-        limit: DAILY_LIMIT,
-        remaining: 0,
+        message: `Limit daily chat reached (${rateLimit.limit} per day). Try again tomorrow.`,
+        limit: rateLimit.limit,
+        remaining: rateLimit.remaining,
       }
       return new Response(JSON.stringify(payload), {
         status: 429,
         headers: {
           'Content-Type': 'application/json',
-          // keep existing cookie as-is, refresh max-age to 24h
-          'Set-Cookie': serializeCookie(QUOTA_COOKIE, `${today}:${count}`, 60 * 60 * 24),
+          'Set-Cookie': rateLimit.setCookie,
+          'X-RateLimit-Limit': String(rateLimit.limit),
+          'X-RateLimit-Remaining': String(rateLimit.remaining),
         },
       })
     }
-
-    // Accept request -> increment count and set cookie
-    const newCount = count + 1
-    const setCookie = serializeCookie(QUOTA_COOKIE, `${today}:${newCount}`, 60 * 60 * 24)
 
     const index = new LlamaCloudIndex({
       name: "Personal Chatbot",
@@ -153,7 +108,9 @@ export const POST: APIRoute = async ({ request }) => {
       headers: {
         'Content-Type': 'text/plain; charset=utf-8',
         'Transfer-Encoding': 'chunked',
-        'Set-Cookie': setCookie,
+        'Set-Cookie': rateLimit.setCookie,
+        'X-RateLimit-Limit': String(rateLimit.limit),
+        'X-RateLimit-Remaining': String(rateLimit.remaining),
       },
     })
 

@@ -28,7 +28,12 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 import { motion } from 'framer-motion'
-import { Skeleton } from '@/components/ui/skeleton'
+import {
+  getCachedData,
+  setCachedData,
+  CACHE_TTL,
+  CACHE_KEYS,
+} from '@/lib/cache'
 
 const languageIcons: { [key: string]: IconType } = {
   astro: SiAstro,
@@ -93,6 +98,15 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    // Check cache first for faster loading
+    const cached = getCachedData<Language[]>(CACHE_KEYS.WAKATIME)
+    if (cached) {
+      setLanguages(cached)
+      setIsLoading(false)
+      return
+    }
+
+    // Fetch fresh data if cache miss
     fetch(
       'https://wakatime.com/share/@raihanpk/5313bb35-0b69-4080-9b36-87d958bf7730.json',
     )
@@ -111,6 +125,9 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
             hours: Number(lang.hours.toFixed(2)),
             fill: colors[index % colors.length],
           }))
+
+        // Cache the result for faster subsequent loads
+        setCachedData(CACHE_KEYS.WAKATIME, filteredLanguages, CACHE_TTL.WAKATIME)
         setLanguages(filteredLanguages)
         setIsLoading(false)
       })
@@ -118,7 +135,7 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
         setError(err instanceof Error ? err.message : 'An error occurred')
         setIsLoading(false)
       })
-  }, [omitLanguages.includes])
+  }, [])
 
   const CustomYAxisTick = ({ x, y, payload }: any) => {
     const icon = getLanguageIcon(payload.value.toLowerCase())
@@ -150,12 +167,12 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
     return (
       <div className="size-full rounded-3xl p-4">
         <div className="space-y-1.5">
-          {[...Array(4)].map((_, index) => (
-            <div key={index} className="flex items-center gap-x-2">
-              <Skeleton className="h-6 w-6 rounded-full" />
+          {['skeleton-1', 'skeleton-2', 'skeleton-3', 'skeleton-4'].map((id, index) => (
+            <div key={id} className="flex items-center gap-x-2">
+              <div className="h-6 w-6 animate-pulse rounded-full bg-primary/10" />
               <div className="flex-1">
-                <Skeleton
-                  className="h-6 rounded-md"
+                <div
+                  className="h-6 animate-pulse rounded-md bg-primary/10"
                   style={{ width: `${90 * 0.8 ** index}%` }}
                 />
               </div>
@@ -164,6 +181,7 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
         </div>
       </div>
     )
+
   if (error) return <div>Error: {error}</div>
 
   return (
@@ -173,40 +191,40 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-    <ChartContainer config={chartConfig} className="h-full w-full p-4">
-      <BarChart
-        accessibilityLayer
-        data={languages}
-        layout="vertical"
-        margin={{ left: -10, right: 35 }}
-      >
-        <CartesianGrid horizontal={false} />
-        <YAxis
-          dataKey="name"
-          type="category"
-          tickLine={false}
-          axisLine={false}
-          width={50}
-          tick={<CustomYAxisTick />}
-        />
-        <XAxis type="number" hide />
-        <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-        <Bar
-          dataKey="hours"
-          fill="var(--color-hours)"
-          radius={[8, 8, 8, 8]}
-          isAnimationActive={true}
+      <ChartContainer config={chartConfig} className="h-full w-full p-4">
+        <BarChart
+          accessibilityLayer
+          data={languages}
+          layout="vertical"
+          margin={{ left: -10, right: 35 }}
         >
-          <LabelList
-            dataKey="hours"
-            position="right"
-            formatter={(value: number) => `${Math.round(value)}h`}
-            className="fill-foreground"
-            fontSize={12}
+          <CartesianGrid horizontal={false} />
+          <YAxis
+            dataKey="name"
+            type="category"
+            tickLine={false}
+            axisLine={false}
+            width={50}
+            tick={<CustomYAxisTick />}
           />
-        </Bar>
-      </BarChart>
-    </ChartContainer>
+          <XAxis type="number" hide />
+          <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+          <Bar
+            dataKey="hours"
+            fill="var(--color-hours)"
+            radius={[8, 8, 8, 8]}
+            isAnimationActive={true}
+          >
+            <LabelList
+              dataKey="hours"
+              position="right"
+              formatter={(value: number) => `${Math.round(value)}h`}
+              className="fill-foreground"
+              fontSize={12}
+            />
+          </Bar>
+        </BarChart>
+      </ChartContainer>
     </motion.div>
   )
 }

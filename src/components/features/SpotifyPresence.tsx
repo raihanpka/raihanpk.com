@@ -2,7 +2,12 @@ import { MoveUpRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { FaHeadphonesAlt, FaSpotify } from 'react-icons/fa'
 import { motion } from 'framer-motion'
-import { Skeleton } from '../ui/skeleton'
+import {
+  getCachedData,
+  setCachedData,
+  CACHE_TTL,
+  CACHE_KEYS,
+} from '@/lib/cache'
 
 interface Track {
   name: string
@@ -18,9 +23,20 @@ const SpotifyPresence = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
+    // Check cache first for faster loading
+    const cached = getCachedData<Track>(CACHE_KEYS.LASTFM)
+    if (cached) {
+      setDisplayData(cached)
+      setIsLoading(false)
+      return
+    }
+
+    // Fetch fresh data if cache miss
     fetch('https://lastfm-last-played.biancarosa.com.br/raihanpka/latest-song')
       .then((response) => response.json())
       .then((data) => {
+        // Cache the result for faster subsequent loads
+        setCachedData(CACHE_KEYS.LASTFM, data.track, CACHE_TTL.LASTFM)
         setDisplayData(data.track)
         setIsLoading(false)
       })
@@ -34,30 +50,30 @@ const SpotifyPresence = () => {
     return (
       <div className="relative flex h-full w-full flex-col items-start justify-between gap-4 p-2 md:flex-row md:items-center">
         <div className="relative flex h-full w-full flex-row items-start justify-between gap-4">
-          {/* Album art: w-28 max-w-[170px] h matches actual img */}
-          <Skeleton className="mb-2 w-28 max-w-[170px] h-28 max-h-[160px] rounded-xl border border-border" />
+          {/* Album art skeleton */}
+          <div className="mb-2 w-28 max-w-[170px] h-28 max-h-[160px] animate-pulse rounded-xl border border-border bg-primary/10" />
           <div className="flex min-w-0 flex-1 flex-col justify-end overflow-hidden">
             <div className="flex flex-col">
-              {/* Icon (16px) + "Listening to..." text (text-sm ~14px h-5) */}
+              {/* Icon + "Listening to..." text skeleton */}
               <span className="mb-1 flex gap-2 items-center">
-                <Skeleton className="h-4 w-4 rounded" />
-                <Skeleton className="h-4 w-24 rounded" />
+                <div className="h-4 w-4 animate-pulse rounded bg-primary/10" />
+                <div className="h-4 w-24 animate-pulse rounded bg-primary/10" />
               </span>
-              {/* Song title: text-2xl font-bold ~32px height */}
-              <Skeleton className="mb-2 pb-1 h-8 w-48 rounded" />
-              {/* Artist: text-sm ~20px */}
-              <Skeleton className="h-4 w-[60%] rounded" />
-              {/* Album: text-sm ~20px */}
-              <Skeleton className="h-4 w-[50%] rounded mt-1" />
+              {/* Song title skeleton */}
+              <div className="mb-2 pb-1 h-8 w-48 animate-pulse rounded bg-primary/10" />
+              {/* Artist skeleton */}
+              <div className="h-4 w-[60%] animate-pulse rounded bg-primary/10" />
+              {/* Album skeleton */}
+              <div className="h-4 w-[50%] animate-pulse rounded bg-primary/10 mt-1" />
             </div>
           </div>
         </div>
-        {/* Spotify icon: size={24} */}
+        {/* Spotify icon skeleton */}
         <div className="absolute right-1 top-0 m-2">
-          <Skeleton className="h-6 w-6 rounded-full" />
+          <div className="h-6 w-6 animate-pulse rounded-full bg-primary/10" />
         </div>
-        {/* Link button: p-3 with icon size={16} => ~40x40px */}
-        <Skeleton className="absolute bottom-0 right-0 m-3 h-10 w-10 rounded-full" />
+        {/* Link button skeleton */}
+        <div className="absolute bottom-0 right-0 m-3 h-10 w-10 animate-pulse rounded-full bg-primary/10" />
       </div>
     )
   }
@@ -130,35 +146,35 @@ const SpotifyPresence = () => {
                   <div
                     className="w-0.5 h-1.5 bg-primary/90 rounded-full animate-pulse"
                     style={{ animationDelay: '0ms', animationDuration: '1.5s' }}
-                  ></div>
+                  />
                   <div
                     className="w-0.5 h-2 bg-primary/70 rounded-full animate-pulse"
                     style={{
                       animationDelay: '150ms',
                       animationDuration: '1.2s',
                     }}
-                  ></div>
+                  />
                   <div
                     className="w-0.5 h-3 bg-primary/60 rounded-full animate-pulse"
                     style={{
                       animationDelay: '300ms',
                       animationDuration: '1.5s',
                     }}
-                  ></div>
+                  />
                   <div
                     className="w-0.5 h-2 bg-primary/90 rounded-full animate-pulse"
                     style={{
                       animationDelay: '450ms',
                       animationDuration: '1.2s',
                     }}
-                  ></div>
+                  />
                   <div
                     className="w-0.5 h-2.5 bg-primary/80 rounded-full animate-pulse"
                     style={{
                       animationDelay: '600ms',
                       animationDuration: '1.5s',
                     }}
-                  ></div>
+                  />
                 </div>
               ) : (
                 <FaHeadphonesAlt size={16} />
@@ -200,7 +216,7 @@ const SpotifyPresence = () => {
       >
         <MoveUpRight size={16} />
       </a>
-  </motion.div>
+    </motion.div>
   )
 }
 

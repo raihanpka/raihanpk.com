@@ -12,7 +12,7 @@ import { formatDate, readingTime } from '@/lib/utils'
 import { Icon } from 'astro-icon/components'
 import { Image } from 'astro:assets'
 import { type CollectionEntry, getCollection, render } from 'astro:content'
-import ViewCounter from '@/components/ViewCounter.astro'
+import ViewCounter from '@/components/ViewCounter'
 
 export async function getStaticPaths() {
   const posts = (await getCollection('blog'))
@@ -122,7 +122,7 @@ const authors = await parseAuthors(post.data.authors ?? [])
             <span>{formatDate(post.data.date)}</span>
             <Separator orientation="vertical" className="h-4" />
             <span>{readingTime(post.body!)}</span>
-            <ViewCounter server:defer slug={post.id} />
+            <ViewCounter client:load slug={post.id} />
           </div>
         </div>
         <div class="flex flex-wrap justify-center gap-2">
@@ -234,27 +234,5 @@ const authors = await parseAuthors(post.data.authors ?? [])
         }
       }
     })
-
-    // Reload ViewCounter setelah navigasi
-    document.addEventListener('astro:after-swap', async () => {
-      const viewCounters = Array.from(document.querySelectorAll('[data-island="view-counter"]'));
-      
-      for (const counter of viewCounters) {
-        try {
-          // Re-fetch page untuk mendapatkan ViewCounter terbaru
-          const response = await fetch(window.location.pathname);
-          const html = await response.text();
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(html, 'text/html');
-          const newCounter = doc.querySelector('[data-island="view-counter"]');
-          
-          if (newCounter) {
-            counter.replaceWith(newCounter);
-          }
-        } catch (error) {
-          console.error('Failed to reload view counter:', error);
-        }
-      }
-    });
   </script>
 </Layout>

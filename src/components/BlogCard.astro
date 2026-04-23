@@ -22,17 +22,17 @@ const authors = await parseAuthors(entry.data.authors ?? [])
 >
   <Link
     href={`/${entry.collection}/${entry.id}`}
-    class="flex flex-row gap-4"
+    class="flex flex-col gap-4 sm:flex-row"
   >
     {
       entry.data.image && (
-        <div class="w-[180px] shrink-0">
+        <div class="w-full shrink-0 sm:w-[180px]">
           <Image
             src={entry.data.image}
             alt={entry.data.title}
             width={1300}
             height={700}
-            class="h-full object-cover rounded-lg"
+            class="aspect-video w-full rounded-lg object-cover sm:h-full"
           />
         </div>
       )

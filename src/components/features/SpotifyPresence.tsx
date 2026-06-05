@@ -19,17 +19,24 @@ interface Track {
 }
 
 const SpotifyPresence = () => {
-  const [displayData, setDisplayData] = useState<Track | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [displayData, setDisplayData] = useState<Track | null>(() => {
+    if (typeof window !== 'undefined') {
+      const { data } = getStaleWhileRevalidate<Track>(CACHE_KEYS.LASTFM)
+      return data || null
+    }
+    return null
+  })
+  const [isLoading, setIsLoading] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const { data } = getStaleWhileRevalidate<Track>(CACHE_KEYS.LASTFM)
+      return !data
+    }
+    return true
+  })
 
   useEffect(() => {
     // Stale-While-Revalidate: show cached data instantly, refresh in background
-    const { data: cached, isStale } = getStaleWhileRevalidate<Track>(CACHE_KEYS.LASTFM)
-
-    if (cached) {
-      setDisplayData(cached)
-      setIsLoading(false)
-    }
+    const { isStale } = getStaleWhileRevalidate<Track>(CACHE_KEYS.LASTFM)
 
     // Fetch fresh data if stale or no cache
     if (isStale) {
@@ -135,6 +142,8 @@ const SpotifyPresence = () => {
           alt="Album art"
           width={160}
           height={160}
+          loading="eager"
+          decoding="async"
           className="mb-2 w-28 max-w-[160px] rounded-xl border border-border grayscale md:w-full"
           whileHover={{ scale: 1.05, rotate: 1.5 }}
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}

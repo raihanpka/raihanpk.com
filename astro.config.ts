@@ -43,6 +43,11 @@ export default defineConfig({
       },
     }),
   ],
+  vite: {
+    css: {
+      postcss: {}
+    }
+  },
   markdown: {
     syntaxHighlight: false,
     rehypePlugins: [

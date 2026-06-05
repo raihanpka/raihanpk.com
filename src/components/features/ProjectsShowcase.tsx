@@ -1,8 +1,8 @@
 'use client'
 
 import { ArrowUpRight, SlidersHorizontal } from 'lucide-react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { useState } from 'react'
+import { AnimatePresence, motion, useInView } from 'framer-motion'
+import { useState, useRef, useEffect } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
 import {
@@ -201,6 +201,19 @@ function ProjectCard({ project }: { project: ProjectItem }) {
   const [hovered, setHovered] = useState(false)
   const [assetSrc, setAssetSrc] = useState(project.asset)
   const [assetErrored, setAssetErrored] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const isInView = useInView(containerRef, { once: false, margin: '100px' })
+
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isInView) {
+        videoRef.current.play().catch(() => {})
+      } else {
+        videoRef.current.pause()
+      }
+    }
+  }, [isInView])
 
   const handleError = () => {
     if (!assetErrored && project.fallback) {
@@ -211,6 +224,7 @@ function ProjectCard({ project }: { project: ProjectItem }) {
 
   return (
     <div
+      ref={containerRef}
       className="not-prose flex h-full flex-col overflow-hidden rounded-xl border shadow-sm transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -219,8 +233,9 @@ function ProjectCard({ project }: { project: ProjectItem }) {
       <div className="aspect-[16/10] w-full overflow-hidden bg-muted">
         {assetSrc && isVideo(assetSrc) ? (
           <video
+            ref={videoRef}
             src={assetSrc}
-            autoPlay
+            preload="none"
             loop
             muted
             playsInline

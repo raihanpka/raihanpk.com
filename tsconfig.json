@@ -4,7 +4,6 @@
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "*": ["./"],
       "@/*": ["./src/*"]
     },
     "jsx": "react-jsx",

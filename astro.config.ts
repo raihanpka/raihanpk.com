@@ -18,6 +18,7 @@ import rehypePrettyCode from 'rehype-pretty-code'
 import remarkEmoji from 'remark-emoji'
 import remarkMath from 'remark-math'
 import remarkToc from 'remark-toc'
+import { unified } from '@astrojs/markdown-remark'
 
 // https://astro.build/config
 export default defineConfig({
@@ -49,35 +50,37 @@ export default defineConfig({
   },
   markdown: {
     syntaxHighlight: false,
-    rehypePlugins: [
-      [
-        rehypeExternalLinks,
-        {
-          target: '_blank',
-          rel: ['nofollow', 'noreferrer', 'noopener'],
-        },
-      ],
-      rehypeKatex,
-      sectionize,
-      [
-        rehypePrettyCode,
-        {
-          theme: {
-            light: 'github-light-high-contrast',
-            dark: 'github-dark-high-contrast',
+    processor: unified({
+      rehypePlugins: [
+        [
+          rehypeExternalLinks,
+          {
+            target: '_blank',
+            rel: ['nofollow', 'noreferrer', 'noopener'],
           },
-          transformers: [
-            transformerNotationDiff(),
-            transformerMetaHighlight(),
-            transformerCopyButton({
-              visibility: 'hover',
-              feedbackDuration: 1000,
-            }),
-          ],
-        },
+        ],
+        rehypeKatex,
+        sectionize,
+        [
+          rehypePrettyCode,
+          {
+            theme: {
+              light: 'github-light-high-contrast',
+              dark: 'github-dark-high-contrast',
+            },
+            transformers: [
+              transformerNotationDiff(),
+              transformerMetaHighlight(),
+              transformerCopyButton({
+                visibility: 'hover',
+                feedbackDuration: 1000,
+              }),
+            ],
+          },
+        ],
       ],
-    ],
-    remarkPlugins: [remarkToc, remarkMath, remarkEmoji],
+      remarkPlugins: [remarkToc, remarkMath, remarkEmoji],
+    }),
   },
   server: {
     port: 1234,

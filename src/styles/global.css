@@ -222,7 +222,7 @@
 }
 
 /* ─────────────────────────────────────────────────────────────
-   MOBILE OPTIMIZATION PATCH (added via mobile audit)
+   Mobile Optimization
    Safe-area tokens, fluid type/spacing scale, dynamic viewport
    utilities. Place AFTER existing @layer blocks.
    ───────────────────────────────────────────────────────────── */
@@ -290,12 +290,11 @@
 
   /* Section rhythm */
   .py-section    { padding-top: var(--space-sec); padding-bottom: var(--space-sec); }
-  .py-section-sm { padding-top: clamp(2rem, 0.5rem + 6vw, 4.5rem);
-                   padding-bottom: clamp(2rem, 0.5rem + 6vw, 4.5rem); }
+  .py-section-sm { padding-top: 1.5rem; padding-bottom: 1.5rem; }
 }
 
 /* ─────────────────────────────────────────────────────────────
-   ADDED: text-fluid-* utilities (referenced by Hero, Modal, cards)
+   text-fluid-* utilities (referenced by Hero, Modal, cards)
    Provides clamp()-based fluid type that smooths between
    mobile (375px) and desktop (1440px) without breakpoints.
    ───────────────────────────────────────────────────────────── */

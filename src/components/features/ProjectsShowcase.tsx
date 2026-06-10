@@ -487,12 +487,13 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
         initial={{ opacity: 0, scale: 0.95, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 30 }}
-        className="relative w-full max-w-7xl h-[100dvh] sm:h-auto sm:max-h-[95dvh] overflow-hidden rounded-none sm:rounded-xl border bg-background shadow-[0_32px_64px_-12px_rgba(0,0,0,0.5)] cursor-default mx-auto flex flex-col"
+        className="relative w-full max-w-7xl h-[100dvh] sm:h-[700px] md:h-[620px] overflow-hidden rounded-none sm:rounded-xl border bg-background shadow-[0_32px_64px_-12px_rgba(0,0,0,0.5)] cursor-default mx-auto flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex flex-col md:grid md:grid-cols-[72%_28%] md:h-[620px] w-full flex-1 min-h-0 overflow-hidden">
+        {/* Mobile: stacked layout */}
+        <div className="flex flex-col md:grid md:grid-cols-[72%_28%] w-full h-full overflow-hidden">
           {/* Media Section */}
-          <div className="relative bg-black border-b md:border-b-0 md:border-r w-full h-[200px] sm:h-[280px] md:h-full shrink-0 overflow-hidden">
+          <div className="relative bg-black border-b md:border-b-0 md:border-r w-full h-[40vh] md:h-full shrink-0 overflow-hidden">
             {assetSrc && isVideo(assetSrc) ? (
               <video
                 ref={videoRef}
@@ -520,8 +521,8 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
           </div>
           
           {/* Content Section */}
-          <div className="flex flex-col min-h-0 bg-background overflow-hidden flex-1 md:h-full">
-            <div className="flex-1 overflow-y-auto p-4 sm:p-5 md:p-8 scrollbar-hide min-h-0">
+          <div className="flex flex-col min-h-0 bg-background overflow-hidden flex-1">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-5 md:p-8 scrollbar-hide">
               <div className="flex flex-col gap-4 sm:gap-5">
                 <div className="space-y-2">
                   <h3 className="text-lg sm:text-xl md:text-2xl font-bold leading-tight tracking-tight text-foreground">{project.name}</h3>

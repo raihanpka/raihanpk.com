@@ -162,16 +162,16 @@ export function ProjectsShowcase({ projects }: Props) {
       </div>
 
       {/* Filter */}
-      <div className="flex flex-wrap items-center gap-2">
-        <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+      <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
+        <div className="flex items-center gap-1.5 text-sm text-muted-foreground shrink-0">
           <SlidersHorizontal size={14} />
         </div>
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex gap-1.5">
           {allTypes.map((type) => (
             <button
               key={type}
               onClick={() => handleTypeChange(type)}
-              className={`rounded-full border px-3 py-0.5 text-xs font-medium transition-colors duration-200 ${
+              className={`shrink-0 rounded-full border px-3 py-1 text-xs font-medium transition-colors duration-200 ${
                 activeType === type
                   ? 'border-foreground bg-foreground text-background'
                   : 'border-border bg-transparent text-foreground hover:bg-secondary/60'
@@ -288,19 +288,29 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
   const [hovered, setHovered] = useState(false)
   const [assetSrc, setAssetSrc] = useState(project.asset)
   const [assetErrored, setAssetErrored] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const isInView = useInView(containerRef, { once: false, amount: 0.3 })
 
+  // Detect mobile viewport (disable video autoplay on mobile to save battery/data)
   useEffect(() => {
-    if (videoRef.current) {
+    const mq = window.matchMedia('(max-width: 767px)')
+    const update = () => setIsMobile(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
+
+  useEffect(() => {
+    if (videoRef.current && !isMobile) {
       if (isInView) {
         videoRef.current.play().catch(() => {})
       } else {
         videoRef.current.pause()
       }
     }
-  }, [isInView])
+  }, [isInView, isMobile])
 
   const handleError = () => {
     if (!assetErrored && project.fallback) {
@@ -381,28 +391,33 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
         </p>
 
         {/* Footer: tech icons + action buttons */}
-        <div className="flex items-center justify-between border-t border-border pt-3">
-          {/* Tech icons */}
-          <div className="flex items-center gap-2">
-            {project.techStack?.slice(0, 5).map((tech) => {
-              const Icon = techIconMap[tech]
-              return Icon ? (
-                <span
-                  key={tech}
-                  title={tech}
-                  className="text-foreground/70 transition-colors hover:text-foreground"
-                >
-                  <Icon size={16} />
-                </span>
-              ) : null
-            })}
-            {project.techStack && project.techStack.length > 5 && (
-              <span className="text-[10px] text-muted-foreground">+{project.techStack.length - 5}</span>
-            )}
+        <div className="flex items-center gap-2 border-t border-border pt-3">
+          {/* Tech icons with fade */}
+          <div className="relative flex-1 min-w-0 overflow-hidden">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              {project.techStack?.slice(0, 5).map((tech) => {
+                const Icon = techIconMap[tech]
+                return Icon ? (
+                  <span
+                    key={tech}
+                    title={tech}
+                    className="text-foreground/70 transition-colors hover:text-foreground shrink-0"
+                  >
+                    <Icon size={14} className="sm:hidden" />
+                    <Icon size={16} className="hidden sm:inline" />
+                  </span>
+                ) : null
+              })}
+              {project.techStack && project.techStack.length > 5 && (
+                <span className="text-[10px] text-muted-foreground shrink-0">+{project.techStack.length - 5}</span>
+              )}
+            </div>
+            {/* Fade gradient */}
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-background to-transparent" />
           </div>
 
           {/* Action buttons */}
-          <div className="flex items-center gap-1.5" onClick={e => e.stopPropagation()}>
+          <div className="flex items-center gap-1.5 shrink-0" onClick={e => e.stopPropagation()}>
             <CopyLinkButton projectName={project.name} />
             {project.github && (
               <a
@@ -465,19 +480,19 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-background/70 backdrop-blur-2xl p-4 sm:p-8 cursor-pointer"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-background/70 backdrop-blur-2xl p-0 sm:p-4 md:p-8 cursor-pointer"
       onClick={onClose}
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 30 }}
-        className="relative w-full max-w-7xl overflow-hidden rounded-xl border bg-background shadow-[0_32px_64px_-12px_rgba(0,0,0,0.5)] cursor-default mx-auto"
+        className="relative w-full max-w-7xl h-[100dvh] sm:h-auto sm:max-h-[95dvh] overflow-hidden rounded-none sm:rounded-xl border bg-background shadow-[0_32px_64px_-12px_rgba(0,0,0,0.5)] cursor-default mx-auto flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="grid grid-cols-1 md:grid-cols-[70%_30%] md:h-[620px] w-full overflow-hidden">
-          {/* Media Section - The Height Master */}
-          <div className="relative bg-black border-b md:border-b-0 md:border-r w-full h-[250px] sm:h-[350px] md:h-full shrink-0 overflow-hidden">
+        <div className="flex flex-col md:grid md:grid-cols-[72%_28%] md:h-[620px] w-full flex-1 min-h-0 overflow-hidden">
+          {/* Media Section */}
+          <div className="relative bg-black border-b md:border-b-0 md:border-r w-full h-[200px] sm:h-[280px] md:h-full shrink-0 overflow-hidden">
             {assetSrc && isVideo(assetSrc) ? (
               <video
                 ref={videoRef}
@@ -504,12 +519,12 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
             )}
           </div>
           
-          {/* Content Section - Robust Width & Height Lock */}
-          <div className="flex flex-col min-h-0 bg-background overflow-hidden h-full w-full">
-            <div className="flex-1 overflow-y-auto p-5 md:p-8 scrollbar-hide">
-              <div className="flex flex-col gap-5">
+          {/* Content Section */}
+          <div className="flex flex-col min-h-0 bg-background overflow-hidden flex-1 md:h-full">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-5 md:p-8 scrollbar-hide min-h-0">
+              <div className="flex flex-col gap-4 sm:gap-5">
                 <div className="space-y-2">
-                  <h3 className="text-xl md:text-2xl font-bold leading-tight tracking-tight text-foreground">{project.name}</h3>
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold leading-tight tracking-tight text-foreground">{project.name}</h3>
                   {project.date && (
                     <div className="flex">
                       <span className="text-[10px] text-muted-foreground bg-secondary/50 px-2 py-0.5 rounded border border-border/50">
@@ -533,16 +548,17 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
 
                 {/* Tech Stack - Compact Grid */}
                 <div className="pt-2">
-                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/50 mb-3">Powered By</h4>
-                  <div className="grid grid-cols-2 gap-y-3 gap-x-6">
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/50 mb-2 sm:mb-3">Powered By</h4>
+                  <div className="grid grid-cols-2 gap-y-2 sm:gap-y-3 gap-x-4 sm:gap-x-6">
                     {project.techStack?.map((tech) => {
                       const Icon = techIconMap[tech]
                       return (
-                        <div key={tech} className="flex items-center gap-2.5 group">
-                          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-secondary/30 border border-border/40 transition-all group-hover:bg-secondary/60 group-hover:border-foreground/20">
-                            {Icon && <Icon size={14} className="text-foreground/60 group-hover:text-foreground transition-colors" />}
+                        <div key={tech} className="flex items-center gap-2 sm:gap-2.5 group">
+                          <div className="flex h-6 w-6 sm:h-7 sm:w-7 shrink-0 items-center justify-center rounded-lg bg-secondary/30 border border-border/40 transition-all group-hover:bg-secondary/60 group-hover:border-foreground/20">
+                            {Icon && <Icon size={12} className="sm:hidden text-foreground/60 group-hover:text-foreground transition-colors" />}
+                            {Icon && <Icon size={14} className="hidden sm:inline text-foreground/60 group-hover:text-foreground transition-colors" />}
                           </div>
-                          <span className="text-[11px] font-medium text-foreground/50 group-hover:text-foreground transition-colors truncate">{tech}</span>
+                          <span className="text-[10px] sm:text-[11px] font-medium text-foreground/50 group-hover:text-foreground transition-colors truncate">{tech}</span>
                         </div>
                       )
                     })}
@@ -552,7 +568,7 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
             </div>
 
             {/* Actions Footer - Precision Consistent Height */}
-            <div className="h-20 shrink-0 px-6 md:px-8 border-t border-border bg-background flex items-center justify-between gap-4 mt-auto">
+            <div className="h-16 sm:h-20 shrink-0 px-4 sm:px-6 md:px-8 border-t border-border bg-background flex items-center justify-between gap-4 mt-auto">
               <div className="flex items-center gap-2">
                 <CopyLinkButton projectName={project.name} />
                 {project.github && (

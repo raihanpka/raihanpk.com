@@ -42,9 +42,10 @@ import { Badge } from '@/components/ui/badge'
 interface StackIconProps {
   name: string
   size?: string
+  className?: string
 }
 
-const StackIcon: React.FC<StackIconProps> = ({ name, size = '2em' }) => {
+const StackIcon: React.FC<StackIconProps> = ({ name, size = '2em', className }) => {
   const iconMap: Record<string, React.ComponentType<any>> = {
     react: SiReact,
     nextdotjs: SiNextdotjs,
@@ -85,7 +86,7 @@ const StackIcon: React.FC<StackIconProps> = ({ name, size = '2em' }) => {
   if (!IconComponent) {
     return <div>?</div> // Fallback
   }
-  return <IconComponent size={size} />
+  return <IconComponent size={size} className={className} />
 }
 
 export default function TechStackSlider() {
@@ -202,20 +203,25 @@ export default function TechStackSlider() {
             target="_blank"
             rel="noopener noreferrer"
             title={stack.alt}
-            className="relative mx-2 flex h-14 w-16 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-br from-[#1f1f1f] to-[#0e0e0e] p-2 shadow-xl"
+            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-br from-[#1f1f1f] to-[#0e0e0e] p-1.5 sm:p-2 shadow-xl"
             onMouseEnter={() => setHoveredKey(`row1-${index}`)}
             onMouseLeave={() => setHoveredKey(null)}
           >
-            <div className="absolute h-14 w-16 rounded-lg border-2 border-b-0 border-r-0 border-[#2a2a2a]" />
+            <div className="absolute h-10 w-12 sm:h-14 sm:w-16 rounded-lg border-2 border-b-0 border-r-0 border-[#2a2a2a]" />
             <span
               className="h-full w-full select-none flex items-center justify-center transition-all duration-150"
               draggable={false}
               aria-label={stack.alt}
             >
               {hoveredKey === `row1-${index}` ? (
-                <ExternalLink size="1.8em" className="text-white/80" />
+                <ExternalLink size="1.4em" className="sm:hidden text-white/80" />
               ) : (
-                <StackIcon name={stack.name} size="2.5em" />
+                <StackIcon name={stack.name} size="1.8em" className="sm:hidden" />
+              )}
+              {hoveredKey === `row1-${index}` ? (
+                <ExternalLink size="1.8em" className="hidden sm:inline text-white/80" />
+              ) : (
+                <StackIcon name={stack.name} size="2.5em" className="hidden sm:inline" />
               )}
             </span>
           </a>
@@ -239,20 +245,25 @@ export default function TechStackSlider() {
             target="_blank"
             rel="noopener noreferrer"
             title={stack.alt}
-            className="relative mx-2 flex h-14 w-16 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-br from-[#1f1f1f] to-[#0e0e0e] p-2 shadow-xl"
+            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-br from-[#1f1f1f] to-[#0e0e0e] p-1.5 sm:p-2 shadow-xl"
             onMouseEnter={() => setHoveredKey(`row2-${index}`)}
             onMouseLeave={() => setHoveredKey(null)}
           >
-            <div className="absolute h-14 w-16 rounded-lg border-2 border-b-0 border-r-0 border-[#2a2a2a]" />
+            <div className="absolute h-10 w-12 sm:h-14 sm:w-16 rounded-lg border-2 border-b-0 border-r-0 border-[#2a2a2a]" />
             <span
               className="h-full w-full select-none flex items-center justify-center transition-all duration-150"
               draggable={false}
               aria-label={stack.alt}
             >
               {hoveredKey === `row2-${index}` ? (
-                <ExternalLink size="1.8em" className="text-white/80" />
+                <ExternalLink size="1.4em" className="sm:hidden text-white/80" />
               ) : (
-                <StackIcon name={stack.name} size="2.5em" />
+                <StackIcon name={stack.name} size="1.8em" className="sm:hidden" />
+              )}
+              {hoveredKey === `row2-${index}` ? (
+                <ExternalLink size="1.8em" className="hidden sm:inline text-white/80" />
+              ) : (
+                <StackIcon name={stack.name} size="2.5em" className="hidden sm:inline" />
               )}
             </span>
           </a>
@@ -275,20 +286,25 @@ export default function TechStackSlider() {
             target="_blank"
             rel="noopener noreferrer"
             title={stack.alt}
-            className="relative mx-2 flex h-14 w-16 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-br from-[#1f1f1f] to-[#0e0e0e] p-2 shadow-xl"
+            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-br from-[#1f1f1f] to-[#0e0e0e] p-1.5 sm:p-2 shadow-xl"
             onMouseEnter={() => setHoveredKey(`row3-${index}`)}
             onMouseLeave={() => setHoveredKey(null)}
           >
-            <div className="absolute h-14 w-16 rounded-lg border-2 border-b-0 border-r-0 border-[#2a2a2a]" />
+            <div className="absolute h-10 w-12 sm:h-14 sm:w-16 rounded-lg border-2 border-b-0 border-r-0 border-[#2a2a2a]" />
             <span
               className="h-full w-full select-none flex items-center justify-center transition-all duration-150"
               draggable={false}
               aria-label={stack.alt}
             >
               {hoveredKey === `row3-${index}` ? (
-                <ExternalLink size="1.8em" className="text-white/80" />
+                <ExternalLink size="1.4em" className="sm:hidden text-white/80" />
               ) : (
-                <StackIcon name={stack.name} size="2.5em" />
+                <StackIcon name={stack.name} size="1.8em" className="sm:hidden" />
+              )}
+              {hoveredKey === `row3-${index}` ? (
+                <ExternalLink size="1.8em" className="hidden sm:inline text-white/80" />
+              ) : (
+                <StackIcon name={stack.name} size="2.5em" className="hidden sm:inline" />
               )}
             </span>
           </a>

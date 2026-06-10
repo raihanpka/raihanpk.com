@@ -8,9 +8,12 @@ import { Image } from 'astro:assets'
 import logo from '../../public/static/notion-avatar.svg'
 ---
 
-<header class="sticky top-0 z-10 bg-background/50 backdrop-blur-md">
+<header
+  class="sticky top-0 z-10 bg-background/50 backdrop-blur-md pt-safe"
+  transition:persist
+>
   <Container>
-    <div class="flex flex-wrap items-center justify-between gap-4 py-4">
+    <div class="flex flex-wrap items-center justify-between gap-3 py-3 sm:gap-4 sm:py-4">
       <Link
         href="/"
         class="flex flex-shrink-0 items-center gap-2 text-xl font-semibold transition-colors duration-300 hover:text-primary"

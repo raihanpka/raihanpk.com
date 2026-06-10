@@ -10,7 +10,7 @@ export default function FloatingChatButton() {
   }
 
   return (
-    <div className="fixed bottom-10 right-5 z-50 md:bottom-20 md:right-20">
+    <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] z-50 md:bottom-8 md:right-8">
       {/* SVG Filter for Liquid Glass Refraction */}
       <svg style={{ display: 'none' }}>
         <filter id="liquid-glass-refraction">
@@ -35,7 +35,7 @@ export default function FloatingChatButton() {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         className={cn(
-          'group relative flex h-20 w-20 items-center justify-center rounded-full border border-white/40 bg-white/20 dark:border-white/20 dark:bg-black/40 transition-all duration-500 ease-in-out hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-[0_12px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.4)]',
+          'group relative flex h-14 w-14 md:h-16 md:w-16 items-center justify-center rounded-full border border-white/40 bg-white/20 dark:border-white/20 dark:bg-black/40 transition-all duration-500 ease-in-out hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-[0_12px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.4)]',
         )}
         style={{
           backdropFilter: 'blur(16px) saturate(200%) url(#liquid-glass-refraction)',
@@ -51,7 +51,7 @@ export default function FloatingChatButton() {
 
         {/* Main button content - Enlarged Icon */}
         <div className="relative z-10 transition-transform duration-500 group-hover:rotate-12">
-          <MessageCircle className="h-10 w-10 md:h-10 md:w-10 text-foreground group-hover:text-primary transition-colors drop-shadow-sm" />
+          <MessageCircle className="h-6 w-6 md:h-7 md:w-7 text-foreground group-hover:text-primary transition-colors drop-shadow-sm" />
         </div>
 
         {/* Tooltip - Matching Glass Style */}

@@ -5,8 +5,8 @@ import ChatInterface from '@/components/chat/ChatInterface.tsx'
 ---
 
 <Layout title="Chat with me" description="Chat with me - Ask anything about me">
-  <Container class="flex flex-col gap-y-6 min-h-[calc(100vh-12rem)]">
-    <div class="flex-1">
+  <Container class="flex flex-col gap-y-6">
+    <div class="flex-1 min-h-[60dvh]">
       <ChatInterface client:load />
     </div>
   </Container>

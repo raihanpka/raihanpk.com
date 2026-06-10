@@ -163,8 +163,8 @@ export default function ChatInterface() {
   }
 
   return (
-    <div className="flex h-full max-h-[85vh] flex-col">
-      <Card className="flex-1 flex flex-col min-h-[60vh] rounded-2xl border-muted-foreground/20 bg-muted/20 backdrop-blur">
+    <div className="flex h-full max-h-[85dvh] flex-col">
+      <Card className="flex-1 flex flex-col min-h-[50dvh] sm:min-h-[60dvh] rounded-2xl border-muted-foreground/20 bg-muted/20 backdrop-blur">
         <CardContent className="flex-1 flex flex-col p-4 sm:p-6 min-h-0">
           {/* Messages */}
           <div className="flex-1 overflow-y-auto space-y-4 pr-1 sm:pr-2">
@@ -248,7 +248,7 @@ export default function ChatInterface() {
               onChange={e => setInputValue(e.target.value)}
               onKeyUp={handleKeyPress}
               placeholder="Write your message..."
-              className="flex-1 min-h-[44px] max-h-10 px-3 py-2 text-sm border border-input bg-background rounded-lg resize-y focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+              className="flex-1 min-h-[44px] max-h-10 px-3 py-2 text-base border border-input bg-background rounded-lg resize-y focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
               disabled={isLoading || rateLimited}
             />
             <Button

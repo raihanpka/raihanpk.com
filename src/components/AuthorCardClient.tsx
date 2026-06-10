@@ -75,7 +75,7 @@ export function AuthorCardClient({
                 src={avatar}
                 alt={`Avatar of ${name}`}
                 fallback={name[0]}
-                className="size-32 rounded-md"
+                className="size-20 sm:size-32 rounded-md"
               />
             ) : (
               <motion.a

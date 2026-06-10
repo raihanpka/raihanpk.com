@@ -40,12 +40,12 @@ const MobileMenu = () => {
           <span className="sr-only">Toggle menu</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-background">
+      <DropdownMenuContent align="end" className="bg-background pb-safe min-w-[200px]">
         {NAV_LINKS.map((item) => (
           <DropdownMenuItem key={item.href} asChild>
             <a
               href={item.href}
-              className="w-full text-lg font-medium capitalize"
+              className="flex min-h-11 w-full items-center px-4 py-3 text-base font-medium capitalize"
               onClick={() => setIsOpen(false)}
             >
               {item.label}

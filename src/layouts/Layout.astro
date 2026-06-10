@@ -24,19 +24,6 @@ const { title, description, image, fullTitle } = Astro.props
       image={image}
     />
   </head>
-  <style is:inline>
-    body {
-      visibility: hidden;
-      opacity: 0;
-    }
-  </style>
-  <style is:global>
-    body {
-      visibility: visible;
-      opacity: 1;
-      transition: visibility 0.2s linear, opacity 0.2s linear;
-    }
-  </style>
   <body class="min-h-screen bg-background text-foreground antialiased">
     <div class="flex min-h-screen flex-col">
       <Header />
@@ -45,7 +32,7 @@ const { title, description, image, fullTitle } = Astro.props
           <slot />
         </div>
       </main>
-      {Astro.url.pathname === '/' && <FloatingChatButton client:load />}
+      {Astro.url.pathname === '/' && <FloatingChatButton client:idle />}
       <Footer />
     </div>
   </body>

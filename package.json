@@ -6,6 +6,9 @@
   "engines": {
     "node": ">=22"
   },
+  "overrides": {
+    "astro": "$astro"
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "bun run build",
@@ -45,7 +48,7 @@
     "@types/react-dom": "^18.3.5",
     "@vercel/speed-insights": "^1.2.0",
     "ai": "^6.0.197",
-    "astro": "^6.4.4",
+    "astro": "^6.4.5",
     "astro-icon": "^1.1.4",
     "baseline-browser-mapping": "^2.10.0",
     "bootstrap-icons": "^1.11.3",

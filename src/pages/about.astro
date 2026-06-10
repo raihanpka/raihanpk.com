@@ -20,7 +20,7 @@ const authors = await getCollection('authors')
           {authors.map((author) => (
             <li>
               <AuthorCardClient
-                client:load
+                client:idle
                 id={author.id}
                 name={author.data.name}
                 avatar={author.data.avatar}

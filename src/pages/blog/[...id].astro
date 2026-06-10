@@ -71,7 +71,7 @@ const authors = await parseAuthors(post.data.authors ?? [])
       post.data.image && (
         <Image
           src={post.data.image}
-          alt={post.data.title}
+          alt={post.data.title} loading="eager" fetchpriority="high"
           width={1200}
           height={630}
           class="mx-auto w-full rounded-xl object-cover"
@@ -95,7 +95,7 @@ const authors = await parseAuthors(post.data.authors ?? [])
                     <div class="flex items-center gap-x-1.5">
                       <Image
                         src={author.avatar}
-                        alt={author.name}
+                        alt={author.name} loading="eager"
                         width={24}
                         height={24}
                         class="rounded-full"

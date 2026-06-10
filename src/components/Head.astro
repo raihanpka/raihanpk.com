@@ -24,6 +24,30 @@ const { title, description, image = '/static/twitter-card.png' } = Astro.props
 <link rel="canonical" href={canonicalURL} />
 <link rel="sitemap" href="/sitemap-index.xml" />
 
+<!-- Preload critical fonts -->
+<link
+  rel="preload"
+  href="/fonts/GeistVF.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
+<link
+  rel="preload"
+  href="/fonts/GeistMonoVF.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
+
+<!-- External CSS -->
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css"
+  integrity="sha384-75hc9p9f67G94V5N1Y2e56W7yH/H/U67XjRz8l1u6f7W/Y3rG6e6U8z1z1z1z1z1"
+  crossorigin="anonymous"
+/>
+
 <title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />

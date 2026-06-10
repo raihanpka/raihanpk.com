@@ -6,8 +6,32 @@ import Link from '@/components/Link.astro'
 import { SITE } from '@/consts'
 import Layout from '@/layouts/Layout.astro'
 import { getCollection } from 'astro:content'
+import { getImage } from 'astro:assets'
 
 const authors = await getCollection('authors')
+
+const optimizedAuthors = await Promise.all(
+  authors.map(async (author) => {
+    let optimizedAvatar = author.data.avatar
+    if (author.data.avatar && !author.data.avatar.startsWith('http')) {
+      try {
+        const img = await getImage({
+          src: author.data.avatar,
+          width: 256,
+          format: 'webp',
+          inferSize: true,
+        })
+        optimizedAvatar = img.src
+      } catch (e) {
+        console.error(`Failed to optimize avatar for ${author.data.name}:`, e)
+      }
+    }
+    return {
+      ...author,
+      optimizedAvatar,
+    }
+  })
+)
 ---
 
 <Layout title="About" description={SITE.DESCRIPTION}>
@@ -15,15 +39,15 @@ const authors = await getCollection('authors')
     <Breadcrumbs items={[{ label: 'About', icon: 'lucide:info' }]} />
 
     {
-      authors.length > 0 ? (
+      optimizedAuthors.length > 0 ? (
         <ul class="not-prose flex flex-col gap-4">
-          {authors.map((author) => (
+          {optimizedAuthors.map((author) => (
             <li>
               <AuthorCardClient
-                client:idle
+                client:load
                 id={author.id}
                 name={author.data.name}
-                avatar={author.data.avatar}
+                avatar={author.optimizedAvatar}
                 bio={author.data.bio}
                 pronouns={author.data.pronouns}
                 github={author.data.github}
@@ -42,23 +66,24 @@ const authors = await getCollection('authors')
 
     <section>
       <div class="min-w-full">
-        <div class="prose prose-neutral max-w-none mb-8 text-justify dark:prose-invert">
+        <div class="prose prose-neutral max-w-none mb-8 dark:prose-invert">
           <h2 class="mb-4 text-2xl font-semibold">Hello, I'm Raihan.</h2>
           <p class="mb-4">
             My name is Raihan Putra Kirana, but my friends often called me "Peka". 
-            I am currently a second-year student majoring in Computer Science at 
+            I am currently a third-year student majoring in Computer Science at 
             <Link
               href="https://ipb.ac.id"
               class="text-foreground"
               external
               underline>IPB University</Link>. 
-            My primary interests are Deep Learning, Computer Vision, and Blockchain Technology.
+            I'd say I'm a person who enjoys bridging the gap between robust software systems and real-world business impact.
           </p>
           <p>
-            My passion for technology has been growing since I was 5 years old and that was when 
-            I tried installing some apps on my dad's laptop. From then on, I would often operate 
-            my dad's laptop and also started tinkering with other tech stuff. Maybe that's one of my reasons, why 
-            I chose this major.
+            I treat software architecture with production-grade seriousness, even for small-scale projects or university assignments. 
+            I focus on building AI-native applications with a strong obsession for modular design, clean codebases, and scalable systems. 
+            This mindset of treating every project like production software has led me and my teams to multiple national hackathon podiums 
+            and top finalist positions. I thrive in high-pressure environments where technical idealism meets rapid execution, 
+            turning complex system challenges into functional, intelligent products.
           </p>
         </div>
       </div>

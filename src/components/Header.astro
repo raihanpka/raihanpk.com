@@ -8,10 +8,7 @@ import { Image } from 'astro:assets'
 import logo from '../../public/static/notion-avatar.svg'
 ---
 
-<header
-  class="sticky top-0 z-10 bg-background/50 backdrop-blur-md"
-  transition:persist
->
+<header class="sticky top-0 z-10 bg-background/50 backdrop-blur-md">
   <Container>
     <div class="flex flex-wrap items-center justify-between gap-4 py-4">
       <Link
@@ -34,8 +31,8 @@ import logo from '../../public/static/notion-avatar.svg'
             ))
           }
         </nav>
-        <MobileMenu client:load transition:persist />
-        <ModeToggle client:load transition:persist />
+        <MobileMenu client:load />
+        <ModeToggle client:load />
       </div>
     </div>
   </Container>

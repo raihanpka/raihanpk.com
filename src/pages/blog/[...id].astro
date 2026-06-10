@@ -72,7 +72,7 @@ const authors = await parseAuthors(post.data.authors ?? [])
         <Image
           src={post.data.image}
           alt={post.data.title} loading="eager" fetchpriority="high"
-          width={1200}
+          width={1200} format="webp"
           height={630}
           class="mx-auto w-full rounded-xl object-cover"
         />
@@ -96,7 +96,7 @@ const authors = await parseAuthors(post.data.authors ?? [])
                       <Image
                         src={author.avatar}
                         alt={author.name} loading="eager"
-                        width={24}
+                        width={24} format="webp"
                         height={24}
                         class="rounded-full"
                       />

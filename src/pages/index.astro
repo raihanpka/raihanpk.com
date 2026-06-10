@@ -50,7 +50,7 @@ const projectsData = rawProjects.map((p) => ({
         <CardHeader>
           <CardTitle className="text-3xl"><span class="font-mono">Raihan Putra Kirana</span></CardTitle>
           <CardDescription>/ˈraɪ.han.peˈka/ &bull; 
-            <span class="font-bold font-mono">SWE & AI Engineer &bull; 3rd Year CS @ IPB</span
+            <span class="font-bold font-mono">SWE & AI Enthusiast &bull; 3rd Year CS @ IPB</span
           ></CardDescription
           >
         </CardHeader>
@@ -65,22 +65,22 @@ const projectsData = rawProjects.map((p) => ({
     <section class="flex flex-wrap gap-4">
       <div role="region" aria-label="Wakatime Section"
       class="flex h-[200px] w-[calc(50%-0.5rem)] flex-col items-start whitespace-nowrap rounded-lg border shadow-sm px-2 py-2 text-xs leading-loose text-white max-md:w-full">
-      <WakatimeBox omitLanguages={['Markdown', 'JSON']} client:idle />
+      <WakatimeBox omitLanguages={['Markdown', 'JSON']} client:load />
       </div>
 
       <div role="region" aria-label="Spotify Section"
       class="flex h-[200px] w-[calc(50%-0.5rem)] flex-col items-start whitespace-nowrap rounded-lg border shadow-sm px-2 py-2 text-xs leading-loose text-white max-md:w-full">
-      <SpotifyPresence client:idle />
+      <SpotifyPresence client:load />
       </div>
 
       <div role="region" aria-label="Tech Stack"
         class="flex-1 h-[300px] min-w-[160px] flex flex-col items-start whitespace-nowrap rounded-lg border shadow-sm px-2 py-4 text-xs leading-loose text-white">
-        <TechStackSlider client:idle />
+        <TechStackSlider client:load />
       </div>
     </section>
 
     <section class="flex flex-col gap-y-4">
-      <ProjectsShowcase projects={projectsData} client:idle />
+      <ProjectsShowcase projects={projectsData} client:load />
     </section>
 
     <section class="flex flex-col gap-y-4">

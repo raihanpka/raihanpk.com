@@ -290,7 +290,7 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
   const [assetErrored, setAssetErrored] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
-  const isInView = useInView(containerRef, { once: false, margin: '100px' })
+  const isInView = useInView(containerRef, { once: false, amount: 0.3 })
 
   useEffect(() => {
     if (videoRef.current) {
@@ -313,25 +313,24 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
     <div
       ref={containerRef}
       onClick={onOpenModal}
-      className="not-prose flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border shadow-sm transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg"
+      className="not-prose flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border shadow-sm transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg will-change-transform"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
       {/* Media: video or image */}
-      <div className="aspect-[16/10] w-full overflow-hidden bg-muted">
+      <div className="aspect-[16/10] w-full overflow-hidden bg-muted relative">
         {assetSrc && isVideo(assetSrc) ? (
           <video
             ref={videoRef}
             src={assetSrc}
-            preload="none"
+            preload="metadata"
             loop
             muted
             playsInline
             onError={handleError}
-            className={`h-full w-full object-cover transition-[transform,filter] duration-500 ease-in-out ${
-              hovered ? 'grayscale-0' : 'grayscale'
+            className={`h-full w-full object-cover transition-all duration-500 ease-in-out ${
+              hovered ? 'grayscale-0 scale-[1.02]' : 'grayscale scale-100'
             }`}
-            style={{ transform: hovered ? 'scale(1.02)' : 'scale(1)' }}
           />
         ) : assetSrc ? (
           <img
@@ -340,10 +339,9 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
             loading="lazy"
             decoding="async"
             onError={handleError}
-            className={`h-full w-full object-cover transition-[transform,filter] duration-500 ease-in-out ${
-              hovered ? 'grayscale-0' : 'grayscale'
+            className={`h-full w-full object-cover transition-all duration-500 ease-in-out ${
+              hovered ? 'grayscale-0 scale-[1.02]' : 'grayscale scale-100'
             }`}
-            style={{ transform: hovered ? 'scale(1.02)' : 'scale(1)' }}
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground text-sm">
@@ -474,48 +472,47 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
         initial={{ opacity: 0, scale: 0.95, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 30 }}
-        className="relative w-full max-w-7xl overflow-hidden rounded-[2.5rem] border bg-background shadow-[0_32px_64px_-12px_rgba(0,0,0,0.5)] cursor-default"
+        className="relative w-full max-w-7xl overflow-hidden rounded-xl border bg-background shadow-[0_32px_64px_-12px_rgba(0,0,0,0.5)] cursor-default mx-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="grid grid-cols-1 md:grid-cols-[70%_30%] md:h-[620px] overflow-hidden">
-          {/* Media Section - Height Master */}
-          <div className="relative bg-black border-b md:border-b-0 md:border-r w-full h-full">
-            <div className="w-full h-full overflow-hidden">
-              {assetSrc && isVideo(assetSrc) ? (
-                <video
-                  ref={videoRef}
-                  src={assetSrc}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  onError={handleError}
-                  className="h-full w-full object-cover"
-                />
-              ) : assetSrc ? (
-                <img
-                  src={assetSrc}
-                  alt={project.name}
-                  onError={handleError}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground text-sm">
-                  No preview available
-                </div>
-              )}
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-[70%_30%] md:h-[620px] w-full overflow-hidden">
+          {/* Media Section - The Height Master */}
+          <div className="relative bg-black border-b md:border-b-0 md:border-r w-full h-[250px] sm:h-[350px] md:h-full shrink-0 overflow-hidden">
+            {assetSrc && isVideo(assetSrc) ? (
+              <video
+                ref={videoRef}
+                src={assetSrc}
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                onError={handleError}
+                className="h-full w-full object-cover"
+              />
+            ) : assetSrc ? (
+              <img
+                src={assetSrc}
+                alt={project.name}
+                onError={handleError}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-muted text-muted-foreground text-sm">
+                No preview available
+              </div>
+            )}
           </div>
           
-          {/* Content Section - Precision Alignment */}
-          <div className="flex flex-col min-h-0 bg-background overflow-hidden h-full">
+          {/* Content Section - Robust Width & Height Lock */}
+          <div className="flex flex-col min-h-0 bg-background overflow-hidden h-full w-full">
             <div className="flex-1 overflow-y-auto p-5 md:p-8 scrollbar-hide">
               <div className="flex flex-col gap-5">
                 <div className="space-y-2">
                   <h3 className="text-xl md:text-2xl font-bold leading-tight tracking-tight text-foreground">{project.name}</h3>
                   {project.date && (
                     <div className="flex">
-                      <span className="text-[12px] text-muted-foreground bg-secondary/50 px-2 py-0.5 rounded border border-border/50">
+                      <span className="text-[10px] text-muted-foreground bg-secondary/50 px-2 py-0.5 rounded border border-border/50">
                         {project.date}
                       </span>
                     </div>
@@ -545,7 +542,7 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
                           <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-secondary/30 border border-border/40 transition-all group-hover:bg-secondary/60 group-hover:border-foreground/20">
                             {Icon && <Icon size={14} className="text-foreground/60 group-hover:text-foreground transition-colors" />}
                           </div>
-                          <span className="text-[11px] font-bold text-foreground/50 group-hover:text-foreground transition-colors truncate">{tech}</span>
+                          <span className="text-[11px] font-medium text-foreground/50 group-hover:text-foreground transition-colors truncate">{tech}</span>
                         </div>
                       )
                     })}
@@ -554,7 +551,7 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
               </div>
             </div>
 
-            {/* Actions Footer - Precision Alignment */}
+            {/* Actions Footer - Precision Consistent Height */}
             <div className="h-20 shrink-0 px-6 md:px-8 border-t border-border bg-background flex items-center justify-between gap-4 mt-auto">
               <div className="flex items-center gap-2">
                 <CopyLinkButton projectName={project.name} />
@@ -576,7 +573,7 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={buttonVariants({ variant: 'default' }) + " gap-2 rounded-lg h-9 text-xs font-bold shadow-sm hover:bg-primary flex items-center justify-center"}
+                  className={buttonVariants({ variant: 'default' }) + " gap-2 rounded-lg h-9 px-5 text-xs font-bold shadow-sm active:scale-95 hover:bg-primary flex items-center justify-center"}
                 >
                   <ArrowUpRight size={16} />
                   <span>Live Preview</span>

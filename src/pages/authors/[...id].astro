@@ -5,6 +5,7 @@ import Breadcrumbs from '@/components/Breadcrumbs.astro'
 import Container from '@/components/Container.astro'
 import Layout from '@/layouts/Layout.astro'
 import { type CollectionEntry, getCollection } from 'astro:content'
+import { getImage } from 'astro:assets'
 
 export async function getStaticPaths() {
   const authors = await getCollection('authors')
@@ -19,6 +20,14 @@ type Props = {
 }
 
 const { author } = Astro.props
+
+let optimizedAvatar = author.data.avatar
+if (author.data.avatar && !author.data.avatar.startsWith("http")) {
+  try {
+    const img = await getImage({ src: author.data.avatar, width: 256, format: "webp", inferSize: true })
+    optimizedAvatar = img.src
+  } catch (e) {}
+}
 
 const allPosts = await getCollection('blog')
 const authorPosts = allPosts
@@ -45,7 +54,7 @@ const authorPosts = allPosts
         client:load
         id={author.id}
         name={author.data.name}
-        avatar={author.data.avatar}
+        avatar={optimizedAvatar}
         bio={author.data.bio}
         pronouns={author.data.pronouns}
         github={author.data.github}

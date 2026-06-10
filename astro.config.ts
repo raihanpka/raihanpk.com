@@ -1,4 +1,3 @@
-import { rehypeHeadingIds } from '@astrojs/markdown-remark'
 import mdx from '@astrojs/mdx'
 import partytown from '@astrojs/partytown'
 import react from '@astrojs/react'
@@ -58,7 +57,6 @@ export default defineConfig({
           rel: ['nofollow', 'noreferrer', 'noopener'],
         },
       ],
-      rehypeHeadingIds,
       rehypeKatex,
       sectionize,
       [

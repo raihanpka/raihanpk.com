@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowUpRight, SlidersHorizontal, Link2, Check } from 'lucide-react'
+import { ArrowUpRight, SlidersHorizontal, Link2, Check, X } from 'lucide-react'
 import { AnimatePresence, motion, useInView } from 'framer-motion'
 import { useState, useRef, useEffect } from 'react'
 import { Badge } from '@/components/ui/badge'
@@ -251,7 +251,7 @@ export function ProjectsShowcase({ projects }: Props) {
   )
 }
 
-function CopyLinkButton({ projectName }: { projectName: string }) {
+function CopyLinkButton({ projectName, className = "h-7 w-7" }: { projectName: string; className?: string }) {
   const [copied, setCopied] = useState(false)
   
   const handleCopy = (e: React.MouseEvent) => {
@@ -264,23 +264,17 @@ function CopyLinkButton({ projectName }: { projectName: string }) {
     setTimeout(() => setCopied(false), 2000)
   }
 
+  const iconSize = className.includes('h-9') ? 16 : 14
+
   return (
-    <div className="group relative flex items-center">
-      <button
-        onClick={handleCopy}
-        className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-background text-foreground transition-all hover:bg-secondary active:scale-95 shadow-sm"
-        aria-label="Copy project link"
-      >
-        {copied ? <Check size={16} className="text-additive" /> : <Link2 size={16} />}
-      </button>
-      <div className="pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 translate-y-1 opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100 z-30">
-        <div className="whitespace-nowrap rounded-md bg-foreground px-2 py-1 text-[10px] font-bold text-background shadow-md border border-background/10">
-          {copied ? 'Link Copied!' : 'Copy Link'}
-        </div>
-        {/* Tooltip triangle */}
-        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-foreground"></div>
-      </div>
-    </div>
+    <button
+      onClick={handleCopy}
+      className={`flex items-center justify-center rounded-lg border border-border bg-background text-foreground transition-all hover:bg-secondary active:scale-95 shadow-sm ${className}`}
+      aria-label="Copy project link"
+      title="Copy Link"
+    >
+      {copied ? <Check size={iconSize} className="text-additive" /> : <Link2 size={iconSize} />}
+    </button>
   )
 }
 
@@ -480,20 +474,28 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-background/70 backdrop-blur-2xl p-0 sm:p-4 md:p-8 cursor-pointer"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-background/70 backdrop-blur-2xl p-4 sm:p-4 md:p-8 cursor-pointer"
       onClick={onClose}
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 30 }}
-        className="relative w-full max-w-7xl h-[100dvh] sm:h-[700px] md:h-[620px] overflow-hidden rounded-none sm:rounded-xl border bg-background shadow-[0_32px_64px_-12px_rgba(0,0,0,0.5)] cursor-default mx-auto flex flex-col"
+        className="relative w-full max-w-7xl h-fit max-h-[75dvh] sm:h-[700px] md:h-[620px] overflow-hidden rounded-2xl sm:rounded-xl border bg-background shadow-[0_32px_64px_-12px_rgba(0,0,0,0.5)] cursor-default mx-auto flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Mobile X close button */}
+        <button
+          onClick={onClose}
+          className="md:hidden absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm border border-border text-foreground/70 hover:text-foreground transition-colors"
+          aria-label="Close"
+        >
+          <X size={14} />
+        </button>
         {/* Mobile: stacked layout */}
         <div className="flex flex-col md:grid md:grid-cols-[72%_28%] w-full h-full overflow-hidden">
           {/* Media Section */}
-          <div className="relative bg-black border-b md:border-b-0 md:border-r w-full h-[40vh] md:h-full shrink-0 overflow-hidden">
+          <div className="relative bg-black border-b md:border-b-0 md:border-r w-full h-[30vh] md:h-full shrink-0 overflow-hidden">
             {assetSrc && isVideo(assetSrc) ? (
               <video
                 ref={videoRef}
@@ -571,7 +573,7 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
             {/* Actions Footer - Precision Consistent Height */}
             <div className="h-16 sm:h-20 shrink-0 px-4 sm:px-6 md:px-8 border-t border-border bg-background flex items-center justify-between gap-4 mt-auto">
               <div className="flex items-center gap-2">
-                <CopyLinkButton projectName={project.name} />
+                <CopyLinkButton projectName={project.name} className="h-9 w-9" />
                 {project.github && (
                   <a
                     href={project.github}

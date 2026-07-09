@@ -56,7 +56,7 @@ export default function FloatingChatButton() {
 
         {/* Tooltip - Matching Glass Style */}
         <div
-          className={`absolute bottom-full right-0 mb-4 transform transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] ${
+          className={`absolute bottom-full right-0 mb-4 transform transition-all duration-300 ease-out ${
             isHovered
               ? 'translate-y-0 opacity-100'
               : 'translate-y-2 opacity-0 pointer-events-none'

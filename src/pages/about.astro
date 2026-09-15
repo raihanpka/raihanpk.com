@@ -6,69 +6,40 @@ import Container from '@/components/Container.astro'
 import Link from '@/components/Link.astro'
 import { SITE } from '@/consts'
 import Layout from '@/layouts/Layout.astro'
-import { getCollection } from 'astro:content'
-import { getImage } from 'astro:assets'
+import { getEntry } from 'astro:content'
 
-const authors = await getCollection('authors')
-
-const optimizedAuthors = await Promise.all(
-  authors.map(async (author) => {
-    let optimizedAvatar = author.data.avatar
-    if (author.data.avatar && !author.data.avatar.startsWith('http')) {
-      try {
-        const img = await getImage({
-          src: author.data.avatar,
-          width: 256,
-          format: 'webp',
-          inferSize: true,
-        })
-        optimizedAvatar = img.src
-      } catch (e) {
-        console.error(`Failed to optimize avatar for ${author.data.name}:`, e)
-      }
-    }
-    return {
-      ...author,
-      optimizedAvatar,
-    }
-  })
-)
+const author = await getEntry('authors', 'raihanpk')
 ---
 
 <Layout title="About" description={SITE.DESCRIPTION}>
   <Container class="flex flex-col gap-y-6">
     <Breadcrumbs items={[{ label: 'About', icon: 'lucide:info' }]} />
 
-    {
-      optimizedAuthors.length > 0 ? (
-        <div class="flex flex-col gap-4">
-          {optimizedAuthors.map((author) => (
-            <EditorialProfileCard
-              id={author.id}
-              name={author.data.name}
-              avatar={author.optimizedAvatar}
-              bio={author.data.bio}
-              pronouns={author.data.pronouns}
-              github={author.data.github}
-              linkedin={author.data.linkedin}
-              instagram={author.data.instagram}
-              website={author.data.website}
-              mail={author.data.mail}
-            />
-          ))}
-        </div>
-      ) : (
-        <p class="text-center text-muted-foreground">No authors found.</p>
-      )
-    }
+    {author && (
+      <EditorialProfileCard
+        id={author.id}
+        name={author.data.name}
+        avatar={author.data.avatar}
+        bio={author.data.bio}
+        role={author.data.role}
+        location={author.data.location}
+        pronouns={author.data.pronouns}
+        github={author.data.github}
+        linkedin={author.data.linkedin}
+        instagram={author.data.instagram}
+        website={author.data.website}
+        mail={author.data.mail}
+        linkDisabled
+      />
+    )}
 
     <section>
       <div class="min-w-full">
-        <div class="prose prose-neutral max-w-none mb-8 dark:prose-invert">
+        <div class="prose prose-neutral max-w-none mb-3 dark:prose-invert">
           <h2 class="mb-4 text-2xl font-semibold">Hello, I'm Raihan.</h2>
           <p class="mb-4">
             My name is Raihan Putra Kirana, but my friends often called me "Peka". 
-            I am currently a third-year student majoring in Computer Science at 
+            I am currently a final year student majoring in Computer Science at 
             <Link
               href="https://ipb.ac.id"
               class="text-foreground"

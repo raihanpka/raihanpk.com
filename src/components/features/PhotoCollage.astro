@@ -1,16 +1,13 @@
 ---
 /**
- * Aesthetic Photo Collage component
- * Inspired by creative studio & non-tech minimalist blogs.
- * Asymmetric pinboard gallery with slight tilts, 1px borders, and technical captions.
- * Ready to host user photos or animated GIFs seamlessly.
+ * Aesthetic Photo Collage component for Core Memories with friends.
+ * Follows clean uniform aspect ratios, enlarged 2-line wrapped captions,
+ * no AI-slop dots, and auto marquee if photos > 3.
  */
 
 interface PhotoItem {
   src: string
   caption: string
-  aspect?: string
-  tilt?: string
 }
 
 interface Props {
@@ -20,59 +17,110 @@ interface Props {
 const defaultPhotos: PhotoItem[] = [
   {
     src: '/static/twitter-card.png',
-    caption: 'FIG 01. / CORE DEV ENVIRONMENT & ARCHITECTURE',
-    aspect: 'aspect-[4/3]',
-    tilt: 'sm:-rotate-1',
+    caption: 'Late night sprints and caffeinated ideas with the crew',
   },
   {
-    src: '/static/astro-cover.webp',
-    caption: 'FIG 02. / PRODUCTION PLATFORM & HACKATHON SPRINTS',
-    aspect: 'aspect-[16/10]',
-    tilt: 'sm:rotate-1',
+    src: '/static/kalanusa.png',
+    caption: 'Podium celebrations and the relief of shipping together',
   },
   {
-    src: '/static/lighthouse.webp',
-    caption: 'FIG 03. / 100% AUDIT BENCHMARKS & CORE WEB VITALS',
-    aspect: 'aspect-[16/9]',
-    tilt: 'sm:-rotate-0.5',
+    src: '/static/satria.png',
+    caption: 'Between deadlines: quiet laughter that outlasts the code',
   },
 ]
 
 const { photos = defaultPhotos } = Astro.props
+const isMarquee = photos.length > 3
 ---
 
-<section class="mt-8 pt-8 border-t border-border/60">
-  <div class="flex items-baseline justify-between mb-6">
-    <h3 class="text-sm font-mono uppercase tracking-widest text-muted-foreground">
-      Visual Archives / Snapshots
-    </h3>
-    <span class="text-xs font-mono text-muted-foreground/60">
-      FIG 01 - 03
-    </span>
+<section class="mt-2 pt-4 border-t border-border/50">
+  <div class="mb-5">
+    <h2 class="text-xl font-semibold text-foreground">
+      Core Memories
+    </h2>
+    <p class="text-sm text-muted-foreground mt-1">
+      Fragments of time, shared laughter, and quiet moments with friends along the journey.
+    </p>
   </div>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    {photos.map((item) => (
-      <figure class={`group relative flex flex-col overflow-hidden rounded-xl border border-border/80 bg-card/70 p-3 shadow-sm transition-all duration-500 hover:border-foreground/40 hover:-translate-y-1 hover:shadow-md ${item.tilt ?? ''}`}>
-        {/* Photo Container */}
-        <div class={`relative w-full ${item.aspect ?? 'aspect-[4/3]'} overflow-hidden rounded-lg bg-secondary/50 border border-border/40`}>
-          <img
-            src={item.src}
-            alt={item.caption}
-            loading="lazy"
-            decoding="async"
-            class="h-full w-full object-cover grayscale contrast-110 transition-all duration-500 ease-out group-hover:grayscale-0 group-hover:scale-105"
-          />
-          {/* Subtle vignette overlay */}
-          <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 group-hover:opacity-20 transition-opacity duration-300" />
-        </div>
+  {isMarquee ? (
+    <div class="group relative -mx-4 sm:-mx-6 px-4 sm:px-6 overflow-hidden py-2">
+      {/* Gradient edge fades */}
+      <div class="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-background to-transparent" />
+      <div class="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-background to-transparent" />
 
-        {/* Monospaced Technical Caption */}
-        <figcaption class="mt-3 flex items-center justify-between text-[10px] font-mono text-muted-foreground tracking-tight">
-          <span class="truncate">{item.caption}</span>
-          <span class="size-1 rounded-full bg-foreground/40 group-hover:bg-foreground transition-colors" />
-        </figcaption>
-      </figure>
-    ))}
-  </div>
+      <div class="animate-core-marquee gap-5">
+        {[...photos, ...photos].map((item) => (
+          <figure class="w-72 sm:w-80 shrink-0 flex flex-col overflow-hidden rounded-xl border border-border/80 bg-card/60 p-3.5 shadow-sm transition-all duration-300 hover:border-foreground/40 hover:-translate-y-1 hover:shadow-md">
+            {/* Uniform Aspect Ratio Photo */}
+            <div class="relative w-full aspect-[4/3] overflow-hidden rounded-lg bg-secondary/50 border border-border/40">
+              <img
+                src={item.src}
+                alt={item.caption}
+                loading="lazy"
+                decoding="async"
+                class="h-full w-full object-cover grayscale contrast-110 transition-all duration-500 ease-out hover:grayscale-0"
+              />
+              <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-40" />
+            </div>
+
+            {/* Enlarged 2-Line Caption matching width */}
+            <figcaption class="mt-3 w-full">
+              <p class="text-sm sm:text-base font-medium text-foreground/90 leading-snug line-clamp-2">
+                {item.caption}
+              </p>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  ) : (
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {photos.map((item) => (
+        <figure class="group flex flex-col overflow-hidden rounded-xl border border-border/80 bg-card/60 p-3.5 shadow-sm transition-all duration-300 hover:border-foreground/40 hover:-translate-y-1 hover:shadow-md">
+          {/* Uniform Aspect Ratio Photo */}
+          <div class="relative w-full aspect-[4/3] overflow-hidden rounded-lg bg-secondary/50 border border-border/40">
+            <img
+              src={item.src}
+              alt={item.caption}
+              loading="lazy"
+              decoding="async"
+              class="h-full w-full object-cover grayscale contrast-110 transition-all duration-500 ease-out group-hover:grayscale-0 group-hover:scale-105"
+            />
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-40 group-hover:opacity-10 transition-opacity duration-300" />
+          </div>
+
+          {/* Enlarged 2-Line Caption matching width */}
+          <figcaption class="mt-3 w-full">
+            <p class="text-sm sm:text-base font-medium text-foreground/90 leading-snug line-clamp-2">
+              {item.caption}
+            </p>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  )}
 </section>
+
+<style>
+  @keyframes core-memories-marquee {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+    100% {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  .animate-core-marquee {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+    animation: core-memories-marquee 30s linear infinite;
+  }
+
+  .animate-core-marquee:hover,
+  .group:hover .animate-core-marquee {
+    animation-play-state: paused;
+  }
+</style>

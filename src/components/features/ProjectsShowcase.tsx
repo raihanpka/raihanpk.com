@@ -286,6 +286,11 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
   const videoRef = useRef<HTMLVideoElement>(null)
   const isInView = useInView(containerRef, { once: false, amount: 0.3 })
 
+  useEffect(() => {
+    setAssetSrc(project.asset)
+    setAssetErrored(false)
+  }, [project.asset])
+
   // Detect mobile viewport (disable video autoplay on mobile to save battery/data)
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 767px)')
@@ -339,7 +344,7 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
           <img
             src={assetSrc}
             alt={project.name}
-            loading="lazy"
+            loading="eager"
             decoding="async"
             onError={handleError}
             className={`h-full w-full object-cover transition-all duration-500 ease-in-out ${
@@ -445,6 +450,11 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
   const [assetSrc, setAssetSrc] = useState(project.asset)
   const [assetErrored, setAssetErrored] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    setAssetSrc(project.asset)
+    setAssetErrored(false)
+  }, [project.asset])
 
   // Handle ESC key to close
   useEffect(() => {

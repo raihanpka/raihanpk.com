@@ -2,22 +2,23 @@
 
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { PiX, PiFileText, PiDownloadSimple, PiCopy, PiCheck, PiArrowSquareOut } from 'react-icons/pi'
+import { PiX, PiFileText, PiDownloadSimple, PiCopy, PiCheck, PiArrowSquareOut, PiStarFourFill } from 'react-icons/pi'
 import { cn } from '@/lib/utils'
 import '@/styles/arrow-fill-button.css'
 
 interface ResumeModalProps {
   className?: string
+  resumeUrl?: string
 }
 
-export default function ResumeModal({ className }: ResumeModalProps) {
+export default function ResumeModal({ className, resumeUrl = 'https://tr.ee/0gvXOd' }: ResumeModalProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [copied, setCopied] = useState(false)
 
   const handleCopyLink = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    navigator.clipboard.writeText(window.location.origin + '/static/resume.pdf')
+    navigator.clipboard.writeText(resumeUrl)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
@@ -41,14 +42,14 @@ export default function ResumeModal({ className }: ResumeModalProps) {
         } as React.CSSProperties}
       >
         <span className="obsidian-arrow-fill-btn__text flex items-center gap-1.5">
-          <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse inline-block" />
-          CV / Resume
+          <PiStarFourFill className="size-2.5 text-foreground/80 inline-block" />
+          Resume
         </span>
         <div aria-hidden="true" className="obsidian-arrow-fill-btn__circle">
           <div className="obsidian-arrow-fill-btn__circle-text">
             <span className="flex items-center gap-1.5">
-              <span className="size-1.5 rounded-full bg-emerald-400 inline-block" />
-              CV / Resume
+              <PiStarFourFill className="size-2.5 text-primary-foreground inline-block" />
+              Resume
             </span>
             <svg
               viewBox="0 0 10 10"
@@ -133,8 +134,8 @@ export default function ResumeModal({ className }: ResumeModalProps) {
                 </div>
                 <div className="grid grid-cols-3 gap-2 p-3 rounded-lg bg-secondary/40 border border-border/40">
                   <span className="text-muted-foreground">Status</span>
-                  <span className="col-span-2 text-emerald-500 font-medium flex items-center gap-1.5">
-                    <span className="size-1.5 rounded-full bg-emerald-500 inline-block" />
+                  <span className="col-span-2 text-foreground font-medium flex items-center gap-1.5">
+                    <PiStarFourFill className="size-2.5 text-foreground inline-block" />
                     Open to Engineering Roles (Summer/FT)
                   </span>
                 </div>
@@ -146,27 +147,28 @@ export default function ResumeModal({ className }: ResumeModalProps) {
                   onClick={handleCopyLink}
                   className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-2 text-xs font-mono text-foreground hover:bg-secondary transition-colors"
                 >
-                  {copied ? <PiCheck className="size-3.5 text-emerald-500" /> : <PiCopy className="size-3.5" />}
+                  {copied ? <PiCheck className="size-3.5 text-foreground" /> : <PiCopy className="size-3.5" />}
                   {copied ? 'Link Copied' : 'Copy Link'}
                 </button>
 
                 <div className="flex items-center gap-2">
                   <a
-                    href="/static/resume.pdf"
+                    href={resumeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-secondary px-3 py-2 text-xs font-mono text-foreground hover:bg-accent transition-colors"
                   >
                     <PiArrowSquareOut className="size-3.5" />
-                    Open PDF
+                    Open Resume
                   </a>
                   <a
-                    href="/static/resume.pdf"
-                    download="Raihan_Putra_Kirana_Resume.pdf"
+                    href={resumeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-primary-foreground px-3.5 py-2 text-xs font-mono hover:opacity-90 transition-opacity"
                   >
                     <PiDownloadSimple className="size-3.5" />
-                    Download
+                    Access
                   </a>
                 </div>
               </div>

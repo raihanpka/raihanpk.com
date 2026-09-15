@@ -102,7 +102,7 @@ void main() {
 
   // Strict monochrome: white glyphs in dark mode, dark charcoal glyphs in light mode
   vec3 col = uDark > 0.5 ? vec3(0.92, 0.92, 0.94) : vec3(0.12, 0.12, 0.14);
-  float alpha = ca * (uDark > 0.5 ? 0.09 : 0.05);
+  float alpha = ca * (uDark > 0.5 ? 0.14 : 0.08);
   alpha = mix(alpha, alpha * 2.2, hm);
 
   O = vec4(col * alpha, alpha);
@@ -513,7 +513,7 @@ export default function MonochromeDitherCanvas({ className }: DitherCanvasProps)
       ref={canvasRef}
       aria-hidden="true"
       className={cn(
-        'pointer-events-none fixed inset-0 z-0 h-full w-full opacity-60 dark:opacity-40 transition-opacity duration-700',
+        'pointer-events-none fixed inset-0 z-0 h-full w-full opacity-75 dark:opacity-60 transition-opacity duration-700',
         className
       )}
     />

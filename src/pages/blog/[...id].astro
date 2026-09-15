@@ -166,7 +166,7 @@ const authors = await parseAuthors(post.data.authors ?? [])
   <Button
     variant="outline"
     size="icon"
-    className="group fixed bottom-8 right-8 z-50 hidden"
+    className="group fixed bottom-24 md:bottom-28 right-5 md:right-8 z-40 hidden shadow-md"
     id="scroll-to-top"
     title="Scroll to top"
     aria-label="Scroll to top"
@@ -183,6 +183,12 @@ const authors = await parseAuthors(post.data.authors ?? [])
       const footer = document.querySelector('footer')
       
       if (!scrollToTopButton || !footer) return
+
+      // Smooth scroll to top on click
+      const onScrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
+      scrollToTopButton.addEventListener('click', onScrollToTop)
 
       // Cache footer position
       let footerTop = footer.offsetTop
@@ -227,6 +233,7 @@ const authors = await parseAuthors(post.data.authors ?? [])
       
       // Cleanup
       return () => {
+        scrollToTopButton.removeEventListener('click', onScrollToTop)
         window.removeEventListener('scroll', handleScroll)
         window.removeEventListener('resize', handleResize)
         if (resizeTimeout !== null) {

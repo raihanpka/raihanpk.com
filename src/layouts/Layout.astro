@@ -35,7 +35,7 @@ const { title, description, image, fullTitle } = Astro.props
           <slot />
         </div>
       </main>
-      {Astro.url.pathname === '/' && <FloatingChatButton client:load />}
+      {Astro.url.pathname !== '/chat' && <FloatingChatButton client:idle />}
       <Footer />
     </div>
     <SpeedInsights />

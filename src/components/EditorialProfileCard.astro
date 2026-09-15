@@ -8,13 +8,13 @@ import {
   PiMapPin,
   PiBriefcase,
 } from 'react-icons/pi'
-import AvatarComponent from '@/components/ui/avatar'
-
 interface Props {
   id: string
   name: string
   avatar?: string
   bio?: string
+  role?: string
+  location?: string
   pronouns?: string
   github?: string
   linkedin?: string
@@ -29,6 +29,8 @@ const {
   name,
   avatar,
   bio,
+  role,
+  location,
   pronouns,
   github,
   linkedin,
@@ -47,41 +49,40 @@ const socialLinks = [
 ].filter(Boolean) as { href: string; label: string; icon: any }[]
 ---
 
-<div class="relative overflow-hidden rounded-2xl border border-border/80 bg-card/60 backdrop-blur-md p-5 sm:p-7 shadow-sm transition-all duration-300 hover:border-foreground/30">
-  {/* Blueprint technical crosshairs */}
-  <span class="absolute top-2 left-2 text-xs font-mono text-muted-foreground/40 select-none">+</span>
-  <span class="absolute top-2 right-2 text-xs font-mono text-muted-foreground/40 select-none">+</span>
-  <span class="absolute bottom-2 left-2 text-xs font-mono text-muted-foreground/40 select-none">+</span>
-  <span class="absolute bottom-2 right-2 text-xs font-mono text-muted-foreground/40 select-none">+</span>
-
+<div class="relative overflow-hidden rounded-2xl border border-border/80 bg-card/60 backdrop-blur-md p-5 sm:p-6 shadow-sm transition-all duration-300 hover:border-foreground/30">
   {/* Top Specular Edge */}
   <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/20 to-transparent pointer-events-none" />
 
-  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+  <div class="flex flex-col md:flex-row md:items-start justify-between gap-5">
     {/* Identity Left Column */}
-    <div class="flex items-center gap-4 sm:gap-5">
-      <div class="relative group">
+    <div class="flex items-start gap-4 sm:gap-5 flex-1 min-w-0">
+      <div class="relative shrink-0">
         {linkDisabled ? (
-          <AvatarComponent
-            src={avatar}
-            alt={`Profile avatar of ${name}`}
-            fallback={name[0]}
-            className="size-20 sm:size-24 rounded-xl border border-border/60 grayscale contrast-125 object-cover"
+          <img
+            src={avatar || '/static/notion-avatar.png'}
+            alt={`Profile photo of ${name}`}
+            width="96"
+            height="96"
+            loading="eager"
+            decoding="async"
+            class="size-20 sm:size-24 rounded-xl border border-border/80 grayscale contrast-125 object-cover bg-secondary/40 shadow-sm"
           />
         ) : (
           <a href={`/authors/${id}`} class="block focus:outline-none focus:ring-2 focus:ring-primary rounded-xl">
-            <AvatarComponent
-              src={avatar}
-              alt={`Profile avatar of ${name}`}
-              fallback={name[0]}
-              className="size-20 sm:size-24 rounded-xl border border-border/60 grayscale contrast-125 hover:grayscale-0 transition-all duration-300 object-cover cursor-pointer"
+            <img
+              src={avatar || '/static/notion-avatar.png'}
+              alt={`Profile photo of ${name}`}
+              width="96"
+              height="96"
+              loading="eager"
+              decoding="async"
+              class="size-20 sm:size-24 rounded-xl border border-border/80 grayscale contrast-125 hover:grayscale-0 transition-all duration-300 object-cover bg-secondary/40 cursor-pointer shadow-sm"
             />
           </a>
         )}
-        <div class="absolute -bottom-1 -right-1 size-4 rounded-full bg-emerald-500 border-2 border-background" title="Active & Available" />
       </div>
 
-      <div class="flex flex-col gap-y-1">
+      <div class="flex flex-col gap-y-1.5 flex-1 min-w-0">
         <div class="flex flex-wrap items-baseline gap-x-2.5">
           <h1 class="text-xl sm:text-2xl font-bold font-mono text-foreground tracking-tight">{name}</h1>
           {pronouns && (
@@ -91,21 +92,33 @@ const socialLinks = [
           )}
         </div>
 
-        <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-mono text-muted-foreground mt-1">
-          <span class="flex items-center gap-1">
-            <PiBriefcase className="size-3.5" />
-            SWE & AI Systems
-          </span>
-          <span class="flex items-center gap-1">
-            <PiMapPin className="size-3.5" />
-            Bogor / Jakarta, ID
-          </span>
-        </div>
+        {(role || location) && (
+          <div class="flex flex-wrap items-center gap-x-3.5 gap-y-1 text-xs sm:text-sm font-mono text-muted-foreground">
+            {role && (
+              <span class="flex items-center gap-1.5">
+                <PiBriefcase className="size-3.5 sm:size-4 shrink-0" />
+                {role}
+              </span>
+            )}
+            {location && (
+              <span class="flex items-center gap-1.5">
+                <PiMapPin className="size-3.5 sm:size-4 shrink-0" />
+                {location}
+              </span>
+            )}
+          </div>
+        )}
+
+        {bio && (
+          <p class="text-sm sm:text-base text-foreground/80 font-sans leading-relaxed mt-1">
+            "{bio}"
+          </p>
+        )}
       </div>
     </div>
 
     {/* Social Links Pill Bar */}
-    <div class="flex flex-wrap items-center gap-2">
+    <div class="flex flex-wrap items-center gap-2 self-start md:self-auto shrink-0 pt-1">
       {socialLinks.map((item) => (
         <a
           href={item.href}
@@ -120,10 +133,4 @@ const socialLinks = [
       ))}
     </div>
   </div>
-
-  {bio && (
-    <p class="mt-4 pt-4 border-t border-border/50 text-sm leading-relaxed text-muted-foreground font-sans">
-      {bio}
-    </p>
-  )}
 </div>

@@ -188,7 +188,7 @@ export default function TechStackSlider() {
 
   return (
     <div
-      className="relative mx-auto w-full overflow-hidden rounded-xl p-4"
+      className="relative mx-auto w-full rounded-xl py-1 px-1 flex flex-col justify-between h-full"
       style={{ background: 'transparent' }}
     >
       {/* Row 1 */}
@@ -207,25 +207,25 @@ export default function TechStackSlider() {
             target="_blank"
             rel="noopener noreferrer"
             title={stack.alt}
-            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-br from-[#1f1f1f] to-[#0e0e0e] p-1.5 sm:p-2 shadow-xl"
+            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-secondary/80 dark:bg-[#181818] border border-border text-foreground p-1.5 sm:p-2 shadow-sm transition-all hover:border-foreground/40 hover:scale-105"
             onMouseEnter={() => setHoveredKey(`row1-${index}`)}
             onMouseLeave={() => setHoveredKey(null)}
           >
-            <div className="absolute h-10 w-12 sm:h-14 sm:w-16 rounded-lg border-2 border-b-0 border-r-0 border-[#2a2a2a]" />
+            <div className="absolute inset-0 rounded-lg border-t border-l border-white/20 dark:border-white/10 pointer-events-none" />
             <span
-              className="h-full w-full select-none flex items-center justify-center transition-all duration-150"
+              className="h-full w-full select-none flex items-center justify-center transition-all duration-150 text-foreground"
               draggable={false}
               aria-label={stack.alt}
             >
               {hoveredKey === `row1-${index}` ? (
-                <ExternalLink size="1.4em" className="sm:hidden text-white/80" />
+                <ExternalLink size="1.4em" className="sm:hidden text-foreground" />
               ) : (
-                <StackIcon name={stack.name} size="1.8em" className="sm:hidden" />
+                <StackIcon name={stack.name} size="1.8em" className="sm:hidden text-foreground" />
               )}
               {hoveredKey === `row1-${index}` ? (
-                <ExternalLink size="1.8em" className="hidden sm:inline text-white/80" />
+                <ExternalLink size="1.8em" className="hidden sm:inline text-foreground" />
               ) : (
-                <StackIcon name={stack.name} size="2.5em" className="hidden sm:inline" />
+                <StackIcon name={stack.name} size="2.5em" className="hidden sm:inline text-foreground" />
               )}
             </span>
           </a>
@@ -249,25 +249,25 @@ export default function TechStackSlider() {
             target="_blank"
             rel="noopener noreferrer"
             title={stack.alt}
-            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-br from-[#1f1f1f] to-[#0e0e0e] p-1.5 sm:p-2 shadow-xl"
+            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-secondary/80 dark:bg-[#181818] border border-border text-foreground p-1.5 sm:p-2 shadow-sm transition-all hover:border-foreground/40 hover:scale-105"
             onMouseEnter={() => setHoveredKey(`row2-${index}`)}
             onMouseLeave={() => setHoveredKey(null)}
           >
-            <div className="absolute h-10 w-12 sm:h-14 sm:w-16 rounded-lg border-2 border-b-0 border-r-0 border-[#2a2a2a]" />
+            <div className="absolute inset-0 rounded-lg border-t border-l border-white/20 dark:border-white/10 pointer-events-none" />
             <span
-              className="h-full w-full select-none flex items-center justify-center transition-all duration-150"
+              className="h-full w-full select-none flex items-center justify-center transition-all duration-150 text-foreground"
               draggable={false}
               aria-label={stack.alt}
             >
               {hoveredKey === `row2-${index}` ? (
-                <ExternalLink size="1.4em" className="sm:hidden text-white/80" />
+                <ExternalLink size="1.4em" className="sm:hidden text-foreground" />
               ) : (
-                <StackIcon name={stack.name} size="1.8em" className="sm:hidden" />
+                <StackIcon name={stack.name} size="1.8em" className="sm:hidden text-foreground" />
               )}
               {hoveredKey === `row2-${index}` ? (
-                <ExternalLink size="1.8em" className="hidden sm:inline text-white/80" />
+                <ExternalLink size="1.8em" className="hidden sm:inline text-foreground" />
               ) : (
-                <StackIcon name={stack.name} size="2.5em" className="hidden sm:inline" />
+                <StackIcon name={stack.name} size="2.5em" className="hidden sm:inline text-foreground" />
               )}
             </span>
           </a>
@@ -290,33 +290,33 @@ export default function TechStackSlider() {
             target="_blank"
             rel="noopener noreferrer"
             title={stack.alt}
-            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-br from-[#1f1f1f] to-[#0e0e0e] p-1.5 sm:p-2 shadow-xl"
+            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-secondary/80 dark:bg-[#181818] border border-border text-foreground p-1.5 sm:p-2 shadow-sm transition-all hover:border-foreground/40 hover:scale-105"
             onMouseEnter={() => setHoveredKey(`row3-${index}`)}
             onMouseLeave={() => setHoveredKey(null)}
           >
-            <div className="absolute h-10 w-12 sm:h-14 sm:w-16 rounded-lg border-2 border-b-0 border-r-0 border-[#2a2a2a]" />
+            <div className="absolute inset-0 rounded-lg border-t border-l border-white/20 dark:border-white/10 pointer-events-none" />
             <span
-              className="h-full w-full select-none flex items-center justify-center transition-all duration-150"
+              className="h-full w-full select-none flex items-center justify-center transition-all duration-150 text-foreground"
               draggable={false}
               aria-label={stack.alt}
             >
               {hoveredKey === `row3-${index}` ? (
-                <ExternalLink size="1.4em" className="sm:hidden text-white/80" />
+                <ExternalLink size="1.4em" className="sm:hidden text-foreground" />
               ) : (
-                <StackIcon name={stack.name} size="1.8em" className="sm:hidden" />
+                <StackIcon name={stack.name} size="1.8em" className="sm:hidden text-foreground" />
               )}
               {hoveredKey === `row3-${index}` ? (
-                <ExternalLink size="1.8em" className="hidden sm:inline text-white/80" />
+                <ExternalLink size="1.8em" className="hidden sm:inline text-foreground" />
               ) : (
-                <StackIcon name={stack.name} size="2.5em" className="hidden sm:inline" />
+                <StackIcon name={stack.name} size="2.5em" className="hidden sm:inline text-foreground" />
               )}
             </span>
           </a>
         ))}
       </Marquee>
 
-      <div className="flex justify-center mt-4">
-        <Badge variant="outline" className="text-xs font-mono mb-2">
+      <div className="flex justify-center mt-3 pt-1 pb-0.5">
+        <Badge variant="outline" className="text-xs font-mono">
           My tech stack & tools
         </Badge>
       </div>

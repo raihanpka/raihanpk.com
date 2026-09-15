@@ -17,7 +17,9 @@ import {
 } from '@/components/ui/card'
 import { SITE } from '@/consts'
 import Layout from '@/layouts/Layout.astro'
-import { getCollection } from 'astro:content'
+import { getCollection, getEntry } from 'astro:content'
+
+const author = await getEntry('authors', 'raihanpk')
 
 const blog = (await getCollection('blog'))
   .filter((post) => !post.data.draft)
@@ -53,11 +55,11 @@ const projectsData = rawProjects.map((p) => ({
             <div>
               <CardTitle className="text-3xl"><span class="font-mono">Raihan Putra Kirana</span></CardTitle>
               <CardDescription>/ˈraɪ.han.peˈka/ &bull; 
-                <span class="font-bold font-mono">SWE & AI Enthusiast &bull; 3rd Year CS @ IPB</span>
+                <span class="font-bold font-mono">SWE & AI Systems &bull; 3rd Year CS @ IPB</span>
               </CardDescription>
             </div>
             <div class="shrink-0">
-              <ResumeModal client:idle />
+              <ResumeModal client:idle resumeUrl={author?.data.resume} />
             </div>
           </div>
         </CardHeader>
@@ -81,13 +83,13 @@ const projectsData = rawProjects.map((p) => ({
       </div>
 
       <div role="region" aria-label="Tech Stack"
-        class="col-span-1 md:col-span-2 lg:col-span-4 h-[250px] sm:h-[280px] w-full flex flex-col items-start whitespace-nowrap rounded-xl border border-border bg-card/60 backdrop-blur-sm shadow-sm p-4 text-xs leading-loose text-foreground transition-all duration-300 hover:border-foreground/30">
+        class="col-span-1 md:col-span-2 lg:col-span-4 min-h-[350px] sm:min-h-[380px] h-auto w-full flex flex-col justify-between rounded-xl border border-border bg-card/60 backdrop-blur-sm shadow-sm p-4 text-xs text-foreground transition-all duration-300 hover:border-foreground/30">
         <TechStackSlider client:idle />
       </div>
     </section>
 
     <section class="flex flex-col gap-y-4">
-      <ProjectsShowcase projects={projectsData} client:visible />
+      <ProjectsShowcase projects={projectsData} client:load />
     </section>
 
     <section class="flex flex-col gap-y-4">

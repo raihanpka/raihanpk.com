@@ -31,8 +31,11 @@ const authors = defineCollection({
   schema: z.object({
     name: z.string(),
     pronouns: z.string().optional(),
-    avatar: z.url(),
+    avatar: z.string(),
     bio: z.string().optional(),
+    role: z.string().optional(),
+    location: z.string().optional(),
+    resume: z.url().optional(),
     mail: z.email().optional(),
     website: z.url().optional(),
     kofi: z.url().optional(),

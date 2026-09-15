@@ -6,6 +6,7 @@ import { ProjectsShowcase } from '@/components/features/ProjectsShowcase.tsx'
 import SpotifyPresence from '@/components/features/SpotifyPresence.tsx'
 import TechStackSlider from '@/components/features/TechStackSlider.tsx'
 import WakatimeBox from '@/components/features/WakatimeBox.tsx'
+import ResumeModal from '@/components/features/ResumeModal.tsx'
 import { buttonVariants } from '@/components/ui/button'
 import {
   Card,
@@ -48,11 +49,17 @@ const projectsData = rawProjects.map((p) => ({
     <section>
       <Card>
         <CardHeader>
-          <CardTitle className="text-3xl"><span class="font-mono">Raihan Putra Kirana</span></CardTitle>
-          <CardDescription>/ˈraɪ.han.peˈka/ &bull; 
-            <span class="font-bold font-mono">SWE & AI Enthusiast &bull; 3rd Year CS @ IPB</span
-          ></CardDescription
-          >
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <CardTitle className="text-3xl"><span class="font-mono">Raihan Putra Kirana</span></CardTitle>
+              <CardDescription>/ˈraɪ.han.peˈka/ &bull; 
+                <span class="font-bold font-mono">SWE & AI Enthusiast &bull; 3rd Year CS @ IPB</span>
+              </CardDescription>
+            </div>
+            <div class="shrink-0">
+              <ResumeModal client:idle />
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           <p class="mb-2 text-md text-foreground">

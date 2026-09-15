@@ -1,5 +1,5 @@
 ---
-import { AuthorCardClient } from '@/components/AuthorCardClient'
+import EditorialProfileCard from '@/components/EditorialProfileCard.astro'
 import BlogCard from '@/components/BlogCard.astro'
 import Breadcrumbs from '@/components/Breadcrumbs.astro'
 import Container from '@/components/Container.astro'
@@ -50,8 +50,7 @@ const authorPosts = allPosts
     />
 
     <section>
-      <AuthorCardClient
-        client:load
+      <EditorialProfileCard
         id={author.id}
         name={author.data.name}
         avatar={optimizedAvatar}

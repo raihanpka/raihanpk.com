@@ -1,5 +1,6 @@
 ---
-import { AuthorCardClient } from '@/components/AuthorCardClient'
+import EditorialProfileCard from '@/components/EditorialProfileCard.astro'
+import PhotoCollage from '@/components/features/PhotoCollage.astro'
 import Breadcrumbs from '@/components/Breadcrumbs.astro'
 import Container from '@/components/Container.astro'
 import Link from '@/components/Link.astro'
@@ -40,25 +41,22 @@ const optimizedAuthors = await Promise.all(
 
     {
       optimizedAuthors.length > 0 ? (
-        <ul class="not-prose flex flex-col gap-4">
+        <div class="flex flex-col gap-4">
           {optimizedAuthors.map((author) => (
-            <li>
-              <AuthorCardClient
-                client:load
-                id={author.id}
-                name={author.data.name}
-                avatar={author.optimizedAvatar}
-                bio={author.data.bio}
-                pronouns={author.data.pronouns}
-                github={author.data.github}
-                linkedin={author.data.linkedin}
-                instagram={author.data.instagram}
-                website={author.data.website}
-                mail={author.data.mail}
-              />
-            </li>
+            <EditorialProfileCard
+              id={author.id}
+              name={author.data.name}
+              avatar={author.optimizedAvatar}
+              bio={author.data.bio}
+              pronouns={author.data.pronouns}
+              github={author.data.github}
+              linkedin={author.data.linkedin}
+              instagram={author.data.instagram}
+              website={author.data.website}
+              mail={author.data.mail}
+            />
           ))}
-        </ul>
+        </div>
       ) : (
         <p class="text-center text-muted-foreground">No authors found.</p>
       )
@@ -88,5 +86,7 @@ const optimizedAuthors = await Promise.all(
         </div>
       </div>
     </section>
+
+    <PhotoCollage />
   </Container>
 </Layout>

@@ -2,8 +2,8 @@ import { Marquee } from '@devnomic/marquee'
 import { useEffect, useState } from 'react'
 import '@devnomic/marquee/dist/index.css'
 import { ExternalLink } from 'lucide-react'
+import { PiAmazonLogo, PiOpenAiLogo } from 'react-icons/pi'
 import {
-  SiAmazon,
   SiAstro,
   SiBun,
   SiCplusplus,
@@ -26,7 +26,6 @@ import {
   SiNextdotjs,
   SiNodedotjs,
   SiNumpy,
-  SiOpenai,
   SiOpencv,
   SiOpenjdk,
   SiPandas,
@@ -80,7 +79,7 @@ const StackIcon: React.FC<StackIconProps> = ({ name, size = '2em', className }) 
     opencv: SiOpencv,
     numpy: SiNumpy,
     pandas: SiPandas,
-    openai: SiOpenai,
+    openai: PiOpenAiLogo,
     langchain: SiLangchain,
     huggingface: SiHuggingface,
     // Cloud & Infrastructure
@@ -94,7 +93,7 @@ const StackIcon: React.FC<StackIconProps> = ({ name, size = '2em', className }) 
     linux: SiLinux,
     git: SiGit,
     grafana: SiGrafana,
-    aws: SiAmazon,
+    aws: PiAmazonLogo,
     // Tools (existing)
     prisma: SiPrisma,
     pytest: SiPytest,

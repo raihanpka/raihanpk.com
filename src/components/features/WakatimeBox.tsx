@@ -8,7 +8,7 @@ import {
   SiC,
   SiCodecrafters,
   SiCplusplus,
-  SiCss3,
+  SiCss,
   SiHtml5,
   SiJavascript,
   SiJson,
@@ -38,7 +38,7 @@ import {
 const languageIcons: { [key: string]: IconType } = {
   astro: SiAstro,
   html: SiHtml5,
-  css: SiCss3,
+  css: SiCss,
   javascript: SiJavascript,
   python: SiPython,
   c: SiC,

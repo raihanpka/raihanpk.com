@@ -1,8 +1,13 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Globe, Mail } from 'lucide-react'
-import { SiGithub, SiInstagram, SiLinkedin } from 'react-icons/si'
+import {
+  PiEnvelope,
+  PiGithubLogo,
+  PiGlobe,
+  PiInstagramLogo,
+  PiLinkedinLogo,
+} from 'react-icons/pi'
 import AvatarComponent from '@/components/ui/avatar'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -49,11 +54,11 @@ export function AuthorCardClient({
   linkDisabled = false,
 }: Props) {
   const socialLinks = [
-    website && { href: website, label: 'Website', icon: <Globe className="size-4" /> },
-    github && { href: github, label: 'GitHub', icon: <SiGithub className="size-4" /> },
-    linkedin && { href: linkedin, label: 'LinkedIn', icon: <SiLinkedin className="size-4" /> },
-    instagram && { href: instagram, label: 'Instagram', icon: <SiInstagram className="size-4" /> },
-    mail && { href: `mailto:${mail}`, label: 'Email', icon: <Mail className="size-4" /> },
+    website && { href: website, label: 'Website', icon: <PiGlobe className="size-4" /> },
+    github && { href: github, label: 'GitHub', icon: <PiGithubLogo className="size-4" /> },
+    linkedin && { href: linkedin, label: 'LinkedIn', icon: <PiLinkedinLogo className="size-4" /> },
+    instagram && { href: instagram, label: 'Instagram', icon: <PiInstagramLogo className="size-4" /> },
+    mail && { href: `mailto:${mail}`, label: 'Email', icon: <PiEnvelope className="size-4" /> },
   ].filter(Boolean) as { href: string; label: string; icon: React.ReactNode }[]
 
   return (

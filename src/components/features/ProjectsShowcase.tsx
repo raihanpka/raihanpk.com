@@ -5,8 +5,8 @@ import { AnimatePresence, motion, useInView } from 'framer-motion'
 import { useState, useRef, useEffect } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
+import { PiAmazonLogo, PiOpenAiLogo } from 'react-icons/pi'
 import {
-  SiAmazon,
   SiAstro,
   SiDjango,
   SiDocker,
@@ -23,7 +23,6 @@ import {
   SiMongodb,
   SiNextdotjs,
   SiNodedotjs,
-  SiOpenai,
   SiPostgresql,
   SiPrisma,
   SiPython,
@@ -51,7 +50,7 @@ const techIconMap: Record<
   Python: SiPython,
   'Google Cloud': SiGooglecloud,
   Expo: SiExpo,
-  OpenAI: SiOpenai,
+  OpenAI: PiOpenAiLogo,
   'Node.js': SiNodedotjs,
   Prisma: SiPrisma,
   Docker: SiDocker,
@@ -68,7 +67,7 @@ const techIconMap: Record<
   Django: SiDjango,
   Flutter: SiFlutter,
   Kubernetes: SiKubernetes,
-  AWS: SiAmazon,
+  AWS: PiAmazonLogo,
   Langchain: SiLangchain,
   Vite: SiVite,
 }

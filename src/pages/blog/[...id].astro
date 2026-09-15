@@ -60,7 +60,7 @@ const authors = await parseAuthors(post.data.authors ?? [])
   description={post.data.description}
   image={post.data.image?.src ?? '/static/1200x630.jpg'}
 >
-  <div class="mx-auto max-w-screen-lg px-4 flex flex-col gap-y-6">
+  <div class="mx-auto max-w-6xl px-[clamp(1rem,0.75rem+2vw,2.5rem)] flex flex-col gap-y-6">
     <Breadcrumbs
       items={[
         { href: '/blog', label: 'Blog', icon: 'lucide:archive' },

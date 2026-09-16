@@ -7,6 +7,7 @@ import {
   PiLinkedinLogo,
   PiMapPin,
   PiBriefcase,
+  PiStarFourFill,
 } from 'react-icons/pi'
 interface Props {
   id: string
@@ -109,6 +110,56 @@ const socialLinks = [
           </div>
         )}
 
+        {/* Mobile Animated Socials Trigger & Drawer */}
+        {socialLinks.length > 0 && (
+          <div class="md:hidden mt-1.5">
+            <button
+              type="button"
+              id="mobile-socials-toggle"
+              aria-expanded="false"
+              aria-controls="mobile-socials-dock"
+              class="group inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-border/80 bg-secondary/60 text-xs font-mono text-foreground hover:bg-secondary transition-all active:scale-95"
+            >
+              <PiStarFourFill className="size-2 text-foreground/80" />
+              <span>Connect & Links</span>
+              <svg
+                id="mobile-socials-arrow"
+                class="size-3 text-muted-foreground transition-transform duration-300 group-hover:text-foreground"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+
+            <div
+              id="mobile-socials-dock"
+              class="mobile-dock grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out overflow-hidden"
+            >
+              <div class="overflow-hidden min-h-0">
+                <div class="flex flex-wrap items-center gap-2 pt-2.5 pb-1">
+                  {socialLinks.map((item) => (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex size-8 items-center justify-center rounded-lg border border-border bg-background/80 text-foreground transition-all duration-200 hover:bg-secondary active:scale-95 shadow-sm"
+                      aria-label={item.label}
+                      title={item.label}
+                    >
+                      <item.icon className="size-3.5 text-foreground" />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {bio && (
           <p class="text-sm sm:text-base text-foreground/80 font-sans leading-relaxed mt-1">
             "{bio}"
@@ -117,8 +168,8 @@ const socialLinks = [
       </div>
     </div>
 
-    {/* Social Links Pill Bar */}
-    <div class="flex flex-wrap items-center gap-2 self-start md:self-auto shrink-0 pt-1">
+    {/* Desktop Social Links (Unchanged) */}
+    <div class="hidden md:flex flex-wrap items-center gap-2 self-start shrink-0 pt-1">
       {socialLinks.map((item) => (
         <a
           href={item.href}
@@ -134,3 +185,31 @@ const socialLinks = [
     </div>
   </div>
 </div>
+
+<style>
+  .mobile-dock.is-open {
+    grid-template-rows: 1fr !important;
+    opacity: 1 !important;
+  }
+  #mobile-socials-arrow.is-open {
+    transform: rotate(180deg);
+  }
+</style>
+
+<script>
+  function initMobileSocials() {
+    const toggleBtn = document.getElementById('mobile-socials-toggle')
+    const dock = document.getElementById('mobile-socials-dock')
+    const arrow = document.getElementById('mobile-socials-arrow')
+    if (!toggleBtn || !dock) return
+
+    // Clean any prior listener
+    toggleBtn.onclick = () => {
+      const isOpen = dock.classList.toggle('is-open')
+      toggleBtn.setAttribute('aria-expanded', String(isOpen))
+      if (arrow) arrow.classList.toggle('is-open', isOpen)
+    }
+  }
+
+  document.addEventListener('astro:page-load', initMobileSocials)
+</script>

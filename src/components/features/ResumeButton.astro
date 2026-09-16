@@ -1,4 +1,5 @@
 ---
+import { getEntry } from 'astro:content'
 import { PiStarFourFill } from 'react-icons/pi'
 import { cn } from '@/lib/utils'
 import '@/styles/arrow-fill-button.css'
@@ -8,7 +9,13 @@ interface Props {
   resumeUrl?: string
 }
 
-const { className, resumeUrl = 'https://tr.ee/0gvXOd' } = Astro.props
+const { className } = Astro.props
+let { resumeUrl } = Astro.props
+
+if (!resumeUrl) {
+  const author = await getEntry('authors', 'raihanpk')
+  resumeUrl = author?.data.resume || 'https://tr.ee/0gvXOd'
+}
 ---
 
 <a

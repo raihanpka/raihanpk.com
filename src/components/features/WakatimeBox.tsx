@@ -147,6 +147,7 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
             React.cloneElement(icon, {
               size: 22,
               className: 'text-neutral-900 dark:text-white',
+              'aria-hidden': 'true',
             })
           ) : (
             <text

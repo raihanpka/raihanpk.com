@@ -37,4 +37,5 @@ pnpm-debug.log*
 knowledge/*
 !knowledge/README.md
 !knowledge/.gitkeep
+public/static/memories/
 

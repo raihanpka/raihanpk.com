@@ -58,7 +58,7 @@ const authors = await parseAuthors(post.data.authors ?? [])
 <Layout
   title={post.data.title}
   description={post.data.description}
-  image={post.data.image?.src ?? '/static/1200x630.jpg'}
+  image={post.data.image?.src ?? '/static/profile/1200x630.jpg'}
 >
   <div class="mx-auto max-w-6xl px-[clamp(1rem,0.75rem+2vw,2.5rem)] flex flex-col gap-y-6">
     <Breadcrumbs

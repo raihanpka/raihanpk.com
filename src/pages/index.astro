@@ -84,13 +84,13 @@ const projectsData = rawProjects.map((p) => ({
 
       <div role="region" aria-label="Tech Stack"
         class="col-span-1 md:col-span-2 lg:col-span-4 h-auto w-full flex flex-col rounded-xl border border-border bg-card/60 backdrop-blur-sm shadow-sm p-2 sm:p-4 text-xs text-foreground">
-        <TechStackSlider client:load />
+        <TechStackSlider client:idle />
       </div>
 
     </section>
 
     <section class="flex flex-col gap-y-4">
-      <ProjectsShowcase projects={projectsData} client:load />
+      <ProjectsShowcase projects={projectsData} client:visible />
     </section>
 
     <section class="flex flex-col gap-y-4">

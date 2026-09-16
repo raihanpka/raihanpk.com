@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./public/static/twitter-card.png" alt="raihanpk.com" width="900">
+<img src="./public/static/profile/twitter-card.png" alt="raihanpk.com" width="900">
 <br><br>
 
 # @raihanpka's website
@@ -28,7 +28,11 @@ Additional features developed from built-in features of the public template [Ast
 - **Projects Showcase**: Interactive portfolio grid featuring smooth media video previews, modal dialogs, and responsive category filtering.
 - **Tech Stack Slider**: 3D-sculpted marquee slider displaying programming languages, frameworks, and cloud infrastructure tools.
 - **Blog & View Counter**: MDX content collections with live view counter persistence backed by [PostgreSQL](https://postgresql.org) and [Prisma Accelerate](https://www.prisma.io/accelerate).
-- **High Performance**: Optimized for Core Web Vitals (98+ Lighthouse score) featuring font preloading, responsive WebP asset compression, and lazy loading.
+- **High Performance**: Optimized for Core Web Vitals (100 Lighthouse score across Performance, Accessibility, Best Practices, and SEO) featuring font preloading, responsive WebP asset compression, and lazy loading.
+
+<div align="center">
+  <img src="./public/static/profile/lighthouse.png" alt="Lighthouse Score - 100/100/100/100" width="850">
+</div>
 
 ---
 

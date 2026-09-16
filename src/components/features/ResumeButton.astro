@@ -23,7 +23,6 @@ if (!resumeUrl) {
   target="_blank"
   rel="noopener noreferrer"
   class={cn('obsidian-arrow-fill-btn font-mono group', className)}
-  aria-label="Open Resume"
   style={{
     '--btn-bg': 'hsl(var(--secondary))',
     '--btn-text': 'hsl(var(--secondary-foreground))',
@@ -36,13 +35,13 @@ if (!resumeUrl) {
   }}
 >
   <span class="obsidian-arrow-fill-btn__text flex items-center gap-1.5">
-    <PiStarFourFill className="size-2.5 text-foreground/80 inline-block" />
+    <PiStarFourFill className="size-2.5 text-foreground/80 inline-block" aria-hidden="true" />
     Resume
   </span>
   <div aria-hidden="true" class="obsidian-arrow-fill-btn__circle">
     <div class="obsidian-arrow-fill-btn__circle-text">
       <span class="flex items-center gap-1.5">
-        <PiStarFourFill className="size-2.5 text-primary-foreground inline-block" />
+        <PiStarFourFill className="size-2.5 text-primary-foreground inline-block" aria-hidden="true" />
         Resume
       </span>
       <svg

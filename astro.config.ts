@@ -24,6 +24,12 @@ import { unified } from '@astrojs/markdown-remark'
 export default defineConfig({
   site: 'https://raihanpk.com',
   output: 'static',
+  build: {
+    inlineStylesheets: 'always',
+  },
+  image: {
+    remotePatterns: [{ protocol: 'https' }],
+  },
   adapter: vercel({
     webAnalytics: {
       enabled: true,

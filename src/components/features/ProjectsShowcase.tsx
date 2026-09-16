@@ -272,7 +272,7 @@ function CopyLinkButton({ projectName, className = "h-7 w-7" }: { projectName: s
       aria-label="Copy project link"
       title="Copy Link"
     >
-      {copied ? <Check size={iconSize} className="text-additive" /> : <Link2 size={iconSize} />}
+      {copied ? <Check size={iconSize} className="text-additive" aria-hidden="true" /> : <Link2 size={iconSize} aria-hidden="true" />}
     </button>
   )
 }
@@ -442,8 +442,8 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
                     title={tech}
                     className="text-foreground/70 transition-colors hover:text-foreground shrink-0"
                   >
-                    <Icon size={14} className="sm:hidden" />
-                    <Icon size={16} className="hidden sm:inline" />
+                    <Icon size={14} className="sm:hidden" aria-hidden="true" />
+                    <Icon size={16} className="hidden sm:inline" aria-hidden="true" />
                   </span>
                 ) : null
               })}
@@ -466,7 +466,7 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
                 aria-label="GitHub repository"
                 className="flex h-7 w-7 items-center justify-center rounded-lg border border-border bg-background text-foreground transition-colors hover:bg-secondary"
               >
-                <SiGithub size={14} />
+                <SiGithub size={14} aria-hidden="true" />
               </a>
             )}
             {project.link && (
@@ -477,7 +477,7 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
                 aria-label="View project"
                 className="flex h-7 w-7 items-center justify-center rounded-lg border border-border bg-background text-foreground transition-colors hover:bg-secondary"
               >
-                <ArrowUpRight size={14} />
+                <ArrowUpRight size={14} aria-hidden="true" />
               </a>
             )}
           </div>
@@ -613,8 +613,8 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
                       return (
                         <div key={tech} className="flex items-center gap-2 sm:gap-2.5 group">
                           <div className="flex h-6 w-6 sm:h-7 sm:w-7 shrink-0 items-center justify-center rounded-lg bg-secondary/30 border border-border/40 transition-all group-hover:bg-secondary/60 group-hover:border-foreground/20">
-                            {Icon && <Icon size={12} className="sm:hidden text-foreground/60 group-hover:text-foreground transition-colors" />}
-                            {Icon && <Icon size={14} className="hidden sm:inline text-foreground/60 group-hover:text-foreground transition-colors" />}
+                            {Icon && <Icon size={12} className="sm:hidden text-foreground/60 group-hover:text-foreground transition-colors" aria-hidden="true" />}
+                            {Icon && <Icon size={14} className="hidden sm:inline text-foreground/60 group-hover:text-foreground transition-colors" aria-hidden="true" />}
                           </div>
                           <span className="text-[10px] sm:text-[11px] font-medium text-foreground/50 group-hover:text-foreground transition-colors truncate">{tech}</span>
                         </div>
@@ -637,7 +637,7 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
                     className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-background text-foreground transition-all hover:bg-secondary active:scale-95 shadow-sm"
                     title="View Source"
                   >
-                    <SiGithub size={16} />
+                    <SiGithub size={16} aria-hidden="true" />
                   </a>
                 )}
               </div>
@@ -649,7 +649,7 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
                   rel="noopener noreferrer"
                   className={buttonVariants({ variant: 'default' }) + " gap-2 rounded-lg h-9 px-5 text-xs font-bold shadow-sm active:scale-95 hover:bg-primary flex items-center justify-center"}
                 >
-                  <ArrowUpRight size={16} />
+                  <ArrowUpRight size={16} aria-hidden="true" />
                   <span>Live Preview</span>
                 </a>
               )}

@@ -16,6 +16,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check",
+    "index-knowledge": "bun run scripts/index-knowledge.ts",
     "postinstall": "prisma generate --no-engine --accelerate"
   },
   "dependencies": {

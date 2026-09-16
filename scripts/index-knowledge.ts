@@ -192,16 +192,6 @@ async function main() {
     }
   }
 
-  // Also include author bio as baseline knowledge if available
-  const authorPath = path.resolve(process.cwd(), 'src/content/authors/raihanpk.md')
-  if (fs.existsSync(authorPath)) {
-    console.log('Adding baseline author profile (src/content/authors/raihanpk.md)...')
-    documents.push({
-      name: 'author-raihanpk.md',
-      content: fs.readFileSync(authorPath, 'utf-8'),
-    })
-  }
-
   if (documents.length === 0) {
     console.log('No documents found to index. Place .md, .txt, or .pdf files in the knowledge/ folder.')
     return

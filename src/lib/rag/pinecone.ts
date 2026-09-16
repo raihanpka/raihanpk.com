@@ -98,6 +98,34 @@ export async function upsertKnowledge(chunks: RawKnowledgeChunk[]): Promise<void
 }
 
 /**
+ * Delete specific chunks from Pinecone by ID.
+ */
+export async function deleteKnowledgeChunks(ids: string[]): Promise<void> {
+  if (!ids.length) return
+  const pc = getPineconeClient()
+  const index = pc.index({ name: getIndexName(), namespace: getNamespace() })
+  await index.deleteMany({ ids })
+}
+
+/**
+ * Delete chunks matching metadata filter (e.g. { source: { $eq: 'author-raihanpk.md' } }).
+ */
+export async function deleteKnowledgeByFilter(filter: Record<string, any>): Promise<void> {
+  const pc = getPineconeClient()
+  const index = pc.index({ name: getIndexName(), namespace: getNamespace() })
+  await index.deleteMany({ filter })
+}
+
+/**
+ * Clear all chunks in the knowledge namespace.
+ */
+export async function clearKnowledgeNamespace(): Promise<void> {
+  const pc = getPineconeClient()
+  const index = pc.index({ name: getIndexName(), namespace: getNamespace() })
+  await index.deleteAll()
+}
+
+/**
  * Query similar chunks from Pinecone.
  * Automatically tries Integrated Inference (llama-text-embed-v2) searchRecords first.
  * Falls back to manual query vector search if needed.

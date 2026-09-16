@@ -52,7 +52,7 @@ async function parseWithLlamaParse(filePath: string, apiKey: string): Promise<st
       version: 'latest',
       agentic_options: {
         custom_prompt:
-          'Extract all content verbatim into clean, well-structured Markdown. Preserve all dates, job titles, companies, technical skills, bullet points, projects, and contact info accurately without summarizing.',
+          'Extract all document sections verbatim into clean, well-formatted Markdown with consistent heading hierarchy (# for document title, ## for major sections like Experience, Projects, Skills, Education, ### for individual roles or projects). Preserve all metrics, dates, bullet points, and technical keywords exactly as written. Do not summarize or omit any details.',
       },
     }),
   })

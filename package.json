@@ -4,7 +4,14 @@
   "version": "1.4.0",
   "private": true,
   "engines": {
-    "node": ">=22"
+    "node": ">=24"
+  },
+  "allowScripts": {
+    "esbuild": true,
+    "@prisma/client": true,
+    "@prisma/engines": true,
+    "prisma": true,
+    "sharp": true
   },
   "overrides": {
     "astro": "$astro"

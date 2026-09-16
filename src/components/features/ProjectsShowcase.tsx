@@ -385,7 +385,7 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
           <img
             src={assetSrc}
             alt={project.name}
-            loading="eager"
+            loading="lazy"
             decoding="async"
             onError={handleError}
             className={`h-full w-full object-cover transition-all duration-500 ease-in-out ${

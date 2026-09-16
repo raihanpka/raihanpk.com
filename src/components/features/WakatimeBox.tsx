@@ -142,16 +142,18 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
     return (
       <g transform={`translate(${x},${y})`}>
         <title>{payload.value}</title>
-        <circle cx="-18" cy="0" r="14" fill="var(--primary)" />
-        <foreignObject width={16} height={16} x={-26} y={-8}>
+        <foreignObject width={22} height={22} x={-28} y={-11}>
           {icon ? (
-            React.cloneElement(icon, { size: 16, color: 'var(--primary)' })
+            React.cloneElement(icon, {
+              size: 22,
+              className: 'text-neutral-900 dark:text-white',
+            })
           ) : (
             <text
-              x={8}
-              y={12}
-              fill="hsl(var(--primary))"
-              fontSize="12"
+              x={11}
+              y={11}
+              className="fill-neutral-900 dark:fill-white font-mono font-bold"
+              fontSize="14"
               textAnchor="middle"
               dominantBaseline="central"
             >

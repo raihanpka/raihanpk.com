@@ -17,6 +17,42 @@ async function getPageViews(slug: string) {
     }
 }
 
+export const GET: APIRoute = async ({ url }) => {
+    try {
+        const slug = url.searchParams.get('slug');
+        if (!slug) {
+            return new Response(JSON.stringify({ error: 'Missing slug' }), { 
+                status: 400,
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-store, max-age=0'
+                }
+            });
+        }
+        
+        const record = await prisma.views.findUnique({
+            where: { slug },
+            select: { slug: true, count: true }
+        });
+        
+        return new Response(JSON.stringify(record ?? { slug, count: 0 }), {
+            headers: { 
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-store, max-age=0'
+            }
+        });
+    } catch (error) {
+        console.error('API Error:', error);
+        return new Response(JSON.stringify({ slug: '', count: 0 }), { 
+            status: 200,
+            headers: { 
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-store, max-age=0'
+            }
+        });
+    }
+}
+
 export const POST: APIRoute = async ({ request }) => {
     try {
         const body = await request.json();
@@ -25,21 +61,29 @@ export const POST: APIRoute = async ({ request }) => {
         if (!slug) {
             return new Response(JSON.stringify({ error: 'Missing slug' }), { 
                 status: 400,
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-store, max-age=0'
+                }
             });
         }
         
         const pageViews = await getPageViews(slug);
-        console.log('Result:', pageViews);
         
         return new Response(JSON.stringify(pageViews), {
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-store, max-age=0'
+            }
         });
     } catch (error) {
         console.error('API Error:', error);
         return new Response(JSON.stringify({ error: 'Invalid request' }), { 
             status: 400,
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 
+                'Content-Type': 'application/json',
+                'Cache-Control': 'no-store, max-age=0'
+            }
         });
     }
 }

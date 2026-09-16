@@ -284,12 +284,43 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
   const [isMobile, setIsMobile] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
-  const isInView = useInView(containerRef, { once: false, amount: 0.3 })
+  const isInView = useInView(containerRef, { once: false, amount: 0.2 })
 
   useEffect(() => {
     setAssetSrc(project.asset)
     setAssetErrored(false)
   }, [project.asset])
+
+  // Re-sync and re-load media on Astro view transitions
+  useEffect(() => {
+    const handlePageLoad = () => {
+      setAssetSrc(project.asset)
+      setAssetErrored(false)
+      if (videoRef.current) {
+        videoRef.current.load()
+        if (!isMobile) {
+          const playPromise = videoRef.current.play()
+          if (playPromise !== undefined) {
+            playPromise.catch(() => {})
+          }
+        }
+      }
+    }
+
+    const handleBeforeSwap = () => {
+      if (videoRef.current) {
+        videoRef.current.pause()
+      }
+    }
+
+    document.addEventListener('astro:page-load', handlePageLoad)
+    document.addEventListener('astro:before-swap', handleBeforeSwap)
+
+    return () => {
+      document.removeEventListener('astro:page-load', handlePageLoad)
+      document.removeEventListener('astro:before-swap', handleBeforeSwap)
+    }
+  }, [project.asset, isMobile])
 
   // Detect mobile viewport (disable video autoplay on mobile to save battery/data)
   useEffect(() => {
@@ -303,7 +334,10 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
   useEffect(() => {
     if (videoRef.current && !isMobile) {
       if (isInView) {
-        videoRef.current.play().catch(() => {})
+        const playPromise = videoRef.current.play()
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {})
+        }
       } else {
         videoRef.current.pause()
       }
@@ -311,7 +345,7 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
   }, [isInView, isMobile])
 
   const handleError = () => {
-    if (!assetErrored && project.fallback) {
+    if (!assetErrored && project.fallback && document.visibilityState === 'visible') {
       setAssetSrc(project.fallback)
       setAssetErrored(true)
     }
@@ -330,17 +364,24 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
         {assetSrc && isVideo(assetSrc) ? (
           <video
             ref={videoRef}
+            key={assetSrc}
             src={assetSrc}
             preload="metadata"
             loop
             muted
             playsInline
-            onError={handleError}
+            onError={(e) => {
+              const video = e.currentTarget
+              // Ignore aborted requests caused by page navigation
+              if (video.error?.code === 1 || document.visibilityState === 'hidden') return
+              handleError()
+            }}
             className={`h-full w-full object-cover transition-all duration-500 ease-in-out ${
               hovered ? 'grayscale-0 scale-[1.02]' : 'grayscale scale-100'
             }`}
           />
         ) : assetSrc ? (
+
           <img
             src={assetSrc}
             alt={project.name}
@@ -508,13 +549,18 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
             {assetSrc && isVideo(assetSrc) ? (
               <video
                 ref={videoRef}
+                key={assetSrc}
                 src={assetSrc}
                 autoPlay
                 loop
                 muted
                 playsInline
                 preload="metadata"
-                onError={handleError}
+                onError={(e) => {
+                  const video = e.currentTarget
+                  if (video.error?.code === 1 || document.visibilityState === 'hidden') return
+                  handleError()
+                }}
                 className="h-full w-full object-cover"
               />
             ) : assetSrc ? (

@@ -11,36 +11,13 @@ export default function FloatingChatButton() {
 
   return (
     <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] z-50 md:bottom-8 md:right-8">
-      {/* SVG Filter for Liquid Glass Refraction */}
-      <svg style={{ display: 'none' }}>
-        <filter id="liquid-glass-refraction">
-          <feTurbulence 
-            type="fractalNoise" 
-            baseFrequency="0.015" 
-            numOctaves="3" 
-            result="noise" 
-          />
-          <feDisplacementMap 
-            in="SourceGraphic" 
-            in2="noise" 
-            scale="8" 
-            xChannelSelector="R" 
-            yChannelSelector="G" 
-          />
-        </filter>
-      </svg>
-
       <button
         onClick={handleClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         className={cn(
-          'group relative flex h-14 w-14 md:h-16 md:w-16 items-center justify-center rounded-full border border-white/40 bg-white/20 dark:border-white/20 dark:bg-black/40 transition-all duration-500 ease-in-out hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-[0_12px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.4)]',
+          'group relative flex h-14 w-14 md:h-16 md:w-16 items-center justify-center rounded-full border border-border/80 bg-background/80 backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-lg',
         )}
-        style={{
-          backdropFilter: 'blur(16px) saturate(200%) url(#liquid-glass-refraction)',
-          WebkitBackdropFilter: 'blur(16px) saturate(200%) url(#liquid-glass-refraction)',
-        }}
         aria-label="Ask Assistant"
       >
         {/* Top Edge Specular Highlight - Stronger Contrast */}

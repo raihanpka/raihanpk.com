@@ -13,8 +13,8 @@ const FN = FC * FR
 const CC = 90
 const EDGE_LO = 36
 const EDGE_HI = 130
-const EDGES = ['.', ',', '=', '+', '-']
-const BRIGHTS = ['R', 'A', 'I', 'H', 'A', 'N', 'P', 'K']
+const EDGES = ['~', '≈', '∼', '·', '-']
+const BRIGHTS = ['r', 'a', 'i', 'h', 'a', 'n', 'p', 'k']
 const ALL_CHARS = [...EDGES, ...BRIGHTS]
 const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5]
 const TL = 360
@@ -65,18 +65,21 @@ void main() {
     float life = uTL[i];
     if (life <= 0.0) continue;
     vec2 d = bp - uTP[i].xy;
-    float dist = length(d);
     float r = 6.0 + life * 4.0;
-    if (dist == 0.0 || dist > r) continue;
-    float f = pow(1.0 - dist / r, 2.0);
-    disp += (d / dist) * f * life * 3.0 + uTP[i].zw * f * 0.04;
+    float d2 = dot(d, d);
+    if (d2 == 0.0 || d2 > r * r) continue;
+    float dist = sqrt(d2);
+    float f = 1.0 - dist / r;
+    f *= f;
+    disp += (d / dist) * (f * life * 3.0) + uTP[i].zw * (f * 0.04);
   }
 
   vec2 sp = bp + disp + flow * 5.0;
   vec2 uv = clamp(sp / uRes, 0.0, 1.0);
 
-  // Procedural subtle sine wave pattern replacing heavy external video
-  float wave = sin(uv.x * 6.28 + float(uPhase) * 0.04) * cos(uv.y * 5.0 + float(uPhase) * 0.03);
+  // Procedural subtle sine wave pattern
+  float p = float(uPhase);
+  float wave = sin(uv.x * 6.2831853 + p * 0.04) * cos(uv.y * 5.0 + p * 0.03);
   float signal = smoothstep(-0.8, 0.8, wave);
   float bg = signal * 200.0;
 
@@ -100,10 +103,10 @@ void main() {
   float ca = texture(uAtlas, vec2(au, cp.y)).a;
   if (ca < 0.08) discard;
 
-  // Strict monochrome: white glyphs in dark mode, dark charcoal glyphs in light mode
+  // Strict monochrome: slightly reduced by ~1% from original (13% dark / 7% light)
   vec3 col = uDark > 0.5 ? vec3(0.92, 0.92, 0.94) : vec3(0.12, 0.12, 0.14);
-  float alpha = ca * (uDark > 0.5 ? 0.14 : 0.08);
-  alpha = mix(alpha, alpha * 2.2, hm);
+  float alpha = ca * (uDark > 0.5 ? 0.13 : 0.07);
+  alpha = mix(alpha, alpha * 2.0, hm);
 
   O = vec4(col * alpha, alpha);
 }

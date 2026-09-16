@@ -73,19 +73,20 @@ const projectsData = rawProjects.map((p) => ({
 
     <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       <div role="region" aria-label="Wakatime Section"
-        class="lg:col-span-2 flex h-[190px] sm:h-[210px] w-full flex-col items-start whitespace-nowrap rounded-xl border border-border bg-card/60 backdrop-blur-sm shadow-sm p-3 text-xs leading-loose text-foreground transition-all duration-300 hover:border-foreground/30">
+        class="lg:col-span-2 flex h-[190px] sm:h-[210px] w-full flex-col items-start whitespace-nowrap rounded-xl border border-border bg-card/60 backdrop-blur-sm shadow-sm p-3 text-xs leading-loose text-foreground">
         <WakatimeBox omitLanguages={['Markdown', 'JSON']} client:visible />
       </div>
 
       <div role="region" aria-label="Spotify Section"
-        class="lg:col-span-2 flex h-[190px] sm:h-[210px] w-full flex-col items-start whitespace-nowrap rounded-xl border border-border bg-card/60 backdrop-blur-sm shadow-sm p-3 text-xs leading-loose text-foreground transition-all duration-300 hover:border-foreground/30">
+        class="lg:col-span-2 flex h-[190px] sm:h-[210px] w-full flex-col items-start whitespace-nowrap rounded-xl border border-border bg-card/60 backdrop-blur-sm shadow-sm p-3 text-xs leading-loose text-foreground">
         <SpotifyPresence client:idle />
       </div>
 
       <div role="region" aria-label="Tech Stack"
-        class="col-span-1 md:col-span-2 lg:col-span-4 min-h-[350px] sm:min-h-[380px] h-auto w-full flex flex-col justify-between rounded-xl border border-border bg-card/60 backdrop-blur-sm shadow-sm p-4 text-xs text-foreground transition-all duration-300 hover:border-foreground/30">
-        <TechStackSlider client:idle />
+        class="col-span-1 md:col-span-2 lg:col-span-4 h-auto w-full flex flex-col rounded-xl border border-border bg-card/60 backdrop-blur-sm shadow-sm p-2 sm:p-4 text-xs text-foreground">
+        <TechStackSlider client:load />
       </div>
+
     </section>
 
     <section class="flex flex-col gap-y-4">

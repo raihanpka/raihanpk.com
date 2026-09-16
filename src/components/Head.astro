@@ -4,7 +4,6 @@ import '../styles/katex.css'
 
 import { SITE } from '@/consts'
 import { ClientRouter } from 'astro:transitions'
-import SpeedInsights from '@vercel/speed-insights/astro'
 
 interface Props {
   title: string
@@ -87,5 +86,12 @@ const { title, description, image = '/static/twitter-card.png' } = Astro.props
     // Pass the incoming document to set the theme on it
     setDarkMode(ev.newDocument)
   })
+
+  document.addEventListener('astro:after-swap', () => {
+    document.querySelectorAll('video').forEach((v) => {
+      try {
+        v.load()
+      } catch (_) {}
+    })
+  })
 </script>
-<SpeedInsights />

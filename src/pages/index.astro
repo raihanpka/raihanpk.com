@@ -6,7 +6,7 @@ import { ProjectsShowcase } from '@/components/features/ProjectsShowcase.tsx'
 import SpotifyPresence from '@/components/features/SpotifyPresence.tsx'
 import TechStackSlider from '@/components/features/TechStackSlider.tsx'
 import WakatimeBox from '@/components/features/WakatimeBox.tsx'
-import ResumeModal from '@/components/features/ResumeModal.tsx'
+import ResumeButton from '@/components/features/ResumeButton.astro'
 import { buttonVariants } from '@/components/ui/button'
 import {
   Card,
@@ -55,11 +55,11 @@ const projectsData = rawProjects.map((p) => ({
             <div>
               <CardTitle className="text-3xl"><span class="font-mono">Raihan Putra Kirana</span></CardTitle>
               <CardDescription>/ˈraɪ.han.peˈka/ &bull; 
-                <span class="font-bold font-mono">SWE & AI Systems &bull; 3rd Year CS @ IPB</span>
+                <span class="font-bold font-mono">SWE & AI Systems &bull; Final Year CS @ IPB</span>
               </CardDescription>
             </div>
             <div class="shrink-0">
-              <ResumeModal client:idle resumeUrl={author?.data.resume} />
+              <ResumeButton resumeUrl={author?.data.resume} />
             </div>
           </div>
         </CardHeader>

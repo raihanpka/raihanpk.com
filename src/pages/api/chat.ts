@@ -90,7 +90,7 @@ ${contextText || 'No specific document context retrieved. Answer from general pr
     if (googleApiKey) {
       try {
         resultStream = streamText({
-          model: google('gemini-2.5-flash-lite'),
+          model: google('gemini-3.5-flash-lite'),
           system: systemPrompt,
           messages: modelMessages,
         })

@@ -1,12 +1,45 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { generateText } from 'ai'
+import { google } from '@ai-sdk/google'
 import { chunkDocument, type Chunk } from '../src/lib/rag/chunker'
 import { upsertKnowledge, getIndexName, getNamespace } from '../src/lib/rag/pinecone'
 
 const KNOWLEDGE_DIR = path.resolve(process.cwd(), 'knowledge')
 
 /**
- * Parse a PDF or DOCX file using LlamaParse REST API v2.
+ * Parse a PDF using Google Gemini Multimodal Vision (fast, free tier, preserves formatting).
+ */
+async function parsePdfWithGemini(filePath: string): Promise<string> {
+  const fileName = path.basename(filePath)
+  console.log(`[Gemini Vision] Parsing ${fileName}...`)
+  const fileData = fs.readFileSync(filePath)
+  
+  const res = await generateText({
+    model: google('gemini-3.5-flash-lite'),
+    messages: [
+      {
+        role: 'user',
+        content: [
+          {
+            type: 'text',
+            text: 'Extract all content from this document and convert it into clean, well-structured Markdown, preserving all headings, dates, jobs, technical skills, projects, and bullet points verbatim. Do not summarize.',
+          },
+          {
+            type: 'file',
+            data: fileData,
+            mediaType: 'application/pdf',
+          },
+        ],
+      },
+    ],
+  })
+
+  return res.text
+}
+
+/**
+ * Parse a PDF or DOCX file using LlamaParse REST API v2 as fallback.
  */
 async function parseWithLlamaParse(filePath: string, apiKey: string): Promise<string> {
   const fileName = path.basename(filePath)
@@ -62,7 +95,7 @@ async function parseWithLlamaParse(filePath: string, apiKey: string): Promise<st
   // 3. Poll for completion
   console.log(`[LlamaParse v2] Waiting for parsing job ${jobId} to finish...`)
   let attempts = 0
-  const maxAttempts = 60 // 2 minutes max
+  const maxAttempts = 60
 
   while (attempts < maxAttempts) {
     await new Promise((r) => setTimeout(r, 2000))
@@ -100,6 +133,7 @@ async function main() {
   console.log(`Target Pinecone Index: ${getIndexName()} | Namespace: ${getNamespace()}`)
 
   const llamaKey = process.env.LLAMA_CLOUD_API_KEY
+  const googleKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GOOGLE_API_KEY
 
   if (!fs.existsSync(KNOWLEDGE_DIR)) {
     fs.mkdirSync(KNOWLEDGE_DIR, { recursive: true })
@@ -120,16 +154,45 @@ async function main() {
       console.log(`Reading text document: ${file}`)
       const content = fs.readFileSync(filePath, 'utf-8')
       documents.push({ name: file, content })
-    } else if (ext === '.pdf' || ext === '.docx') {
-      if (!llamaKey) {
-        console.warn(`[Warning] Skipping ${file}: LLAMA_CLOUD_API_KEY is required to parse PDF/DOCX via LlamaParse.`)
-        continue
+    } else if (ext === '.pdf') {
+      let parsed = false
+
+      // Try Gemini Multimodal Vision first
+      if (googleKey) {
+        try {
+          const content = await parsePdfWithGemini(filePath)
+          console.log(`[Gemini Vision] Successfully extracted ${file} (${content.length} chars)`)
+          documents.push({ name: file, content })
+          parsed = true
+        } catch (geminiErr) {
+          console.warn(`[Gemini Vision] Failed for ${file}:`, geminiErr)
+        }
       }
-      try {
-        const content = await parseWithLlamaParse(filePath, llamaKey)
-        documents.push({ name: file, content })
-      } catch (err) {
-        console.error(`Failed to parse ${file}:`, err)
+
+      // Fallback to LlamaParse if Gemini failed and Llama key exists
+      if (!parsed && llamaKey) {
+        try {
+          const content = await parseWithLlamaParse(filePath, llamaKey)
+          documents.push({ name: file, content })
+          parsed = true
+        } catch (llamaErr) {
+          console.error(`[LlamaParse] Failed for ${file}:`, llamaErr)
+        }
+      }
+
+      if (!parsed) {
+        console.warn(`[Warning] Could not parse ${file}. Ensure GOOGLE_GENERATIVE_AI_API_KEY or LLAMA_CLOUD_API_KEY is configured.`)
+      }
+    } else if (ext === '.docx') {
+      if (llamaKey) {
+        try {
+          const content = await parseWithLlamaParse(filePath, llamaKey)
+          documents.push({ name: file, content })
+        } catch (err) {
+          console.error(`Failed to parse ${file}:`, err)
+        }
+      } else {
+        console.warn(`[Warning] Skipping ${file}: LLAMA_CLOUD_API_KEY is required for .docx files.`)
       }
     }
   }
@@ -162,10 +225,10 @@ async function main() {
   }
 
   console.log(`\nTotal chunks across all documents: ${allChunks.length}`)
-  console.log('Upserting chunks to Pinecone (trying Integrated Inference first, fallback to vector embedding)...')
+  console.log('Upserting chunks to Pinecone...')
   await upsertKnowledge(allChunks)
 
-  console.log('Ingestion completed successfully!')
+  console.log('\nIngestion completed successfully!')
 }
 
 main().catch((err) => {

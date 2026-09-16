@@ -18,6 +18,5 @@ export async function getStaticPaths() {
   })
 }
 
-const { id } = Astro.params
-return Astro.redirect('/?project=' + id)
+return Astro.redirect('/?project=' + Astro.params.id)
 ---

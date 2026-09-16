@@ -59,7 +59,7 @@ export const POST: APIRoute = async ({ request }) => {
     })
 
     const chatEngine = new ContextChatEngine({ 
-      retriever,
+      retriever: retriever as any,
       systemPrompt: `You are chatting with a user that landed on Raihan PK's personal website. Write as if you were Raihan, using the data available.
                     Get information from your knowledge base to answer questions abut Raihan. 
                     Everytime somebody refers to the chat, act like Raihan was asked in the self perspective and try to retrieve correct information. 

@@ -32,3 +32,9 @@ pnpm-debug.log*
 *.claude
 *.omo
 *tasks/
+
+# knowledge documents & raw uploads (untracked for privacy)
+knowledge/*
+!knowledge/README.md
+!knowledge/.gitkeep
+

@@ -50,6 +50,10 @@ async function parseWithLlamaParse(filePath: string, apiKey: string): Promise<st
       file_id: fileId,
       tier: 'agentic',
       version: 'latest',
+      agentic_options: {
+        custom_prompt:
+          'Extract all content verbatim into clean, well-structured Markdown. Preserve all dates, job titles, companies, technical skills, bullet points, projects, and contact info accurately without summarizing.',
+      },
     }),
   })
 

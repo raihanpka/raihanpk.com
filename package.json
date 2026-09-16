@@ -34,7 +34,6 @@
     "@devnomic/marquee": "^1.0.3",
     "@hbsnow/rehype-sectionize": "^1.0.7",
     "@iconify-json/lucide": "^1.2.132",
-    "@llamaindex/openai": "^0.4.23",
     "@pinecone-database/pinecone": "^9.0.0",
     "@prisma/client": "^6.19.3",
     "@prisma/extension-accelerate": "^2.0.2",
@@ -59,8 +58,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.43.0",
-    "llama-cloud-services": "^0.5.4",
-    "llamaindex": "^0.12.1",
     "lucide-react": "^0.469.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -80,6 +77,7 @@
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.20",
     "autoprefixer": "^10.6.1",
+    "bun-types": "^1.4.2",
     "prisma": "^6.19.3"
   }
 }

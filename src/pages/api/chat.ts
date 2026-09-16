@@ -1,8 +1,10 @@
 import type { APIRoute } from 'astro'
-import { LlamaCloudIndex } from 'llama-cloud-services'
-import { ContextChatEngine, Settings } from 'llamaindex'
-import { OpenAI } from '@llamaindex/openai'
+import { streamText } from 'ai'
+import { google } from '@ai-sdk/google'
+import { openai } from '@ai-sdk/openai'
 import { checkRateLimit } from '@/lib/ratelimit'
+import { getEmbedding } from '@/lib/rag/embedding'
+import { querySimilarChunks } from '@/lib/rag/pinecone'
 
 export const prerender = false
 
@@ -14,17 +16,12 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const { messages } = JSON.parse(body)
-
-    // Check if API keys are available
-    const llamaApiKey = process.env.LLAMA_CLOUD_API_KEY || import.meta.env.LLAMA_CLOUD_API_KEY
-    const openaiApiKey = process.env.OPENAI_API_KEY || import.meta.env.OPENAI_API_KEY
-    const organizationId = process.env.LLAMA_CLOUD_ORGANIZATION_ID || import.meta.env.LLAMA_CLOUD_ORGANIZATION_ID
-
-    // Configure LLM
-    Settings.llm = new OpenAI({
-      apiKey: openaiApiKey,
-      model: 'gpt-4o-mini',
-    })
+    if (!Array.isArray(messages) || messages.length === 0) {
+      return new Response(JSON.stringify({ error: 'Messages array is required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
 
     // Rate limiting with signed cookies (privacy-friendly, no IP stored)
     const rateLimit = checkRateLimit(request)
@@ -47,64 +44,96 @@ export const POST: APIRoute = async ({ request }) => {
       })
     }
 
-    const index = new LlamaCloudIndex({
-      name: "Personal Chatbot",
-      projectName: "Website",
-      organizationId: organizationId,
-      apiKey: llamaApiKey,
-    })
+    // API Keys
+    const googleApiKey =
+      process.env.GOOGLE_GENERATIVE_AI_API_KEY ||
+      import.meta.env.GOOGLE_GENERATIVE_AI_API_KEY ||
+      process.env.GOOGLE_API_KEY
+    const openaiApiKey =
+      process.env.OPENAI_API_KEY || import.meta.env.OPENAI_API_KEY
 
-    const retriever = index.asRetriever({
-      similarityTopK: 5,
-    })
+    // Retrieve context from Pinecone using user query
+    const lastUserMessage = messages[messages.length - 1]
+    let contextText = ''
 
-    const chatEngine = new ContextChatEngine({ 
-      retriever: retriever as any,
-      systemPrompt: `You are chatting with a user that landed on Raihan PK's personal website. Write as if you were Raihan, using the data available.
-                    Get information from your knowledge base to answer questions abut Raihan. 
-                    Everytime somebody refers to the chat, act like Raihan was asked in the self perspective and try to retrieve correct information. 
-                    Use simple, easily understandable language and keep answers short. Do not use Markdown or code blocks, just answer with plain text.
-                    If there's no answer to a question, clarify that without making up a conclusion.
-                    If a user's question isn't related to Raihan, explain that the chat is focused on him and can't answer unrelated questions, this is important!
-                    Inappropriate questions will not be answered, with a clear statement that such questions won't be addressed.
-                    You only can answer the question in English. If the question is in Indonesian or other language, you must translate the knowledge base from Indonesian to English and then answer in English, this is important too!
-                    All of these rules are strict!
-                    `
-    })
-
-    const lastMessage = messages[messages.length - 1]
-    
-    const response = await chatEngine.chat({
-      message: lastMessage.content,
-      chatHistory: messages.slice(0, -1).map((msg: any) => ({
-        role: msg.role,
-        content: msg.content
-      }))
-    })
-
-    const encoder = new TextEncoder()
-    const stream = new ReadableStream({
-      start(controller) {
-        const content = response.message.content as string
-        const chunks = content.split(' ')
-        
-        chunks.forEach((chunk, index) => {
-          setTimeout(() => {
-            const data = JSON.stringify({
-              type: 'text-delta',
-              textDelta: chunk + (index < chunks.length - 1 ? ' ' : '')
-            })
-            controller.enqueue(encoder.encode(`0:${data}\n`))
-            
-            if (index === chunks.length - 1) {
-              controller.close()
-            }
-          }, index * 50)
-        })
+    try {
+      const queryVector = await getEmbedding(lastUserMessage.content)
+      const matches = await querySimilarChunks(queryVector, 4)
+      if (matches.length > 0) {
+        contextText = matches
+          .map((m) => `[Source: ${m.source}]\n${m.text}`)
+          .join('\n\n')
       }
+    } catch (err) {
+      console.warn('Vector retrieval skipped (check PINECONE_API_KEY):', err)
+    }
+
+    const systemPrompt = `You are chatting with a user that landed on Raihan PK's personal website. Write as if you were Raihan, using the data available.
+Get information from your knowledge base context below to answer questions about Raihan.
+Every time somebody refers to the chat, act like Raihan was asked in the first-person perspective and retrieve correct information.
+Use simple, easily understandable language and keep answers concise and friendly.
+If there is no answer to a question in the knowledge base, clarify that honestly without making up false facts.
+If a user's question isn't related to Raihan or his work, explain politely that this chat is focused on him.
+Inappropriate questions will not be answered, with a clear statement that such questions won't be addressed.
+
+KNOWLEDGE BASE CONTEXT:
+${contextText || 'No specific document context retrieved. Answer from general profile knowledge.'}
+`
+
+    // Map messages to Vercel AI SDK format
+    const modelMessages = messages.map((msg: any) => ({
+      role: msg.role as 'user' | 'assistant' | 'system',
+      content: msg.content as string,
+    }))
+
+    // Stream text using Google Gemini (Primary) with OpenAI (Fallback)
+    let resultStream: ReturnType<typeof streamText> | null = null
+
+    if (googleApiKey) {
+      try {
+        resultStream = streamText({
+          model: google('gemini-2.5-flash-lite'),
+          system: systemPrompt,
+          messages: modelMessages,
+        })
+      } catch (geminiError) {
+        console.warn('Google Gemini chat initialization failed, falling back to OpenAI:', geminiError)
+      }
+    }
+
+    if (!resultStream && openaiApiKey) {
+      resultStream = streamText({
+        model: openai('gpt-4o-mini'),
+        system: systemPrompt,
+        messages: modelMessages,
+      })
+    }
+
+    if (!resultStream) {
+      throw new Error('No available LLM provider. Configure GOOGLE_GENERATIVE_AI_API_KEY or OPENAI_API_KEY.')
+    }
+
+    // Stream out chunks in Vercel AI SDK text-delta protocol (consumed by ChatInterface.tsx)
+    const encoder = new TextEncoder()
+    const readableStream = new ReadableStream({
+      async start(controller) {
+        try {
+          for await (const textDelta of resultStream.textStream) {
+            const payload = JSON.stringify({
+              type: 'text-delta',
+              textDelta,
+            })
+            controller.enqueue(encoder.encode(`0:${payload}\n`))
+          }
+        } catch (streamError) {
+          console.error('Error during streaming text output:', streamError)
+        } finally {
+          controller.close()
+        }
+      },
     })
 
-    return new Response(stream, {
+    return new Response(readableStream, {
       headers: {
         'Content-Type': 'text/plain; charset=utf-8',
         'Transfer-Encoding': 'chunked',
@@ -113,11 +142,10 @@ export const POST: APIRoute = async ({ request }) => {
         'X-RateLimit-Remaining': String(rateLimit.remaining),
       },
     })
-
   } catch (error) {
     console.error('Chat API Error:', error)
     return new Response(
-      JSON.stringify({ error: 'Failed to process chat request'}),
+      JSON.stringify({ error: 'Failed to process chat request' }),
       {
         status: 500,
         headers: { 'Content-Type': 'application/json' },

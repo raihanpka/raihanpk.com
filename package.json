@@ -19,6 +19,7 @@
     "postinstall": "prisma generate --no-engine --accelerate"
   },
   "dependencies": {
+    "@ai-sdk/google": "^4.0.72",
     "@ai-sdk/openai": "^3.0.112",
     "@astrojs/check": "^0.9.10",
     "@astrojs/markdown-remark": "^7.3.1",
@@ -33,6 +34,7 @@
     "@hbsnow/rehype-sectionize": "^1.0.7",
     "@iconify-json/lucide": "^1.2.132",
     "@llamaindex/openai": "^0.4.23",
+    "@pinecone-database/pinecone": "^9.0.0",
     "@prisma/client": "^6.19.3",
     "@prisma/extension-accelerate": "^2.0.2",
     "@prisma/instrumentation": "^6.19.3",

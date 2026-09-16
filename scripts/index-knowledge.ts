@@ -1,8 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { chunkDocument, type Chunk } from '../src/lib/rag/chunker'
-import { getEmbeddings } from '../src/lib/rag/embedding'
-import { upsertRecords, type PineconeRecord, getIndexName, getNamespace } from '../src/lib/rag/pinecone'
+import { upsertKnowledge, getIndexName, getNamespace } from '../src/lib/rag/pinecone'
 
 const KNOWLEDGE_DIR = path.resolve(process.cwd(), 'knowledge')
 
@@ -163,33 +162,8 @@ async function main() {
   }
 
   console.log(`\nTotal chunks across all documents: ${allChunks.length}`)
-  console.log('Generating vector embeddings (Gemini primary / OpenAI fallback)...')
-
-  const BATCH_SIZE = 50
-  const records: PineconeRecord[] = []
-
-  for (let i = 0; i < allChunks.length; i += BATCH_SIZE) {
-    const batch = allChunks.slice(i, i + BATCH_SIZE)
-    const texts = batch.map((c) => c.text)
-
-    console.log(`Embedding batch ${Math.floor(i / BATCH_SIZE) + 1}/${Math.ceil(allChunks.length / BATCH_SIZE)} (${batch.length} chunks)...`)
-    const embeddings = await getEmbeddings(texts)
-
-    for (let j = 0; j < batch.length; j++) {
-      records.push({
-        id: batch[j].id,
-        values: embeddings[j],
-        metadata: {
-          text: batch[j].text,
-          source: batch[j].source,
-          chunkIndex: batch[j].chunkIndex,
-        },
-      })
-    }
-  }
-
-  console.log(`\nUpserting ${records.length} records to Pinecone...`)
-  await upsertRecords(records)
+  console.log('Upserting chunks to Pinecone (trying Integrated Inference first, fallback to vector embedding)...')
+  await upsertKnowledge(allChunks)
 
   console.log('Ingestion completed successfully!')
 }

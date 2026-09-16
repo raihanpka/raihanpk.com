@@ -3,8 +3,7 @@ import { streamText } from 'ai'
 import { google } from '@ai-sdk/google'
 import { openai } from '@ai-sdk/openai'
 import { checkRateLimit } from '@/lib/ratelimit'
-import { getEmbedding } from '@/lib/rag/embedding'
-import { querySimilarChunks } from '@/lib/rag/pinecone'
+import { searchKnowledge } from '@/lib/rag/pinecone'
 
 export const prerender = false
 
@@ -52,20 +51,19 @@ export const POST: APIRoute = async ({ request }) => {
     const openaiApiKey =
       process.env.OPENAI_API_KEY || import.meta.env.OPENAI_API_KEY
 
-    // Retrieve context from Pinecone using user query
+    // Retrieve context from Pinecone (Integrated Inference or vector fallback)
     const lastUserMessage = messages[messages.length - 1]
     let contextText = ''
 
     try {
-      const queryVector = await getEmbedding(lastUserMessage.content)
-      const matches = await querySimilarChunks(queryVector, 4)
+      const matches = await searchKnowledge(lastUserMessage.content, 4)
       if (matches.length > 0) {
         contextText = matches
           .map((m) => `[Source: ${m.source}]\n${m.text}`)
           .join('\n\n')
       }
     } catch (err) {
-      console.warn('Vector retrieval skipped (check PINECONE_API_KEY):', err)
+      console.warn('Knowledge retrieval skipped:', err)
     }
 
     const systemPrompt = `You are chatting with a user that landed on Raihan PK's personal website. Write as if you were Raihan, using the data available.

@@ -184,23 +184,22 @@ export function ProjectsShowcase({ projects }: Props) {
 
       {/* Grid */}
       <div className="relative">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="popLayout">
           <motion.div
             key={activeType}
             className="grid grid-cols-1 gap-4 sm:grid-cols-2"
-            initial="hidden"
+            initial={false}
             animate="visible"
-            variants={{ visible: { transition: { staggerChildren: 0.07 } } }}
+            variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
           >
             {visibleProjects.map((project) => (
               <motion.div
                 key={project.name}
                 id={slugify(project.name)}
                 className="h-full scroll-mt-24"
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
-                }}
+                initial={{ opacity: 1, y: 0 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2 }}
               >
                 <ProjectCard 
                   project={project} 

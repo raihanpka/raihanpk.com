@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Send, User } from 'lucide-react'
+import { Streamdown } from 'streamdown'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { EXAMPLE_MESSAGES } from '@/consts'
@@ -16,7 +17,7 @@ export default function ChatInterface() {
     {
       id: '1',
       content:
-        'Hello, I\'m Raihan PK! 👋\nThis chatbot is smart, but not perfect and could be wrong. Feel free to ask me anything! 😊',
+        "Hello, I'm Raihan PK! 👋  \nThis chatbot is smart, but not perfect and could be wrong. Feel free to ask me anything! 😊",
       sender: 'bot',
       timestamp: new Date(),
     },
@@ -115,12 +116,14 @@ export default function ChatInterface() {
       }
       setMessages(prev => [...prev, initialBotMessage])
 
+      let buffer = ''
       while (true) {
         const { done, value } = await reader.read()
         if (done) break
 
-        const chunk = decoder.decode(value, { stream: true })
-        const lines = chunk.split('\n')
+        buffer += decoder.decode(value, { stream: true })
+        const lines = buffer.split('\n')
+        buffer = lines.pop() ?? ''
 
         for (const line of lines) {
           if (line.startsWith('0:')) {
@@ -185,13 +188,21 @@ export default function ChatInterface() {
                       <img
                         src="https://1.gravatar.com/avatar/21e49fff739353295995834a864f11194a8419f30d70d1d3cfd51ecf19958785?size=256"
                         alt="Raihan PK"
-                        className="h-6 w-6 sm:h-7 sm:w-7 rounded-full object-cover mt-0.5 flex-shrink-0"
+                        className="h-6 w-6 sm:h-7 sm:w-7 rounded-full object-cover flex-shrink-0"
                       />
                     ) : (
-                      <User className="h-5 w-5 sm:h-6 sm:w-6 mt-0.5 flex-shrink-0" />
+                      <User className="h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0" />
                     )}
-                    <div className="flex-1">
-                      <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</p>
+                    <div className="flex-1 min-w-0">
+                      {message.sender === 'bot' ? (
+                        <div className="text-sm leading-relaxed prose dark:prose-invert max-w-none break-words [&_*]:my-0 [&_p]:my-0 [&_p:first-child]:mt-0 [&_p+p]:mt-2 [&_ul]:my-1.5 [&_ul]:list-disc [&_ul]:pl-4 [&_ol]:my-1.5 [&_ol]:list-decimal [&_ol]:pl-4 [&_pre]:bg-muted [&_pre]:p-2 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_code]:bg-muted/80 [&_code]:px-1 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-xs">
+                          <Streamdown mode={isLoading && message.id === messages[messages.length - 1]?.id ? 'streaming' : 'static'}>
+                            {message.content}
+                          </Streamdown>
+                        </div>
+                      ) : (
+                        <p className="text-sm whitespace-pre-wrap leading-relaxed break-words">{message.content}</p>
+                      )}
                       <p className="text-[10px] sm:text-xs opacity-70 mt-1">
                         {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>

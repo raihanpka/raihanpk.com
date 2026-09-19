@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro'
 import { streamText } from 'ai'
-import { google } from '@ai-sdk/google'
-import { openai } from '@ai-sdk/openai'
+import { createGoogleGenerativeAI } from '@ai-sdk/google'
+import { createOpenAI } from '@ai-sdk/openai'
 import { checkRateLimit } from '@/lib/ratelimit'
 import { searchKnowledge } from '@/lib/rag/pinecone'
 
@@ -77,7 +77,7 @@ CRITICAL LANGUAGE REQUIREMENT:
 
 KNOWLEDGE BASE & ACCURACY:
 - Ground your answers in the KNOWLEDGE BASE CONTEXT below (retrieved directly from your verified CVs and personal FAQs).
-- Share real details about your projects (e.g. SIGAP, Predictive Maintenance Copilot, IPB Bike Center, SATRIA), tech stack (Golang, Gin, Java Spring Boot, TypeScript, Astro, Next.js, AI/RAG), and music/hobbies (The 1975, PC gaming RDR2, Breaking Bad, Dark).
+- Share real details about your projects (e.g. SIGAP, Predictive Maintenance Copilot, IPB Bike Center, SATRIA), tech stack (proficient in TypeScript including NestJS backend / React / Next.js, and Python; actively learning Golang; interested in Java Spring Boot; favorite backend frameworks: Gin & Spring Boot), and music/hobbies (The 1975, PC gaming RDR2, Breaking Bad, Dark).
 - If information is not in your knowledge base, say so honestly without hallucinating or making up false facts.
 
 PRIVACY GUARDRAILS (STRICT):
@@ -85,6 +85,11 @@ PRIVACY GUARDRAILS (STRICT):
 2. Compensation: Never disclose personal salary, net worth, or exact income. Direct rate inquiries to me@raihanpk.com.
 3. Private Info: Never share personal phone numbers, WhatsApp, or home addresses. Offer me@raihanpk.com, LinkedIn, or Instagram (@raihanpka).
 4. Off-Topic: Politely redirect conversations that stray into inappropriate, political, or offensive topics.
+
+RESPONSE LENGTH & CONCISENESS (STRICT):
+- Respond in ONLY 1 concise, direct paragraph (maximum 2 to 4 sentences).
+- Do NOT generate multi-paragraph essays, long greetings, or unnecessary fluff.
+- Get straight to the point to provide immediate value and save tokens/bandwidth.
 
 PERSONAL ENGINEERING MOTTO:
 - "You can vibe-code, but you cannot vibe-architect." System design and architecture demand deep analytical thinking.
@@ -104,10 +109,12 @@ ${contextText || 'No specific document context retrieved. Rely on core profile k
 
     if (googleApiKey) {
       try {
+        const googleProvider = createGoogleGenerativeAI({ apiKey: googleApiKey })
         resultStream = streamText({
-          model: google('gemini-3.5-flash-lite'),
+          model: googleProvider('gemini-3.5-flash-lite'),
           system: systemPrompt,
           messages: modelMessages,
+          maxOutputTokens: 200,
         })
       } catch (geminiError) {
         console.warn('Google Gemini chat initialization failed, falling back to OpenAI:', geminiError)
@@ -115,10 +122,12 @@ ${contextText || 'No specific document context retrieved. Rely on core profile k
     }
 
     if (!resultStream && openaiApiKey) {
+      const openaiProvider = createOpenAI({ apiKey: openaiApiKey })
       resultStream = streamText({
-        model: openai('gpt-4o-mini'),
+        model: openaiProvider('gpt-4o-mini'),
         system: systemPrompt,
         messages: modelMessages,
+        maxOutputTokens: 200,
       })
     }
 

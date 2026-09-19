@@ -139,6 +139,7 @@ const socialLinks = [
             <div
               id="mobile-socials-dock"
               class="mobile-dock grid grid-rows-[0fr] opacity-0 transition-all duration-300 ease-out overflow-hidden"
+              data-state="closed"
             >
               <div class="overflow-hidden min-h-0">
                 <div class="flex flex-wrap items-center gap-2 pt-2.5 pb-1">
@@ -187,29 +188,43 @@ const socialLinks = [
 </div>
 
 <style>
-  .mobile-dock.is-open {
-    grid-template-rows: 1fr !important;
-    opacity: 1 !important;
+  .mobile-dock[data-state="open"] {
+    grid-template-rows: 1fr;
+    opacity: 1;
   }
-  #mobile-socials-arrow.is-open {
+  #mobile-socials-arrow[data-state="open"] {
     transform: rotate(180deg);
   }
 </style>
 
 <script>
-  function initMobileSocials() {
-    const toggleBtn = document.getElementById('mobile-socials-toggle')
-    const dock = document.getElementById('mobile-socials-dock')
-    const arrow = document.getElementById('mobile-socials-arrow')
-    if (!toggleBtn || !dock) return
+  function setupMobileSocialsDelegation() {
+    const handleToggle = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null
+      const toggleBtn = target?.closest('#mobile-socials-toggle')
+      if (!toggleBtn) return
 
-    // Clean any prior listener
-    toggleBtn.onclick = () => {
-      const isOpen = dock.classList.toggle('is-open')
-      toggleBtn.setAttribute('aria-expanded', String(isOpen))
-      if (arrow) arrow.classList.toggle('is-open', isOpen)
+      const dock = document.getElementById('mobile-socials-dock')
+      const arrow = document.getElementById('mobile-socials-arrow')
+      if (!dock) return
+
+      const isOpen = dock.getAttribute('data-state') === 'open'
+      const nextState = isOpen ? 'closed' : 'open'
+
+      dock.setAttribute('data-state', nextState)
+      toggleBtn.setAttribute('aria-expanded', String(!isOpen))
+      if (arrow) {
+        arrow.setAttribute('data-state', nextState)
+      }
+    }
+
+    // Attach once globally to document so view transitions and re-renders never break it
+    if (!(window as any).__mobileSocialsDelegated) {
+      document.addEventListener('click', handleToggle)
+      ;(window as any).__mobileSocialsDelegated = true
     }
   }
 
-  document.addEventListener('astro:page-load', initMobileSocials)
+  setupMobileSocialsDelegation()
+  document.addEventListener('astro:page-load', setupMobileSocialsDelegation)
 </script>

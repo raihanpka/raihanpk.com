@@ -10,13 +10,13 @@ export default function FloatingChatButton() {
   }
 
   return (
-    <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] z-50 md:bottom-8 md:right-8">
+    <div className="fixed bottom-[max(1.75rem,env(safe-area-inset-bottom))] right-[max(1.25rem,env(safe-area-inset-right))] z-50 md:bottom-8 md:right-8">
       <button
         onClick={handleClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         className={cn(
-          'group relative flex h-14 w-14 md:h-16 md:w-16 items-center justify-center rounded-full border border-border/80 bg-background/80 backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-lg',
+          'group relative flex h-16 w-16 md:h-16 md:w-16 items-center justify-center rounded-full border border-border/80 bg-background/80 backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-lg',
         )}
         aria-label="Ask Assistant"
       >
@@ -28,7 +28,7 @@ export default function FloatingChatButton() {
 
         {/* Main button content - Enlarged Icon */}
         <div className="relative z-10 transition-transform duration-500 group-hover:rotate-12">
-          <MessageCircle className="h-6 w-6 md:h-7 md:w-7 text-foreground group-hover:text-primary transition-colors drop-shadow-sm" />
+          <MessageCircle className="h-7 w-7 md:h-7 md:w-7 text-foreground group-hover:text-primary transition-colors drop-shadow-sm" />
         </div>
 
         {/* Tooltip - Matching Glass Style */}

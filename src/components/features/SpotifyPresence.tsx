@@ -63,16 +63,18 @@ const SpotifyPresence = () => {
           <div className="flex min-w-0 flex-1 flex-col justify-end overflow-hidden">
             <div className="flex flex-col">
               {/* Icon + "Listening to..." text skeleton */}
-              <span className="mb-1 flex gap-2 items-center">
-                <div className="h-4 w-4 animate-pulse rounded bg-primary/10" />
-                <div className="h-4 w-24 animate-pulse rounded bg-primary/10" />
+              <span className="mb-2.5 sm:mb-3 flex gap-2 items-center">
+                <div className="h-5 w-5 animate-pulse rounded bg-primary/10" />
+                <div className="h-5 w-28 animate-pulse rounded bg-primary/10" />
               </span>
-              {/* Song title skeleton */}
-              <div className="mb-2 pb-1 h-8 w-48 animate-pulse rounded bg-primary/10" />
-              {/* Artist skeleton */}
-              <div className="h-4 w-[60%] animate-pulse rounded bg-primary/10" />
-              {/* Album skeleton */}
-              <div className="h-4 w-[50%] animate-pulse rounded bg-primary/10 mt-1" />
+              <div className="flex flex-col gap-1">
+                {/* Song title skeleton */}
+                <div className="h-6 w-48 animate-pulse rounded bg-primary/10" />
+                {/* Artist skeleton */}
+                <div className="h-4 w-[60%] animate-pulse rounded bg-primary/10" />
+                {/* Album skeleton */}
+                <div className="h-4 w-[50%] animate-pulse rounded bg-primary/10" />
+              </div>
             </div>
           </div>
         </div>
@@ -150,36 +152,36 @@ const SpotifyPresence = () => {
         />
         <div className="flex min-w-0 flex-1 flex-col justify-end overflow-hidden">
           <div className="flex flex-col">
-            <span className="mb-1 flex gap-2 text-primary items-center">
+            <span className="mb-1.5 sm:mb-1.5 flex gap-2 text-primary items-center">
               {displayData['@attr']?.nowplaying === 'true' ? (
-                <div className="flex items-center space-x-1">
+                <div className="flex items-end space-x-1 h-5 pb-0.5">
                   <div
-                    className="w-0.5 h-1.5 bg-primary/90 rounded-full animate-pulse"
+                    className="w-1 h-3 bg-primary/90 rounded-full animate-pulse"
                     style={{ animationDelay: '0ms', animationDuration: '1.5s' }}
                   />
                   <div
-                    className="w-0.5 h-2 bg-primary/70 rounded-full animate-pulse"
+                    className="w-1 h-4 bg-primary/70 rounded-full animate-pulse"
                     style={{
                       animationDelay: '150ms',
                       animationDuration: '1.2s',
                     }}
                   />
                   <div
-                    className="w-0.5 h-3 bg-primary/60 rounded-full animate-pulse"
+                    className="w-1 h-5 bg-primary/60 rounded-full animate-pulse"
                     style={{
                       animationDelay: '300ms',
                       animationDuration: '1.5s',
                     }}
                   />
                   <div
-                    className="w-0.5 h-2 bg-primary/90 rounded-full animate-pulse"
+                    className="w-1 h-3.5 bg-primary/90 rounded-full animate-pulse"
                     style={{
                       animationDelay: '450ms',
                       animationDuration: '1.2s',
                     }}
                   />
                   <div
-                    className="w-0.5 h-2.5 bg-primary/80 rounded-full animate-pulse"
+                    className="w-1 h-4.5 bg-primary/80 rounded-full animate-pulse"
                     style={{
                       animationDelay: '600ms',
                       animationDuration: '1.5s',
@@ -187,29 +189,31 @@ const SpotifyPresence = () => {
                   />
                 </div>
               ) : (
-                <FaHeadphonesAlt size={16} />
+                <FaHeadphonesAlt size={22} />
               )}
-              <span className="text-sm text-primary">
+              <span className="text-base sm:text-lg font-medium text-primary">
                 {displayData['@attr']?.nowplaying === 'true'
                   ? 'Listening to...'
                   : 'Last played...'}
               </span>
             </span>
-            <span className="mb-2 pb-1 truncate text-lg sm:text-2xl font-bold leading-none text-primary">
-              {song}
-            </span>
-            <span className="w-[85%] truncate text-sm text-muted-foreground">
-              <span className="font-semibold text-secondary-foreground">
-                by
-              </span>{' '}
-              {artist['#text']}
-            </span>
-            <span className="w-[85%] truncate text-sm text-muted-foreground">
-              <span className="font-semibold text-secondary-foreground">
-                on
-              </span>{' '}
-              {album['#text']}
-            </span>
+            <div className="flex flex-col">
+              <span className="truncate text-base sm:text-xl font-bold leading-snug text-primary">
+                {song}
+              </span>
+              <span className="w-[85%] truncate text-sm sm:text-base text-muted-foreground">
+                <span className="font-semibold text-secondary-foreground">
+                  by
+                </span>{' '}
+                {artist['#text']}
+              </span>
+              <span className="w-[85%] truncate text-sm sm:text-base text-muted-foreground">
+                <span className="font-semibold text-secondary-foreground">
+                  on
+                </span>{' '}
+                {album['#text']}
+              </span>
+            </div>
           </div>
         </div>
       </div>

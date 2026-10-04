@@ -9,17 +9,40 @@ import {
   SiCodecrafters,
   SiCplusplus,
   SiCss,
+  SiDart,
+  SiDocker,
+  SiElixir,
+  SiFlutter,
+  SiGit,
+  SiGnubash,
+  SiGo,
+  SiGraphql,
+  SiHaskell,
   SiHtml5,
   SiJavascript,
   SiJson,
+  SiKotlin,
   SiLatex,
+  SiLua,
   SiMarkdown,
   SiMdx,
+  SiOcaml,
+  SiPhp,
+  SiPostgresql,
+  SiPrisma,
   SiPython,
+  SiR,
+  SiRuby,
+  SiRust,
   SiScala,
+  SiSwift,
   SiTypescript,
+  SiVuedotjs,
   SiYaml,
+  SiZig,
 } from 'react-icons/si'
+import { FaJava } from 'react-icons/fa'
+import { TbBrandCSharp, TbSql } from 'react-icons/tb'
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from 'recharts'
 import {
   type ChartConfig,
@@ -36,20 +59,66 @@ import {
 } from '@/lib/cache'
 
 const languageIcons: { [key: string]: IconType } = {
+  // Web & Core
+  typescript: SiTypescript,
+  javascript: SiJavascript,
   astro: SiAstro,
   html: SiHtml5,
   css: SiCss,
-  javascript: SiJavascript,
-  python: SiPython,
+  'vue.js': SiVuedotjs,
+  vue: SiVuedotjs,
+
+  // Systems & Native
+  rust: SiRust,
+  go: SiGo,
+  golang: SiGo,
   c: SiC,
   'c++': SiCplusplus,
-  typescript: SiTypescript,
+  'c#': TbBrandCSharp as IconType,
+  csharp: TbBrandCSharp as IconType,
+  'c-sharp': TbBrandCSharp as IconType,
+  zig: SiZig,
+
+  // JVM & Mobile
+  java: FaJava as IconType,
+  kotlin: SiKotlin,
+  scala: SiScala,
+  dart: SiDart,
+  flutter: SiFlutter,
+  swift: SiSwift,
+
+  // Scripting & Backend
+  python: SiPython,
+  ruby: SiRuby,
+  php: SiPhp,
+  lua: SiLua,
+  bash: SiGnubash,
+  sh: SiGnubash,
+  shell: SiGnubash,
+  zsh: SiGnubash,
+
+  // Functional & Scientific
+  ocaml: SiOcaml,
+  elixir: SiElixir,
+  haskell: SiHaskell,
+  r: SiR,
+
+  // Data, Query, & Infra
+  sql: TbSql as IconType,
+  postgresql: SiPostgresql,
+  docker: SiDocker,
+  dockerfile: SiDocker,
+  prisma: SiPrisma,
+  graphql: SiGraphql,
+  git: SiGit,
+  'git config': SiGit,
+
+  // Docs, Markup & Config
   markdown: SiMarkdown,
   mdx: SiMdx,
   json: SiJson,
   yaml: SiYaml,
   tex: SiLatex,
-  scala: SiScala,
   other: SiCodecrafters,
 }
 

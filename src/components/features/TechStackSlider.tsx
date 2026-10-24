@@ -308,7 +308,7 @@ export default function TechStackSlider() {
         direction="left"
         pauseOnHover={hoveredKey !== null || isDesktop}
         className="mb-4 transform rotate-1"
-        innerClassName="gap-2 [--duration:87s]"
+        innerClassName="gap-2 [--duration:148s]"
       >
         {row1.map((stack, index) => (
           <a
@@ -350,7 +350,7 @@ export default function TechStackSlider() {
         reverse={true}
         pauseOnHover={hoveredKey !== null || isDesktop}
         className="mb-4 transform rotate-1"
-        innerClassName="gap-2 [--duration:47s]"
+        innerClassName="gap-2 [--duration:80s]"
       >
         {row2.map((stack, index) => (
           <a
@@ -391,7 +391,7 @@ export default function TechStackSlider() {
         direction="left"
         pauseOnHover={hoveredKey !== null || isDesktop}
         className="mb-4 transform rotate-1"
-        innerClassName="gap-2 [--duration:40s]"
+        innerClassName="gap-2 [--duration:68s]"
       >
         {row3.map((stack, index) => (
           <a

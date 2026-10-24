@@ -26,6 +26,9 @@ export default function ChatInterface() {
   const [isLoading, setIsLoading] = useState(false)
   const [rateLimited, setRateLimited] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  // Local times differ from the server's, so timestamps are drawn only after mount.
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
 
   const isInitialRender = useRef(true)
 
@@ -204,7 +207,7 @@ export default function ChatInterface() {
                         <p className="text-sm whitespace-pre-wrap leading-relaxed wrap-break-word">{message.content}</p>
                       )}
                       <p className="text-[10px] sm:text-xs opacity-70 mt-1">
-                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        {mounted && message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>
                     </div>
                   </div>

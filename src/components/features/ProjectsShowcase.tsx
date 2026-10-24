@@ -3,8 +3,8 @@
 import { ArrowUpRight, SlidersHorizontal, Link2, Check, X } from 'lucide-react'
 import { AnimatePresence, motion, useInView } from 'framer-motion'
 import { useState, useRef, useEffect } from 'react'
-import { Badge } from '@/components/ui/badge'
-import { buttonVariants } from '@/components/ui/button'
+import { Badge } from '@/components/ui/Badge'
+import { buttonVariants } from '@/components/ui/Button'
 import { PiAmazonLogo, PiOpenAiLogo } from 'react-icons/pi'
 import {
   SiAstro,

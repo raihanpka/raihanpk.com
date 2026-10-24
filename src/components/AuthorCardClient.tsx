@@ -8,8 +8,8 @@ import {
   PiInstagramLogo,
   PiLinkedinLogo,
 } from 'react-icons/pi'
-import AvatarComponent from '@/components/ui/avatar'
-import { buttonVariants } from '@/components/ui/button'
+import AvatarComponent from '@/components/ui/Avatar'
+import { buttonVariants } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 
 type Props = {

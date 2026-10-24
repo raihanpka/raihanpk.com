@@ -49,7 +49,7 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from '@/components/ui/chart'
+} from '@/components/ui/Chart'
 import { motion } from 'framer-motion'
 import {
   getCachedData,

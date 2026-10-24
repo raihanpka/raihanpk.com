@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Send, User } from 'lucide-react'
 import { Streamdown } from 'streamdown'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/Card'
+import { Button } from '@/components/ui/Button'
 import { EXAMPLE_MESSAGES } from '@/consts'
 
 interface Message {

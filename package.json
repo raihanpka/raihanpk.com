@@ -24,10 +24,10 @@
   "scripts": {
     "dev": "astro dev",
     "start": "bun run build",
-    "build": "tsc --noEmit && astro build",
+    "build": "astro sync && tsc --noEmit && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "check": "tsc --noEmit",
+    "check": "astro sync && tsc --noEmit",
     "index-knowledge": "bun run scripts/index-knowledge.ts",
     "postinstall": "prisma generate"
   },

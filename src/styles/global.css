@@ -1,10 +1,42 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
-@import '@devnomic/marquee/dist/index.css';
 
 @plugin '@tailwindcss/typography';
 
+/* Marquee library ships its classes in JS; scan it so v4 generates them */
+@source '../../node_modules/@devnomic/marquee/dist';
+
 @custom-variant dark (&:where(.dark, .dark *));
+
+@utility direction-reverse {
+  animation-direction: reverse;
+}
+
+@utility animate-marquee-left {
+  animation: marquee-left var(--duration, 40s) linear infinite;
+}
+
+@utility animate-marquee-up {
+  animation: marquee-up var(--duration, 40s) linear infinite;
+}
+
+@keyframes marquee-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+
+@keyframes marquee-up {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+  }
+}
 
 @theme inline {
   --font-sans:

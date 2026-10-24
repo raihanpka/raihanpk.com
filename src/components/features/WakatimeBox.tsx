@@ -49,8 +49,8 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from '@/components/ui/chart'
-import { motion } from 'framer-motion'
+} from '@/components/ui/Chart'
+import { motion } from 'motion/react'
 import {
   getCachedData,
   setCachedData,
@@ -122,7 +122,7 @@ const languageIcons: { [key: string]: IconType } = {
   other: SiCodecrafters,
 }
 
-const getLanguageIcon = (language: string): JSX.Element | null => {
+const getLanguageIcon = (language: string): React.JSX.Element | null => {
   const Icon = languageIcons[language]
   return Icon ? <Icon /> : null
 }
@@ -290,7 +290,7 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
             <LabelList
               dataKey="hours"
               position="right"
-              formatter={(value: number) => `${Math.round(value)}h`}
+              formatter={(value: unknown) => `${Math.round(Number(value))}h`}
               className="fill-foreground"
               fontSize={12}
             />

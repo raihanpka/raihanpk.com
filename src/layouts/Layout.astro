@@ -3,7 +3,7 @@ import Footer from '@/components/Footer.astro'
 import Head from '@/components/Head.astro'
 import Header from '@/components/Header.astro'
 import FloatingChatButton from '@/components/chat/FloatingChatButton.tsx'
-import MonochromeDitherCanvas from '@/components/ui/MonochromeDitherCanvas.tsx'
+import HalftoneBg from '@/components/ui/HalftoneBg.tsx'
 import { SITE } from '@/consts'
 import SpeedInsights from '@vercel/speed-insights/astro'
 
@@ -27,7 +27,7 @@ const { title, description, image, fullTitle } = Astro.props
     />
   </head>
   <body class="min-h-screen bg-background text-foreground antialiased relative">
-    <MonochromeDitherCanvas client:idle />
+    <HalftoneBg client:only="react" />
     <div class="relative z-10 flex min-h-dvh flex-col">
       <Header />
       <main class="flex-1">

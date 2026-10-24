@@ -1,8 +1,70 @@
-@import '@devnomic/marquee/dist/index.css';
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@plugin '@tailwindcss/typography';
+
+/* Marquee library ships its classes in JS; scan it so v4 generates them */
+@source '../../node_modules/@devnomic/marquee/dist';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@utility direction-reverse {
+  animation-direction: reverse;
+}
+
+@utility animate-marquee-left {
+  animation: marquee-left var(--duration, 40s) linear infinite;
+}
+
+@utility animate-marquee-up {
+  animation: marquee-up var(--duration, 40s) linear infinite;
+}
+
+@keyframes marquee-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+
+@keyframes marquee-up {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+  }
+}
+
+@theme inline {
+  --font-sans:
+    'Geist', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-mono:
+    'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
+
+  --default-border-width: 2px;
+
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-additive: hsl(var(--additive));
+  --color-additive-foreground: hsl(var(--additive-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-ring: hsl(var(--ring));
+}
 
 @font-face {
   font-family: "Geist";
@@ -110,13 +172,13 @@
 
   .disable-transitions,
   .disable-transitions * {
-    @apply !transition-none;
+    @apply transition-none!;
   }
 }
 
 @layer components {
   article {
-    @apply prose-headings:scroll-mt-20 prose-headings:break-words first:prose-headings:mt-0 prose-p:break-words prose-a:!break-words prose-a:!decoration-muted-foreground prose-a:underline-offset-[3px] prose-a:transition-colors hover:prose-a:!decoration-foreground prose-pre:!px-0 prose-img:mx-auto;
+    @apply prose-headings:scroll-mt-20 prose-headings:wrap-break-word first:prose-headings:mt-0 prose-p:wrap-break-word prose-a:wrap-break-word! prose-a:decoration-muted-foreground! prose-a:underline-offset-[3px] prose-a:transition-colors hover:prose-a:decoration-foreground! prose-pre:px-0! prose-img:mx-auto;
 
     .katex-display {
       @apply overflow-x-auto overflow-y-hidden py-4;
@@ -149,7 +211,7 @@
 
       /* Code block titles */
       [data-rehype-pretty-code-title] {
-        @apply break-words rounded-t-xl border-x border-t px-4 py-2 text-sm font-medium text-foreground;
+        @apply wrap-break-word rounded-t-xl border-x border-t px-4 py-2 text-sm font-medium text-foreground;
 
         /* Remove top margin from code block if a title is present */
         & + pre {

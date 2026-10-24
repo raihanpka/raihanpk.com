@@ -1,7 +1,7 @@
 import { MoveUpRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { FaHeadphonesAlt, FaSpotify } from 'react-icons/fa'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import {
   getStaleWhileRevalidate,
   setCachedData,
@@ -79,7 +79,7 @@ const SpotifyPresence = () => {
           </div>
         </div>
         {/* Spotify icon skeleton */}
-        <div className="absolute right-1 top-0 m-2">
+        <div className="absolute right-1 top-0 m-2 hidden md:block">
           <div className="h-6 w-6 animate-pulse rounded-full bg-primary/10" />
         </div>
         {/* Link button skeleton */}
@@ -99,6 +99,7 @@ const SpotifyPresence = () => {
         {/* Album art placeholder */}
         <div className="mb-2 flex w-28 max-w-[160px] shrink-0 items-center justify-center rounded-xl border border-border bg-secondary/40 aspect-square">
           <motion.div
+            className="hidden md:block"
             animate={{ rotate: [0, -8, 8, -4, 4, 0] }}
             transition={{ duration: 1.6, ease: 'easeInOut', delay: 0.3 }}
           >
@@ -109,9 +110,10 @@ const SpotifyPresence = () => {
         {/* Text area */}
         <div className="flex min-w-0 flex-1 flex-col justify-end overflow-hidden">
           <div className="flex flex-col gap-1.5">
-            <span className="flex items-center gap-2 text-sm text-muted-foreground">
-              <FaHeadphonesAlt size={14} />
+            <span className="flex w-full items-center gap-2 text-sm text-muted-foreground">
+              <FaHeadphonesAlt size={14} className="shrink-0" />
               Signal lost...
+              <FaSpotify size={24} className="ml-auto hidden shrink-0 text-muted-foreground/40 md:block" />
             </span>
             <span className="truncate text-lg font-bold leading-tight text-primary/80">
               Couldn't reach Last.fm API
@@ -122,10 +124,6 @@ const SpotifyPresence = () => {
           </div>
         </div>
 
-        {/* Spotify icon */}
-        <div className="absolute right-1 top-0 m-2 text-muted-foreground/40">
-          <FaSpotify size={24} />
-        </div>
       </motion.div>
     )
 
@@ -152,7 +150,7 @@ const SpotifyPresence = () => {
         />
         <div className="flex min-w-0 flex-1 flex-col justify-end overflow-hidden">
           <div className="flex flex-col">
-            <span className="mb-1.5 sm:mb-1.5 flex gap-2 text-primary items-center">
+            <span className="mt-1 mb-1 flex w-full items-center gap-2 text-primary sm:mb-1">
               {displayData['@attr']?.nowplaying === 'true' ? (
                 <div className="flex items-end space-x-1 h-5 pb-0.5">
                   <div
@@ -189,13 +187,14 @@ const SpotifyPresence = () => {
                   />
                 </div>
               ) : (
-                <FaHeadphonesAlt size={22} />
+                <FaHeadphonesAlt size={22} className="shrink-0" />
               )}
-              <span className="text-base sm:text-lg font-medium text-primary">
+              <span className="text-sm sm:text-base font-medium text-primary">
                 {displayData['@attr']?.nowplaying === 'true'
                   ? 'Listening to...'
                   : 'Last played...'}
               </span>
+              <FaSpotify size={22} className="ml-auto hidden shrink-0 md:block" />
             </span>
             <div className="flex flex-col">
               <span className="truncate text-base sm:text-xl font-bold leading-snug text-primary">
@@ -216,9 +215,6 @@ const SpotifyPresence = () => {
             </div>
           </div>
         </div>
-      </div>
-      <div className="absolute right-1 top-0 m-2 text-primary">
-        <FaSpotify size={24} />
       </div>
       <a
         href={url}

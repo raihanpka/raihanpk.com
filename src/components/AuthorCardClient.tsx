@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import {
   PiEnvelope,
   PiGithubLogo,
@@ -8,8 +8,8 @@ import {
   PiInstagramLogo,
   PiLinkedinLogo,
 } from 'react-icons/pi'
-import AvatarComponent from '@/components/ui/avatar'
-import { buttonVariants } from '@/components/ui/button'
+import AvatarComponent from '@/components/ui/Avatar'
+import { buttonVariants } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 
 type Props = {
@@ -69,7 +69,7 @@ export function AuthorCardClient({
       animate="visible"
     >
       {/* Subtle top highlight — minimal Vercel-style accent */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/20 to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-foreground/20 to-transparent" />
 
       <div className="p-4">
         <div className="flex flex-wrap gap-4">
@@ -100,7 +100,7 @@ export function AuthorCardClient({
           </motion.div>
 
           {/* Info */}
-          <div className="flex flex-grow flex-col justify-between gap-y-4">
+          <div className="flex grow flex-col justify-between gap-y-4">
             <motion.div variants={childVariants}>
               <div className="flex flex-wrap items-center gap-x-2">
                 <h3 className="text-lg font-semibold">{name}</h3>

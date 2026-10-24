@@ -1,6 +1,6 @@
 ---
 import Link from '@/components/Link.astro'
-import AvatarComponent from '@/components/ui/avatar'
+import AvatarComponent from '@/components/ui/Avatar'
 import type { Link as SocialLink } from '@/consts'
 import { cn } from '@/lib/utils'
 import type { CollectionEntry } from 'astro:content'
@@ -52,7 +52,7 @@ const socialLinks: SocialLink[] = [
         )}
       />
     </Link>
-    <div class="flex flex-grow flex-col justify-between gap-y-4">
+    <div class="flex grow flex-col justify-between gap-y-4">
       <div>
         <div class="flex flex-wrap items-center gap-x-2">
           <h3 class="text-lg font-semibold">{name}</h3>

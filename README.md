@@ -42,7 +42,7 @@ Additional features developed from built-in features of the public template [Ast
 - **Styling**: [Tailwind CSS](https://tailwindcss.com), [Tailwind Animate](https://github.com/jamiebuilds/tailwindcss-animate)
 - **Database & ORM**: [PostgreSQL](https://postgresql.org), [Prisma ORM](https://prisma.io) with [Prisma Accelerate](https://www.prisma.io/accelerate)
 - **Vector & AI**: [Pinecone](https://pinecone.io), [Vercel AI SDK](https://sdk.vercel.ai), [Google Generative AI](https://ai.google.dev), [OpenAI](https://openai.com)
-- **UI Components & Animation**: [Radix UI](https://www.radix-ui.com), [Lucide Icons](https://lucide.dev), [React Icons](https://react-icons.github.io/react-icons), [Framer Motion](https://www.framer.com/motion), [Recharts](https://recharts.org), [@devnomic/marquee](https://github.com/devnomic/marquee)
+- **UI Components & Animation**: [Radix UI](https://www.radix-ui.com), [Lucide Icons](https://lucide.dev), [React Icons](https://react-icons.github.io/react-icons), [Motion](https://motion.dev), [Recharts](https://recharts.org), [@devnomic/marquee](https://github.com/devnomic/marquee)
 - **Deployment**: [Vercel](https://vercel.com)
 
 <div align="center">

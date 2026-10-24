@@ -1,6 +1,6 @@
 ---
 import Link from '@/components/Link.astro'
-import { Badge } from '@/components/ui/badge'
+import { Badge } from '@/components/ui/Badge'
 import type { CollectionEntry } from 'astro:content'
 
 type Props = {
@@ -20,7 +20,7 @@ const { project } = Astro.props
   >
     {
       project.data.asset && (
-        <div class="w-full sm:max-w-[200px] sm:flex-shrink-0">
+        <div class="w-full sm:max-w-[200px] sm:shrink-0">
           <img
             src={project.data.asset}
             alt={project.data.name}
@@ -33,7 +33,7 @@ const { project } = Astro.props
         </div>
       )
     }
-    <div class="flex-grow">
+    <div class="grow">
       <h3 class="mb-1 text-fluid-lg font-semibold">
         {project.data.name}
       </h3>

@@ -1,50 +1,83 @@
 import { Marquee } from '@devnomic/marquee'
 import { useEffect, useState } from 'react'
 import { ExternalLink } from 'lucide-react'
-import { PiAmazonLogo, PiOpenAiLogo } from 'react-icons/pi'
 import {
+  SiAnthropic,
+  SiApachespark,
   SiAstro,
+  SiApple,
   SiBun,
+  SiCloudflare,
   SiCplusplus,
+  SiClickhouse,
+  SiClaudecode,
+  SiDatabricks,
+  SiDjango,
   SiDocker,
   SiExpo,
   SiExpress,
   SiFastapi,
   SiFirebase,
-  SiGit,
-  SiGnubash,
+  SiFlutter,
+  SiGin,
   SiGo,
+  SiGooglegemini,
   SiGooglecloud,
   SiGrafana,
+  SiGradle,
+  SiGraphql,
   SiHuggingface,
+  SiHono,
+  SiJavascript,
+  SiJupyter,
   SiK6,
   SiKeras,
-  SiLangchain,
+  SiKotlin,
+  SiLangchaincorporate,
+  SiLanggraph,
+  SiLatex,
   SiLinux,
+  SiMlflow,
   SiMongodb,
+  SiMysql,
+  SiNestjs,
   SiNextdotjs,
   SiNodedotjs,
-  SiNumpy,
+  SiOllama,
+  SiOpencode,
   SiOpencv,
   SiOpenjdk,
-  SiPandas,
+  SiOpenrouter,
+  SiOpentelemetry,
+  SiPnpm,
   SiPostgresql,
   SiPrisma,
+  SiPrometheus,
+  SiPydantic,
   SiPytest,
   SiPython,
   SiPytorch,
+  SiQdrant,
+  SiRabbitmq,
   SiReact,
   SiRedis,
+  SiSentry,
   SiScikitlearn,
+  SiScala,
   SiSpringboot,
   SiStreamlit,
+  SiSupabase,
   SiTailwindcss,
   SiTensorflow,
   SiTypescript,
   SiVercel,
   SiVite,
+  SiVitest,
+  SiApacheflink,
+  SiGnubash,
+  SiModelcontextprotocol,
 } from 'react-icons/si'
-import { Badge } from '@/components/ui/badge'
+import { Badge } from '@/components/ui/Badge'
 import { cn } from '@/lib/utils'
 
 interface StackIconProps {
@@ -55,53 +88,86 @@ interface StackIconProps {
 
 const StackIcon: React.FC<StackIconProps> = ({ name, size = '2em', className }) => {
   const iconMap: Record<string, React.ComponentType<any>> = {
-    // Languages
-    python: SiPython,
-    typescript: SiTypescript,
-    go: SiGo,
+    // Programming Languages
     cplusplus: SiCplusplus,
-    gnubash: SiGnubash,
+    go: SiGo,
     openjdk: SiOpenjdk,
-    // Frameworks
-    react: SiReact,
-    nextdotjs: SiNextdotjs,
+    javascript: SiJavascript,
+    kotlin: SiKotlin,
+    latex: SiLatex,
+    python: SiPython,
+    scala: SiScala,
+    typescript: SiTypescript,
+    // Frontend Frameworks
     astro: SiAstro,
+    django: SiDjango,
+    expo: SiExpo,
+    flutter: SiFlutter,
+    nextdotjs: SiNextdotjs,
+    react: SiReact,
+    streamlit: SiStreamlit,
     tailwindcss: SiTailwindcss,
-    nodedotjs: SiNodedotjs,
+    vite: SiVite,
+    // Backend Frameworks
     bun: SiBun,
+    pnpm: SiPnpm,
     express: SiExpress,
     fastapi: SiFastapi,
+    gin: SiGin,
+    hono: SiHono,
+    nestjs: SiNestjs,
+    nodedotjs: SiNodedotjs,
     springboot: SiSpringboot,
-    // Data Science & AI
-    pytorch: SiPytorch,
-    tensorflow: SiTensorflow,
-    scikitlearn: SiScikitlearn,
-    opencv: SiOpencv,
-    numpy: SiNumpy,
-    pandas: SiPandas,
-    openai: PiOpenAiLogo,
-    langchain: SiLangchain,
-    huggingface: SiHuggingface,
-    // Cloud & Infrastructure
-    postgresql: SiPostgresql,
-    mongodb: SiMongodb,
-    redis: SiRedis,
+    // Databases
     firebase: SiFirebase,
+    graphql: SiGraphql,
+    mongodb: SiMongodb,
+    mysql: SiMysql,
+    postgresql: SiPostgresql,
+    prisma: SiPrisma,
+    rabbitmq: SiRabbitmq,
+    redis: SiRedis,
+    supabase: SiSupabase,
+    // AI, ML, and Data Engineering
+    anthropic: SiAnthropic,
+    apacheflink: SiApacheflink,
+    clickhouse: SiClickhouse,
+    databricks: SiDatabricks,
+    gemini: SiGooglegemini,
+    huggingface: SiHuggingface,
+    jupyter: SiJupyter,
+    keras: SiKeras,
+    langchain: SiLangchaincorporate,
+    langgraph: SiLanggraph,
+    mcp: SiModelcontextprotocol,
+    mlflow: SiMlflow,
+    ollama: SiOllama,
+    opencv: SiOpencv,
+    openrouter: SiOpenrouter,
+    pydantic: SiPydantic,
+    pytorch: SiPytorch,
+    qdrant: SiQdrant,
+    scikitlearn: SiScikitlearn,
+    spark: SiApachespark,
+    tensorflow: SiTensorflow,
+    // Tools
+    gnubash: SiGnubash,
+    cloudflare: SiCloudflare,
+    claude: SiClaudecode,
     docker: SiDocker,
     googlecloud: SiGooglecloud,
-    vercel: SiVercel,
-    linux: SiLinux,
-    git: SiGit,
     grafana: SiGrafana,
-    aws: PiAmazonLogo,
-    // Tools (existing)
-    prisma: SiPrisma,
-    pytest: SiPytest,
+    gradle: SiGradle,
     k6: SiK6,
-    vite: SiVite,
-    expo: SiExpo,
-    streamlit: SiStreamlit,
-    keras: SiKeras,
+    linux: SiLinux,
+    macos: SiApple,
+    opentelemetry: SiOpentelemetry,
+    opencode: SiOpencode,
+    prometheus: SiPrometheus,
+    pytest: SiPytest,
+    vitest: SiVitest,
+    sentry: SiSentry,
+    vercel: SiVercel,
   }
 
   const IconComponent = iconMap[name]
@@ -116,55 +182,96 @@ export default function TechStackSlider() {
   const [isDesktop, setIsDesktop] = useState(false)
   const [marqueeKey, setMarqueeKey] = useState(0)
 
-  const stacksList = [
-    // Languages
+  const languages = [
     { name: 'python', alt: 'Python', url: 'https://python.org' },
     { name: 'typescript', alt: 'TypeScript', url: 'https://typescriptlang.org' },
+    { name: 'javascript', alt: 'JavaScript', url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript' },
     { name: 'go', alt: 'Go', url: 'https://go.dev' },
     { name: 'openjdk', alt: 'Java', url: 'https://java.com' },
+    { name: 'kotlin', alt: 'Kotlin', url: 'https://kotlinlang.org' },
+    { name: 'scala', alt: 'Scala', url: 'https://scala-lang.org' },
     { name: 'cplusplus', alt: 'C++', url: 'https://isocpp.org' },
-    { name: 'gnubash', alt: 'Bash', url: 'https://gnu.org/software/bash' },
-
-    // Frameworks
+    { name: 'latex', alt: 'LaTeX', url: 'https://www.latex-project.org' },
+  ]
+  const frontend = [
     { name: 'react', alt: 'React', url: 'https://react.dev' },
     { name: 'nextdotjs', alt: 'Next.js', url: 'https://nextjs.org' },
     { name: 'astro', alt: 'Astro', url: 'https://astro.build' },
     { name: 'tailwindcss', alt: 'Tailwind CSS', url: 'https://tailwindcss.com' },
+    { name: 'django', alt: 'Django', url: 'https://djangoproject.com' },
+    { name: 'streamlit', alt: 'Streamlit', url: 'https://streamlit.io' },
+    { name: 'vite', alt: 'Vite', url: 'https://vite.dev' },
+    { name: 'expo', alt: 'Expo', url: 'https://expo.dev' },
+    { name: 'flutter', alt: 'Flutter', url: 'https://flutter.dev' },
+  ]
+  const backend = [
     { name: 'nodedotjs', alt: 'Node.js', url: 'https://nodejs.org' },
     { name: 'bun', alt: 'Bun', url: 'https://bun.sh' },
+    { name: 'pnpm', alt: 'pnpm', url: 'https://pnpm.io' },
+    { name: 'nestjs', alt: 'NestJS', url: 'https://nestjs.com' },
+    { name: 'hono', alt: 'Hono', url: 'https://hono.dev' },
     { name: 'express', alt: 'Express', url: 'https://expressjs.com' },
     { name: 'fastapi', alt: 'FastAPI', url: 'https://fastapi.tiangolo.com' },
+    { name: 'gin', alt: 'Gin', url: 'https://gin-gonic.com' },
     { name: 'springboot', alt: 'Spring Boot', url: 'https://spring.io/projects/spring-boot' },
-
-    // Data Science & AI
-    { name: 'pytorch', alt: 'PyTorch', url: 'https://pytorch.org' },
-    { name: 'tensorflow', alt: 'TensorFlow', url: 'https://tensorflow.org' },
-    { name: 'scikitlearn', alt: 'Scikit-learn', url: 'https://scikit-learn.org' },
-    { name: 'opencv', alt: 'OpenCV', url: 'https://opencv.org' },
-    { name: 'numpy', alt: 'NumPy', url: 'https://numpy.org' },
-    { name: 'pandas', alt: 'Pandas', url: 'https://pandas.pydata.org' },
-    { name: 'langchain', alt: 'LangChain', url: 'https://langchain.com' },
-    { name: 'openai', alt: 'OpenAI API', url: 'https://openai.com' },
-    { name: 'huggingface', alt: 'Hugging Face', url: 'https://huggingface.co' },
-
-    // Cloud & Infrastructure
+  ]
+  const databases = [
     { name: 'postgresql', alt: 'PostgreSQL', url: 'https://postgresql.org' },
+    { name: 'mysql', alt: 'MySQL', url: 'https://mysql.com' },
     { name: 'mongodb', alt: 'MongoDB', url: 'https://mongodb.com' },
     { name: 'redis', alt: 'Redis', url: 'https://redis.io' },
+    { name: 'prisma', alt: 'Prisma', url: 'https://prisma.io' },
+    { name: 'rabbitmq', alt: 'RabbitMQ', url: 'https://rabbitmq.com' },
+    { name: 'supabase', alt: 'Supabase', url: 'https://supabase.com' },
     { name: 'firebase', alt: 'Firebase', url: 'https://firebase.google.com' },
+    { name: 'graphql', alt: 'GraphQL', url: 'https://graphql.org' },
+    { name: 'mcp', alt: 'MCP', url: 'https://modelcontextprotocol.io' },
+  ]
+  const aiData = [
+    { name: 'langchain', alt: 'LangChain', url: 'https://langchain.com' },
+    { name: 'langgraph', alt: 'LangGraph', url: 'https://langchain-ai.github.io/langgraph' },
+    { name: 'mlflow', alt: 'MLflow', url: 'https://mlflow.org' },
+    { name: 'pydantic', alt: 'Pydantic', url: 'https://pydantic.dev' },
+    { name: 'huggingface', alt: 'Hugging Face', url: 'https://huggingface.co' },
+    { name: 'ollama', alt: 'Ollama', url: 'https://ollama.com' },
+    { name: 'anthropic', alt: 'Anthropic', url: 'https://anthropic.com' },
+    { name: 'gemini', alt: 'Gemini', url: 'https://ai.google.dev' },
+    { name: 'openrouter', alt: 'OpenRouter', url: 'https://openrouter.ai' },
+    { name: 'qdrant', alt: 'Qdrant', url: 'https://qdrant.tech' },
+    { name: 'pytorch', alt: 'PyTorch', url: 'https://pytorch.org' },
+    { name: 'tensorflow', alt: 'TensorFlow', url: 'https://tensorflow.org' },
+    { name: 'keras', alt: 'Keras', url: 'https://keras.io' },
+    { name: 'spark', alt: 'Spark', url: 'https://spark.apache.org' },
+    { name: 'scikitlearn', alt: 'Scikit-learn', url: 'https://scikit-learn.org' },
+    { name: 'opencv', alt: 'OpenCV', url: 'https://opencv.org' },
+    { name: 'jupyter', alt: 'Jupyter', url: 'https://jupyter.org' },
+    { name: 'apacheflink', alt: 'Apache Flink', url: 'https://flink.apache.org' },
+    { name: 'clickhouse', alt: 'ClickHouse', url: 'https://clickhouse.com' },
+    { name: 'databricks', alt: 'Databricks', url: 'https://databricks.com' },
+  ]
+  const tools = [
     { name: 'docker', alt: 'Docker', url: 'https://docker.com' },
     { name: 'googlecloud', alt: 'GCP', url: 'https://cloud.google.com' },
-    { name: 'aws', alt: 'AWS', url: 'https://aws.amazon.com' },
+    { name: 'cloudflare', alt: 'Cloudflare', url: 'https://cloudflare.com' },
     { name: 'vercel', alt: 'Vercel', url: 'https://vercel.com' },
-    { name: 'linux', alt: 'Linux', url: 'https://linux.org' },
-    { name: 'git', alt: 'Git', url: 'https://git-scm.com' },
+    { name: 'k6', alt: 'k6', url: 'https://k6.io' },
+    { name: 'pytest', alt: 'Pytest', url: 'https://pytest.org' },
+    { name: 'vitest', alt: 'Vitest', url: 'https://vitest.dev' },
+    { name: 'sentry', alt: 'Sentry', url: 'https://sentry.io' },
+    { name: 'opentelemetry', alt: 'OpenTelemetry', url: 'https://opentelemetry.io' },
     { name: 'grafana', alt: 'Grafana', url: 'https://grafana.com' },
+    { name: 'prometheus', alt: 'Prometheus', url: 'https://prometheus.io' },
+    { name: 'gnubash', alt: 'Bash', url: 'https://gnu.org/software/bash' },
+    { name: 'linux', alt: 'Linux', url: 'https://linux.org' },
+    { name: 'macos', alt: 'macOS', url: 'https://apple.com/macos' },
+    { name: 'gradle', alt: 'Gradle', url: 'https://gradle.org' },
+    { name: 'claude', alt: 'Claude Code', url: 'https://claude.com/product/claude-code' },
+    { name: 'opencode', alt: 'Opencode', url: 'https://opencode.ai' },
   ]
 
-  const third = Math.ceil(stacksList.length / 3)
-  const row1 = stacksList.slice(0, third)
-  const row2 = stacksList.slice(third, 2 * third)
-  const row3 = stacksList.slice(2 * third)
+  const row1 = [...languages, ...frontend, ...backend, ...databases]
+  const row2 = aiData
+  const row3 = tools
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -201,7 +308,7 @@ export default function TechStackSlider() {
         direction="left"
         pauseOnHover={hoveredKey !== null || isDesktop}
         className="mb-4 transform rotate-1"
-        innerClassName="gap-2"
+        innerClassName="gap-2 [--duration:87s]"
       >
         {row1.map((stack, index) => (
           <a
@@ -211,7 +318,7 @@ export default function TechStackSlider() {
             rel="noopener noreferrer"
             title={stack.alt}
             aria-label={stack.alt}
-            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-1.5 sm:p-2 shadow-md"
+            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-linear-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-1.5 sm:p-2 shadow-md"
             onMouseEnter={() => setHoveredKey(`row1-${index}`)}
             onMouseLeave={() => setHoveredKey(null)}
           >
@@ -243,7 +350,7 @@ export default function TechStackSlider() {
         reverse={true}
         pauseOnHover={hoveredKey !== null || isDesktop}
         className="mb-4 transform rotate-1"
-        innerClassName="gap-2"
+        innerClassName="gap-2 [--duration:47s]"
       >
         {row2.map((stack, index) => (
           <a
@@ -253,7 +360,7 @@ export default function TechStackSlider() {
             rel="noopener noreferrer"
             title={stack.alt}
             aria-label={stack.alt}
-            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-1.5 sm:p-2 shadow-md"
+            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-linear-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-1.5 sm:p-2 shadow-md"
             onMouseEnter={() => setHoveredKey(`row2-${index}`)}
             onMouseLeave={() => setHoveredKey(null)}
           >
@@ -284,7 +391,7 @@ export default function TechStackSlider() {
         direction="left"
         pauseOnHover={hoveredKey !== null || isDesktop}
         className="mb-4 transform rotate-1"
-        innerClassName="gap-2"
+        innerClassName="gap-2 [--duration:40s]"
       >
         {row3.map((stack, index) => (
           <a
@@ -294,7 +401,7 @@ export default function TechStackSlider() {
             rel="noopener noreferrer"
             title={stack.alt}
             aria-label={stack.alt}
-            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-1.5 sm:p-2 shadow-md"
+            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-linear-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-1.5 sm:p-2 shadow-md"
             onMouseEnter={() => setHoveredKey(`row3-${index}`)}
             onMouseLeave={() => setHoveredKey(null)}
           >

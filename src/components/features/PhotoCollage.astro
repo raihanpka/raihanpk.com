@@ -41,14 +41,14 @@ const marqueeItems = photos.length <= 3
   {/* Mobile Marquee (always active on mobile < sm, and everywhere if > 3 photos) */}
   <div class={`group relative -mx-4 sm:-mx-6 px-4 sm:px-6 overflow-hidden py-2 ${isAlwaysMarquee ? 'block' : 'block sm:hidden'}`}>
     {/* Gradient edge fades */}
-    <div class="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 sm:w-12 bg-gradient-to-r from-background to-transparent" />
-    <div class="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 sm:w-12 bg-gradient-to-l from-background to-transparent" />
+    <div class="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 sm:w-12 bg-linear-to-r from-background to-transparent" />
+    <div class="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 sm:w-12 bg-linear-to-l from-background to-transparent" />
 
     <div class="animate-core-marquee gap-4 sm:gap-5">
       {marqueeItems.map((item) => (
         <figure class="w-72 sm:w-84 shrink-0 flex flex-col overflow-hidden rounded-xl border border-border/80 bg-card/60 p-3 sm:p-3.5 shadow-sm transition-all duration-300 hover:border-foreground/40 hover:-translate-y-1 hover:shadow-md">
           {/* Uniform Aspect Ratio Photo (3:2 auto fit center) */}
-          <div class="relative w-full aspect-[3/2] overflow-hidden rounded-lg bg-secondary/50 border border-border/40">
+          <div class="relative w-full aspect-3/2 overflow-hidden rounded-lg bg-secondary/50 border border-border/40">
             {isRemote(item.src) ? (
               <Image
                 src={item.src}
@@ -69,7 +69,7 @@ const marqueeItems = photos.length <= 3
                 class="h-full w-full object-cover object-center grayscale contrast-110 transition-all duration-500 ease-out hover:grayscale-0"
               />
             )}
-            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-40" />
+            <div class="pointer-events-none absolute inset-0 bg-linear-to-t from-black/25 via-transparent to-transparent opacity-40" />
           </div>
 
           {/* Aesthetic Caption */}
@@ -89,7 +89,7 @@ const marqueeItems = photos.length <= 3
       {photos.map((item) => (
         <figure class="group flex flex-col overflow-hidden rounded-xl border border-border/80 bg-card/60 p-3.5 shadow-sm transition-all duration-300 hover:border-foreground/40 hover:-translate-y-1 hover:shadow-md">
           {/* Uniform Aspect Ratio Photo (3:2 auto fit center) */}
-          <div class="relative w-full aspect-[3/2] overflow-hidden rounded-lg bg-secondary/50 border border-border/40">
+          <div class="relative w-full aspect-3/2 overflow-hidden rounded-lg bg-secondary/50 border border-border/40">
             {isRemote(item.src) ? (
               <Image
                 src={item.src}
@@ -110,7 +110,7 @@ const marqueeItems = photos.length <= 3
                 class="h-full w-full object-cover object-center grayscale contrast-110 transition-all duration-500 ease-out group-hover:grayscale-0 group-hover:scale-105"
               />
             )}
-            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-40 group-hover:opacity-10 transition-opacity duration-300" />
+            <div class="pointer-events-none absolute inset-0 bg-linear-to-t from-black/25 via-transparent to-transparent opacity-40 group-hover:opacity-10 transition-opacity duration-300" />
           </div>
 
           {/* Aesthetic Caption */}

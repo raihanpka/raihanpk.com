@@ -24,7 +24,7 @@ export default function FloatingChatButton() {
         <div className="absolute inset-0 rounded-full border-t border-white/50 dark:border-white/30 pointer-events-none"></div>
         
         {/* Subtle Surface Shine Gradient */}
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/20 to-transparent opacity-60 pointer-events-none"></div>
+        <div className="absolute inset-0 rounded-full bg-linear-to-br from-white/20 to-transparent opacity-60 pointer-events-none"></div>
 
         {/* Main button content - Enlarged Icon */}
         <div className="relative z-10 transition-transform duration-500 group-hover:rotate-12">

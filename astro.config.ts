@@ -2,6 +2,7 @@ import mdx from '@astrojs/mdx'
 import partytown from '@astrojs/partytown'
 import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
+import tailwindcss from '@tailwindcss/vite'
 import vercel from '@astrojs/vercel'
 import sectionize from '@hbsnow/rehype-sectionize'
 import { transformerCopyButton } from '@rehype-pretty/transformers'
@@ -78,6 +79,9 @@ export default defineConfig({
       ],
       remarkPlugins: [remarkToc, remarkMath, remarkEmoji],
     }),
+  },
+  vite: {
+    plugins: [tailwindcss()],
   },
   server: {
     port: 1234,

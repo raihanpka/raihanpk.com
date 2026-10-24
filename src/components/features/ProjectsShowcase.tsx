@@ -1,7 +1,7 @@
 'use client'
 
 import { ArrowUpRight, SlidersHorizontal, Link2, Check, X } from 'lucide-react'
-import { AnimatePresence, motion, useInView } from 'framer-motion'
+import { AnimatePresence, motion, useInView } from 'motion/react'
 import { useState, useRef, useEffect } from 'react'
 import { Badge } from '@/components/ui/Badge'
 import { buttonVariants } from '@/components/ui/Button'
@@ -212,7 +212,7 @@ export function ProjectsShowcase({ projects }: Props) {
 
         {/* Bottom fade overlay */}
         {hasMore && (
-          <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-background via-background/70 to-transparent" />
+          <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-28 bg-linear-to-t from-background via-background/70 to-transparent" />
         )}
       </div>
 
@@ -359,7 +359,7 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
       onMouseLeave={() => setHovered(false)}
     >
       {/* Media: video or image */}
-      <div className="aspect-[16/10] w-full overflow-hidden bg-muted relative">
+      <div className="aspect-16/10 w-full overflow-hidden bg-muted relative">
         {assetSrc && isVideo(assetSrc) ? (
           <video
             ref={videoRef}
@@ -451,7 +451,7 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
               )}
             </div>
             {/* Fade gradient */}
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-background to-transparent" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-linear-to-l from-background to-transparent" />
           </div>
 
           {/* Action buttons */}
@@ -523,7 +523,7 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-background/70 backdrop-blur-2xl p-4 sm:p-4 md:p-8 cursor-pointer"
+      className="fixed inset-0 z-100 flex items-center justify-center bg-background/70 backdrop-blur-2xl p-4 sm:p-4 md:p-8 cursor-pointer"
       onClick={onClose}
     >
       <motion.div

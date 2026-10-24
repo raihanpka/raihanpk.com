@@ -74,7 +74,7 @@ const projectsData = rawProjects.map((p) => ({
     <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       <div role="region" aria-label="Wakatime Section"
         class="lg:col-span-2 flex h-[190px] sm:h-[210px] w-full flex-col items-start whitespace-nowrap rounded-xl border border-border bg-card/60 backdrop-blur-sm shadow-sm p-3 text-xs leading-loose text-foreground">
-        <WakatimeBox omitLanguages={['Markdown', 'JSON']} client:visible />
+        <WakatimeBox omitLanguages={['Markdown', 'JSON']} client:only="react" />
       </div>
 
       <div role="region" aria-label="Spotify Section"

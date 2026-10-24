@@ -1,7 +1,7 @@
 import { MoveUpRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { FaHeadphonesAlt, FaSpotify } from 'react-icons/fa'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import {
   getStaleWhileRevalidate,
   setCachedData,

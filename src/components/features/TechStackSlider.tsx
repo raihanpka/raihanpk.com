@@ -318,7 +318,7 @@ export default function TechStackSlider() {
             rel="noopener noreferrer"
             title={stack.alt}
             aria-label={stack.alt}
-            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-1.5 sm:p-2 shadow-md"
+            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-linear-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-1.5 sm:p-2 shadow-md"
             onMouseEnter={() => setHoveredKey(`row1-${index}`)}
             onMouseLeave={() => setHoveredKey(null)}
           >
@@ -360,7 +360,7 @@ export default function TechStackSlider() {
             rel="noopener noreferrer"
             title={stack.alt}
             aria-label={stack.alt}
-            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-1.5 sm:p-2 shadow-md"
+            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-linear-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-1.5 sm:p-2 shadow-md"
             onMouseEnter={() => setHoveredKey(`row2-${index}`)}
             onMouseLeave={() => setHoveredKey(null)}
           >
@@ -401,7 +401,7 @@ export default function TechStackSlider() {
             rel="noopener noreferrer"
             title={stack.alt}
             aria-label={stack.alt}
-            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-1.5 sm:p-2 shadow-md"
+            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-linear-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-1.5 sm:p-2 shadow-md"
             onMouseEnter={() => setHoveredKey(`row3-${index}`)}
             onMouseLeave={() => setHoveredKey(null)}
           >

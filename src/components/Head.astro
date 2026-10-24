@@ -52,6 +52,7 @@ const { title, description, image = '/static/profile/twitter-card.png' } = Astro
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
 
+<link rel="preload" href="/assets/sea.webp" as="image" type="image/webp" fetchpriority="high" />
 <ClientRouter />
 
 <script is:inline>

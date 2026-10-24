@@ -164,6 +164,12 @@ export function useWaterDither(
       rafId = requestAnimationFrame(loop)
     }
 
+    const scheduleStart = () => {
+      if (disposed) return
+      const idle = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback
+      if (idle) idle(() => start(), { timeout: 1500 })
+      else window.setTimeout(start, 300)
+    }
     const start = () => {
       if (reduceMotion || rafId || document.hidden || !ready) return
       rafId = requestAnimationFrame(loop)
@@ -181,8 +187,13 @@ export function useWaterDither(
       gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false)
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image)
       ready = true
+      // Show the still frame first, so LCP and first paint are not waiting on animation.
       draw(performance.now())
-      start()
+      canvas.style.removeProperty('opacity')
+      if (reduceMotion) return
+      // Start the loop only after the page has loaded and the browser is idle.
+      if (document.readyState === 'complete') scheduleStart()
+      else window.addEventListener('load', scheduleStart, { once: true })
     }
     image.src = src
 

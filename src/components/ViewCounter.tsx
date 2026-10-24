@@ -8,7 +8,12 @@ interface ViewCounterProps {
 
 const ViewCounter = ({ slug }: ViewCounterProps) => {
   const cacheKey = `view_count_${slug}`
-  const [views, setViews] = useState<number | null>(() => getCachedData<number>(cacheKey))
+  // Start empty so the server and first client render match, then read the cache after mount.
+  const [views, setViews] = useState<number | null>(null)
+  useEffect(() => {
+    const cached = getCachedData<number>(cacheKey)
+    if (cached != null) setViews(cached)
+  }, [cacheKey])
   const [error, setError] = useState(false)
   const isFetchingRef = useRef(false)
 

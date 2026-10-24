@@ -189,9 +189,9 @@ export default function TechStackSlider() {
     { name: 'go', alt: 'Go', url: 'https://go.dev' },
     { name: 'openjdk', alt: 'Java', url: 'https://java.com' },
     { name: 'kotlin', alt: 'Kotlin', url: 'https://kotlinlang.org' },
-    { name: 'latex', alt: 'LaTeX', url: 'https://www.latex-project.org' },
     { name: 'scala', alt: 'Scala', url: 'https://scala-lang.org' },
     { name: 'cplusplus', alt: 'C++', url: 'https://isocpp.org' },
+    { name: 'latex', alt: 'LaTeX', url: 'https://www.latex-project.org' },
   ]
   const frontend = [
     { name: 'react', alt: 'React', url: 'https://react.dev' },

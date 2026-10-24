@@ -52,6 +52,7 @@ const { title, description, image = '/static/profile/twitter-card.png' } = Astro
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
 
+<link rel="preload" href="/assets/sea.webp" as="image" type="image/webp" fetchpriority="high" />
 <ClientRouter />
 
 <script is:inline>
@@ -70,12 +71,13 @@ const { title, description, image = '/static/profile/twitter-card.png' } = Astro
     const isDark = getThemePreference() === 'dark'
     document.documentElement.classList[isDark ? 'add' : 'remove']('dark')
 
-    if (typeof localStorage !== 'undefined') {
-      const observer = new MutationObserver(() => {
+    // Attach the observer once. Each page change would otherwise add another one.
+    if (typeof localStorage !== 'undefined' && !window.__themeObserver) {
+      window.__themeObserver = new MutationObserver(() => {
         const isDark = document.documentElement.classList.contains('dark')
         localStorage.setItem('theme', isDark ? 'dark' : 'theme-light')
       })
-      observer.observe(document.documentElement, {
+      window.__themeObserver.observe(document.documentElement, {
         attributes: true,
         attributeFilter: ['class'],
       })

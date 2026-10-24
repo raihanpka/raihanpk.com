@@ -19,24 +19,18 @@ interface Track {
 }
 
 const SpotifyPresence = () => {
-  const [displayData, setDisplayData] = useState<Track | null>(() => {
-    if (typeof window !== 'undefined') {
-      const { data } = getStaleWhileRevalidate<Track>(CACHE_KEYS.LASTFM)
-      return data || null
-    }
-    return null
-  })
-  const [isLoading, setIsLoading] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const { data } = getStaleWhileRevalidate<Track>(CACHE_KEYS.LASTFM)
-      return !data
-    }
-    return true
-  })
+  // Start empty on both server and client, then read the cache after mount.
+  // Reading localStorage in the initializer makes the first client render differ from SSR.
+  const [displayData, setDisplayData] = useState<Track | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     // Stale-While-Revalidate: show cached data instantly, refresh in background
-    const { isStale } = getStaleWhileRevalidate<Track>(CACHE_KEYS.LASTFM)
+    const { data: cached, isStale } = getStaleWhileRevalidate<Track>(CACHE_KEYS.LASTFM)
+    if (cached) {
+      setDisplayData(cached)
+      setIsLoading(false)
+    }
 
     // Fetch fresh data if stale or no cache
     if (isStale) {

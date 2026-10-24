@@ -6,35 +6,30 @@ import { Button } from '@/components/ui/Button'
 export function ModeToggle() {
   const [theme, setThemeState] = React.useState<'light' | 'dark'>('light')
 
+  // The page's <html> class is the source of truth, set before paint by Head.astro.
+  // Read it after mount only, and apply the theme only on click, so a page change
+  // cannot override the choice the visitor saved.
   React.useEffect(() => {
-    const isDarkMode = document.documentElement.classList.contains('dark')
-    setThemeState(isDarkMode ? 'dark' : 'light')
+    setThemeState(document.documentElement.classList.contains('dark') ? 'dark' : 'light')
   }, [])
 
-  React.useEffect(() => {
-    const isDark =
-      theme === 'dark' ||
-      (theme === 'light' &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches &&
-        !document.documentElement.classList.contains('dark'))
-
+  const toggleTheme = () => {
+    const next = theme === 'light' ? 'dark' : 'light'
     document.documentElement.classList.add('disable-transitions')
-    document.documentElement.classList[isDark ? 'add' : 'remove']('dark')
-    window
-      .getComputedStyle(document.documentElement)
-      .getPropertyValue('opacity')
-
+    document.documentElement.classList.toggle('dark', next === 'dark')
+    window.getComputedStyle(document.documentElement).getPropertyValue('opacity')
     requestAnimationFrame(() => {
       document.documentElement.classList.remove('disable-transitions')
     })
-  }, [theme])
+    setThemeState(next)
+  }
 
   return (
     <Button
       variant="outline"
       size="icon"
       title="Toggle theme"
-      onClick={() => setThemeState(theme === 'light' ? 'dark' : 'light')}
+      onClick={toggleTheme}
     >
       <AnimatePresence mode="wait" initial={false}>
         {theme === 'light' ? (

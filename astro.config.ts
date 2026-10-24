@@ -2,7 +2,6 @@ import mdx from '@astrojs/mdx'
 import partytown from '@astrojs/partytown'
 import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
-import tailwind from '@astrojs/tailwind'
 import vercel from '@astrojs/vercel'
 import sectionize from '@hbsnow/rehype-sectionize'
 import { transformerCopyButton } from '@rehype-pretty/transformers'
@@ -36,9 +35,6 @@ export default defineConfig({
     },
   }),
   integrations: [
-    tailwind({
-      applyBaseStyles: false,
-    }),
     sitemap(),
     mdx(),
     react(),
@@ -49,11 +45,6 @@ export default defineConfig({
       },
     }),
   ],
-  vite: {
-    css: {
-      postcss: {}
-    }
-  },
   markdown: {
     syntaxHighlight: false,
     processor: unified({

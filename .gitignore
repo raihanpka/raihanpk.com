@@ -39,3 +39,6 @@ knowledge/*
 !knowledge/.gitkeep
 public/static/memories/
 
+
+# prisma generated client
+src/generated/

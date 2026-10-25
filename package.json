@@ -29,7 +29,8 @@
     "astro": "astro",
     "check": "astro sync && tsc --noEmit",
     "index-knowledge": "bun run scripts/index-knowledge.ts",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "check:tokens": "bun run scripts/check-tokens.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^4.0.104",

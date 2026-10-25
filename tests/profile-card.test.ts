@@ -33,7 +33,7 @@ describe('profile card', () => {
   })
 
   it('shows the role as AI Engineer', async () => {
-    expect(await read('src/pages/index.astro')).toContain('Data Science & AI Engineer @ Zurich Insurance')
+    expect(await read('src/pages/index.astro')).toContain('AI Engineer, Final Year CS @ IPB')
   })
 
   it('uses a camera icon for the photo gallery link', async () => {

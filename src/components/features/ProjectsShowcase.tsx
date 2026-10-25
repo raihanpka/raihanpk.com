@@ -155,7 +155,7 @@ export function ProjectsShowcase({ projects }: Props) {
     <section className="flex flex-col gap-y-5">
       {/* Section heading */}
       <div className="flex items-center gap-4">
-        <h2 className="shrink-0 font-title text-display-sm">
+        <h2 className="shrink-0 font-title text-2xl max-sm:leading-tight sm:text-display-sm">
           Projects
         </h2>
       </div>

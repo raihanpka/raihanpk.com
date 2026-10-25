@@ -1,5 +1,11 @@
 ---
 import { Icon } from 'astro-icon/components'
+
+// float: the round mobile button that sits over the page. Without it, the button lives in the footer (desktop).
+interface Props {
+  float?: boolean
+}
+const { float = false } = Astro.props
 ---
 
 <button
@@ -7,7 +13,7 @@ import { Icon } from 'astro-icon/components'
   data-back-to-top
   data-visible="false"
   aria-label="Back to top"
-  class="back-to-top group relative h-11 overflow-hidden rounded-md border border-border bg-background/80 font-mono text-xs text-foreground shadow-1 hover:bg-secondary"
+  class:list={['back-to-top group relative h-11 overflow-hidden rounded-md border border-border bg-background/80 font-mono text-xs text-foreground shadow-1 hover:bg-secondary', float && 'back-to-top--float']}
 >
   <Icon name="lucide:arrow-up" class="btt-icon absolute left-1/2 top-1/2 size-4 -translate-x-1/2 -translate-y-1/2" />
   <span class="btt-label absolute inset-0 grid place-items-center whitespace-nowrap" aria-hidden="true">Back to top</span>
@@ -39,6 +45,28 @@ import { Icon } from 'astro-icon/components'
   .btt-label { opacity: 0; transform: translateY(8px); }
   .back-to-top:hover .btt-icon, .back-to-top:focus-visible .btt-icon { opacity: 0; transform: translate(-50%, -150%); }
   .back-to-top:hover .btt-label, .back-to-top:focus-visible .btt-label { opacity: 1; transform: none; }
+  /* Two variants. The footer one shows from sm up. The float one shows below sm: round, icon only,
+     centered, and fixed to the screen. It is rendered outside the footer panel on purpose, because the
+     panel's backdrop-filter would make a fixed child follow the panel instead of the screen. */
+  @media (min-width: 640px) {
+    .back-to-top--float { display: none; }
+  }
+  @media (max-width: 639px) {
+    .back-to-top:not(.back-to-top--float) { display: none; }
+    .back-to-top--float {
+      position: fixed;
+      left: calc(50% - 1.375rem);
+      bottom: calc(1rem + env(safe-area-inset-bottom));
+      z-index: 40;
+      width: 2.75rem;
+      border-radius: 9999px;
+      background-color: hsl(var(--background) / 0.9);
+      backdrop-filter: blur(8px);
+    }
+    .back-to-top--float:hover, .back-to-top--float:focus-visible { width: 2.75rem; }
+    .back-to-top--float .btt-label { display: none; }
+    .back-to-top--float:hover .btt-icon, .back-to-top--float:focus-visible .btt-icon { opacity: 1; transform: translate(-50%, -50%); }
+  }
   @media (prefers-reduced-motion: reduce) {
     .back-to-top, .back-to-top[data-visible='true'], .btt-icon, .btt-label { transition: none; }
   }

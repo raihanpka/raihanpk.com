@@ -103,7 +103,7 @@ export default function ProfileFlipCard({ name, role, pronunciation, avatar, lin
   return (
     <div
       ref={sceneRef}
-      className="flip-scene relative h-96 sm:h-72"
+      className="flip-scene relative h-80 sm:h-72"
       data-flipped={flipped}
       onPointerMove={onPointerMove}
       onPointerLeave={onPointerLeave}
@@ -115,7 +115,7 @@ export default function ProfileFlipCard({ name, role, pronunciation, avatar, lin
         <div className="flip-inner">
           {/* Front */}
           <section
-            className="flip-face flip-face-front metal rounded-xl border-1 border-border p-6 flex flex-col"
+            className="flip-face flip-face-front metal rounded-xl border-1 border-border p-4 sm:p-6 flex flex-col"
             aria-label={`${name}, profile`}
             inert={flipped}
           >
@@ -136,8 +136,8 @@ export default function ProfileFlipCard({ name, role, pronunciation, avatar, lin
                 className="size-16 sm:size-20 shrink-0 rounded-lg object-cover grayscale contrast-125 bg-secondary/40"
               />
               <div className="min-w-0 flex flex-col justify-between">
-                <h2 className="font-title text-display-sm text-foreground">{name}</h2>
-                <p className="text-base font-medium text-foreground">{role}</p>
+                <h2 className="font-title text-2xl max-sm:leading-tight sm:text-display-sm text-foreground">{name}</h2>
+                <p className="text-sm font-medium text-foreground sm:text-base">{role}</p>
                 {pronunciation && <p className="font-mono text-xs text-muted-foreground">{pronunciation}</p>}
               </div>
             </div>
@@ -186,7 +186,7 @@ export default function ProfileFlipCard({ name, role, pronunciation, avatar, lin
 
           {/* Back: the way into the chatbot */}
           <section
-            className="flip-face flip-face-back metal rounded-xl border-1 border-border p-6 flex flex-col justify-between"
+            className="flip-face flip-face-back metal rounded-xl border-1 border-border p-4 sm:p-6 flex flex-col justify-between"
             aria-label="Ask my assistant"
             inert={!flipped}
             onClick={onZoneClick}
@@ -196,7 +196,7 @@ export default function ProfileFlipCard({ name, role, pronunciation, avatar, lin
                 <MessageCircle className="size-4" aria-hidden="true" />
                 Assistant
               </p>
-              <h2 className="mt-3 font-title text-display-sm text-foreground">Ask me anything.</h2>
+              <h2 className="mt-3 font-title text-2xl max-sm:leading-tight sm:text-display-sm text-foreground">Ask me anything.</h2>
               <p className="mt-2 max-w-sm text-sm text-muted-foreground">
                 A chatbot that has read my projects, stack, and write-ups. Ask about the work, not just the résumé.
               </p>

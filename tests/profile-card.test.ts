@@ -59,7 +59,7 @@ describe('profile card', () => {
     const card = await read('src/components/profile/ProfileFlipCard.tsx')
     const img = card.match(/<img[\s\S]*?\/>/)?.[0] ?? ''
     expect(img).toContain('size-16 sm:size-20')
-    expect(card).toMatch(/text-base font-medium text-foreground">\{role\}/)
+    expect(card).toMatch(/text-sm font-medium text-foreground sm:text-base">\{role\}/)
     expect(card).toContain('my-3 h-px bg-border')
   })
 })

@@ -181,7 +181,7 @@ export default function ProfileFlipCard({ name, role, pronunciation, avatar, lin
             >
               Ask my assistant
             </button>
-            <BabysBreathField scene="dandelion" cell={2} className="absolute inset-x-0 bottom-0 h-1/4 w-full text-foreground/55 sm:h-28" />
+            <BabysBreathField scene="dandelion" cell={2} className="absolute inset-x-0 bottom-0 h-1/4 w-full text-foreground/55 sm:h-24" />
           </section>
 
           {/* Back: the way into the chatbot */}

@@ -43,8 +43,8 @@ export interface Head {
  * keeps its shape at any width. The others are the same plant shrunk toward the ground.
  */
 export function headGeometry(cols: number, rows: number, p = 0): Head {
-  const r0 = Math.min(rows * 0.34, cols * 0.14)
-  const cy0 = r0 + rows * 0.1
+  const r0 = Math.min(rows * 0.3, cols * 0.12)
+  const cy0 = r0 + rows * 0.05
   const { x, s } = PLANTS[p]
   const ground = rows - 1
   return { cx: Math.max(r0 + 2, cols * x), cy: ground - (ground - cy0) * s, r: r0 * s }
@@ -168,7 +168,7 @@ function stem(buf: Float32Array, cols: number, rows: number, h: Head, t: number,
 /** One flying seed: a thin tail, and a small fan of bristles at its top end. */
 function seed(buf: Float32Array, cols: number, rows: number, s: Seed, i: number) {
   // Drawn for a 48 row band and scaled for finer grids.
-  const k = (rows / 48) * s.scale
+  const k = (rows / 48) * s.scale * 0.85
   const dir = { x: Math.sin(s.tilt), y: -Math.cos(s.tilt) }
   const len = (4.5 + hash(i, 6.1) * 3) * k
   line(buf, cols, rows, s.x - dir.x * len, s.y - dir.y * len, s.x, s.y, s.alpha * 0.8)
@@ -180,9 +180,25 @@ function seed(buf: Float32Array, cols: number, rows: number, s: Seed, i: number)
   }
 }
 
+/** Short blades of grass along the ground. They sway on the same wind, so the bottom is never still. */
+function grass(buf: Float32Array, cols: number, rows: number, t: number) {
+  const k = rows / 48
+  for (let x = 1; x < cols; x += 2 + Math.floor(hash(x, 2.2) * 2)) {
+    const tall = (2.5 + hash(x, 9.1) * 4.5) * k
+    const sway = (Math.sin(t * 1.3 - x * 0.07) * 0.5 + 0.7) * tall * 0.35
+    const bow = (hash(x, 3.7) - 0.5) * tall * 0.3
+    const steps = Math.ceil(tall * 2)
+    for (let n = 0; n <= steps; n++) {
+      const u = n / steps
+      plot(buf, cols, rows, x + (sway + bow) * u * u, rows - 1 - tall * u, 0.5 - 0.15 * u)
+    }
+  }
+}
+
 /** One frame: ground, then leaves and stem, then the head, then the seeds in the air. Values are 0..1 per cell. */
 export function compose(cols: number, rows: number, t: number, ground?: Float32Array): Float32Array {
   const buf = ground ? Float32Array.from(ground) : groundField(cols, rows)
+  grass(buf, cols, rows, t)
   PLANTS.forEach((plant, p) => {
     const h = headGeometry(cols, rows, p)
     stem(buf, cols, rows, h, t, plant.s)

@@ -57,7 +57,8 @@ export function useBabysBreath(canvasRef: RefObject<HTMLCanvasElement | null>, {
     }
 
     const resize = () => {
-      const rect = canvas.getBoundingClientRect()
+      // Layout size, not getBoundingClientRect: the rect shrinks while the card is tilted or mid-transition.
+      const rect = { width: canvas.clientWidth, height: canvas.clientHeight }
       canvas.width = Math.max(1, Math.round(rect.width * dpr))
       canvas.height = Math.max(1, Math.round(rect.height * dpr))
       if (scratch) {

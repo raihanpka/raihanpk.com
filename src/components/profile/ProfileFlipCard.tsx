@@ -115,7 +115,7 @@ export default function ProfileFlipCard({ name, role, pronunciation, avatar, lin
         <div className="flip-inner">
           {/* Front */}
           <section
-            className="flip-face flip-face-front metal rounded-xl border border-border p-6 flex flex-col"
+            className="flip-face flip-face-front metal rounded-xl border-1 border-border p-6 flex flex-col"
             aria-label={`${name}, profile`}
             inert={flipped}
           >
@@ -186,7 +186,7 @@ export default function ProfileFlipCard({ name, role, pronunciation, avatar, lin
 
           {/* Back: the way into the chatbot */}
           <section
-            className="flip-face flip-face-back metal rounded-xl border border-border p-6 flex flex-col justify-between"
+            className="flip-face flip-face-back metal rounded-xl border-1 border-border p-6 flex flex-col justify-between"
             aria-label="Ask my assistant"
             inert={!flipped}
             onClick={onZoneClick}

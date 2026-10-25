@@ -27,7 +27,7 @@ Additional features developed from built-in features of the public template [Ast
 - **Wakatime Analytics**: Weekly coding time breakdown across languages directly from the [Wakatime API](https://wakatime.com) with dynamic dark/light mode icons.
 - **Projects Showcase**: Interactive portfolio grid featuring smooth media video previews, modal dialogs, and responsive category filtering.
 - **Tech Stack Slider**: 3D-sculpted marquee slider displaying programming languages, frameworks, and cloud infrastructure tools.
-- **Blog & View Counter**: MDX content collections with live view counter persistence backed by [PostgreSQL](https://postgresql.org) and [Prisma Accelerate](https://www.prisma.io/accelerate).
+- **Blog & View Counter**: MDX content collections with live view counter persistence backed by [PostgreSQL](https://postgresql.org).
 - **GitHub Contributions**: Contribution graph that adapts its number of weeks to the card width, with a keyboard-friendly tooltip. Data is loaded at build time from the GitHub GraphQL API when `GITHUB_TOKEN` is set, with a public-page fallback.
 - **Profile Card**: Flip card with a dithered baby's breath band and a chat entry on the back.
 - **About Page**: Bento cards and a hover scene built from the logo. All the copy for Home and About lives as fields in `src/content/authors/raihanpk.md`.
@@ -60,7 +60,7 @@ Environment variables go in `.env`. Names only, never commit values: `DATABASE_U
 
 - **Framework & Core**: [Astro](https://astro.build), [React](https://react.dev), [TypeScript](https://www.typescriptlang.org)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com), [tw-animate-css](https://github.com/Wombosvideo/tw-animate-css)
-- **Database & ORM**: [PostgreSQL](https://postgresql.org), [Prisma ORM](https://prisma.io) with [Prisma Accelerate](https://www.prisma.io/accelerate)
+- **Database & ORM**: [PostgreSQL](https://postgresql.org), [Prisma ORM](https://prisma.io)
 - **Vector & AI**: [Pinecone](https://pinecone.io), [Vercel AI SDK](https://sdk.vercel.ai), [Google Generative AI](https://ai.google.dev), [OpenAI](https://openai.com)
 - **UI Components & Animation**: [Radix UI](https://www.radix-ui.com), [Lucide Icons](https://lucide.dev), [React Icons](https://react-icons.github.io/react-icons), [Motion](https://motion.dev), [Recharts](https://recharts.org), [@devnomic/marquee](https://github.com/devnomic/marquee)
 - **Deployment**: [Vercel](https://vercel.com)

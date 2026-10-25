@@ -78,3 +78,8 @@ Never use raw hex in components.
 3. Titles outside blog use `font-title`, never `font-mono`.
 4. Run `bun run check:tokens` and `bun test` before committing.
 5. One-off exception: add `token-ok` on the same line with a reason.
+
+## Motion and data
+
+- First visit of a session: `html[data-reveal]` is set in `Head.astro`. `.reveal-stack` children fade up with a 70ms stagger (opacity and transform only, so no layout shift). Reduced motion disables it.
+- GitHub contribution graph (`GithubGraph.tsx`) reads `loadContributions` at build time. Set `GITHUB_TOKEN` (read-only, public data) in Vercel for the GraphQL path; without it the public contributions page is used, and without both the card shows an empty state.

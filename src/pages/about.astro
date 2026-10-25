@@ -40,16 +40,16 @@ const author = await getEntry('authors', 'raihanpk')
         <h2 class="font-title text-display-sm text-foreground">Hello, I'm Raihan.</h2>
         <p class="text-base text-muted-foreground">
           My name is Raihan Putra Kirana, but my friends often called me "Peka".
-          I am currently a final year student majoring in Computer Science at{' '}
+          I am currently a <strong class="font-semibold text-foreground">final year student majoring in Computer Science</strong> at{' '}
           <Link href="https://ipb.ac.id" class="text-foreground" external underline>IPB University</Link>.
-          I'd say I'm a person who enjoys bridging the gap between robust software systems and real-world business impact.
+          I'd say I'm a person who enjoys <strong class="font-semibold text-foreground">bridging the gap between robust software systems and real-world business impact</strong>.
         </p>
       </article>
 
       <article class="about-card metal flex flex-col justify-between gap-6 p-6 lg:col-span-5">
-        <p class="font-mono text-xs uppercase tracking-widest text-muted-foreground">Friends call me</p>
-        <p class="font-title text-display text-foreground">Peka</p>
-        <p class="font-mono text-xs text-muted-foreground">/ˈraɪ.han pe'ka/ · Computer Science, IPB University</p>
+        <p class="font-mono text-xs uppercase tracking-widest text-muted-foreground">My friends call me</p>
+        <p class="font-title text-display text-foreground">"Peka"</p>
+        <p class="font-mono text-xs text-muted-foreground">/pe'ka/ · Computer Science, IPB University</p>
       </article>
 
       <article class="about-card flex flex-col gap-4 p-6 lg:col-span-12">
@@ -57,18 +57,18 @@ const author = await getEntry('authors', 'raihanpk')
         <p class="font-title text-display-sm text-foreground">
           Every project is treated like production software.
         </p>
-        <p class="max-w-3xl text-base text-muted-foreground">
-          I treat software architecture with production-grade seriousness, even for small-scale projects or university assignments.
-          I focus on building AI-native applications with a strong obsession for modular design, clean codebases, and scalable systems.
-          This mindset of treating every project like production software has led me and my teams to multiple national hackathon podiums
-          and top finalist positions. I thrive in high-pressure environments where technical idealism meets rapid execution,
+        <p class="text-base text-muted-foreground">
+          I treat software architecture with <strong class="font-semibold text-foreground">production-grade seriousness</strong>, even for small-scale projects or university assignments.
+          I focus on building <strong class="font-semibold text-foreground">AI-native applications</strong> with a strong obsession for <strong class="font-semibold text-foreground">modular design, clean codebases, and scalable systems</strong>.
+          This mindset of treating every project like production software has led me and my teams to multiple <strong class="font-semibold text-foreground">national hackathon podiums</strong>{' '}
+          and <strong class="font-semibold text-foreground">top finalist positions</strong>. I thrive in high-pressure environments where technical idealism meets <strong class="font-semibold text-foreground">rapid execution</strong>,
           turning complex system challenges into functional, intelligent products.
         </p>
       </article>
 
       {[
-        { icon: 'lucide:boxes', title: 'Modular by default', text: 'Clean codebases, clear boundaries, and systems that scale, even for small projects.' },
-        { icon: 'lucide:trophy', title: 'National finalists and some podiums', text: 'A national finalist since my very first competition, with a podium along the way.' },
+        { icon: 'lucide:boxes', title: 'Modular by default', text: 'Clean codebases, clear boundaries, and systems that scale, even for some projects in college.' },
+        { icon: 'lucide:trophy', title: 'Love hackathons', text: 'With a passion for hackathons since my very first competition, with a finalist and podium along the way.' },
         { icon: 'lucide:zap', title: 'Rapid execution', text: 'Technical idealism meets speed, turning complex challenges into intelligent products.' },
       ].map((m, i) => (
         <article class="about-card flex items-start gap-4 p-4 lg:col-span-4" style={`--i:${i}`}>

@@ -38,8 +38,10 @@ const { title, description, image, fullTitle } = Astro.props
     </div>
     <SpeedInsights />
     <script>
+      import { initLinkTooltip } from '@/lib/link-tooltip'
       import { initUiSound } from '@/lib/ui-sound'
       initUiSound()
+      initLinkTooltip()
     </script>
   </body>
 </html>

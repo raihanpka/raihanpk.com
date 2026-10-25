@@ -43,8 +43,9 @@ export const GET: APIRoute = async ({ url }) => {
         });
     } catch (error) {
         console.error('API Error:', error);
-        return new Response(JSON.stringify({ slug: '', count: 0 }), { 
-            status: 200,
+        // A database failure must not look like "0 views", so report it as an error.
+        return new Response(JSON.stringify({ error: 'Unavailable' }), { 
+            status: 503,
             headers: { 
                 'Content-Type': 'application/json',
                 'Cache-Control': 'no-store, max-age=0'

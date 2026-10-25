@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { Eye } from 'lucide-react'
 import { getCachedData, setCachedData, CACHE_TTL } from '@/lib/cache'
+import { formatViews } from '@/lib/views'
 
 interface ViewCounterProps {
   slug: string
@@ -55,7 +56,6 @@ const ViewCounter = ({ slug }: ViewCounterProps) => {
     } catch (err) {
       console.error('Error loading view count:', err)
       setError(true)
-      setViews((prev) => prev ?? 0)
     } finally {
       isFetchingRef.current = false
     }
@@ -95,7 +95,7 @@ const ViewCounter = ({ slug }: ViewCounterProps) => {
 
   return (
     <span className="flex items-center gap-1 text-muted-foreground">
-      <Eye className="h-4 w-4" /> {views ?? 0} views
+      <Eye className="h-4 w-4" /> {formatViews(views, error)}
     </span>
   )
 }

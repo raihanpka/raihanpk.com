@@ -66,6 +66,7 @@ const authors = defineCollection({
         buildLabel: z.string(),
         buildTitle: z.string(),
         buildBody: z.string(),
+        buildCompetitions: z.string().optional(),
         highlights: z.array(z.object({ icon: z.string(), title: z.string(), text: z.string() })),
       })
       .optional(),

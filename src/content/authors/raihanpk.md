@@ -19,7 +19,7 @@ home:
   headline: >-
     Delivering end-to-end systems and robust AI/ML pipelines through solutions that are product-minded.
   tagline: >-
-    Software solutions and automation, built to scale. I lead teams from the first prototype to the production release.
+    I work close to the problem, combining software engineering with AI: agentic platforms, scalable backends, and predictive models built around real client cases.
   galleryLabel: 'photogallery.raihanpk.com'
   galleryUrl: 'https://photogallery.raihanpk.com'
 about:
@@ -37,7 +37,9 @@ about:
   buildLabel: '02 · How I build'
   buildTitle: 'Every project is treated like production software.'
   buildBody: >-
-    I work close to the problem, combining software engineering with AI: **agentic platforms**, **scalable backends**, and **predictive models** built around real client cases. My team won **1st Place in the Industry Sector** and **Overall Winner in the General Category** at AI Open Innovation Challenge 2026, and placed **Top 5** with [SIGAP](https://github.com/raihanpka/sigap) at BKN's ASN Digital AI Hackathon and **Top 10** with [SATRIA](https://github.com/raihanpka/satria-ml) at Astranauts 2025. Every project, big or small, gets built like production software.
+    **SWE & AI systems.** I work close to the problem, combining software engineering with AI: agentic platforms, scalable backends, and predictive models built around real client cases.
+  buildCompetitions: >-
+    **Latest competitions.** 1st Place in the Industry Sector and Overall Winner in the General Category at AI Open Innovation Challenge 2026 (Blibli's logistics case). Top 5 with [SIGAP](https://github.com/raihanpka/sigap) at BKN's ASN Digital AI Hackathon 2025, Top 10 with [SATRIA](https://github.com/raihanpka/satria-ml) at Astranauts by Astra International 2025.
   highlights:
     - icon: 'lucide:boxes'
       title: 'Modular by default'

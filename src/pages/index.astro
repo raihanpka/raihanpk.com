@@ -16,6 +16,7 @@ import Layout from '@/layouts/Layout.astro'
 import { getCollection, getEntry } from 'astro:content'
 
 const author = await getEntry('authors', 'raihanpk')
+const home = author?.data.home
 
 // Fetched once at build time. A GITHUB_TOKEN env var makes it use the GraphQL API.
 const contributions = await loadContributions({
@@ -54,21 +55,21 @@ const projectsData = rawProjects.map((p) => ({
       <ProfileFlipCard
         client:load
         name={author?.data.name ?? 'Raihan Putra Kirana'}
-        role="AI Engineer, Final Year CS @ IPB"
-        pronunciation="/ˈraɪ.han.peˈka/"
+        role={home?.role ?? ''}
+        pronunciation={home?.pronunciation}
         avatar={(author?.data.avatar ?? '/static/profile/avatar.png').replace('size=96', 'size=192')}
         links={[
           { kind: 'mail', label: author?.data.mail ?? 'me@raihanpk.com', href: `mailto:${author?.data.mail ?? 'me@raihanpk.com'}` },
           { kind: 'linkedin', label: 'raihanpk', href: author?.data.linkedin ?? 'https://linkedin.com/in/raihanpk' },
           { kind: 'github', label: 'raihanpka', href: author?.data.github ?? 'https://github.com/raihanpka' },
-          { kind: 'photo', label: 'photogallery.raihanpk.com', href: 'https://photogallery.raihanpk.com' },
+          { kind: 'photo', label: home?.galleryLabel ?? '', href: home?.galleryUrl ?? '/' },
         ]}
       />
       <div class="flex flex-col gap-4 border-l-2 border-border pl-4 sm:pl-6">
-        <p class="font-mono text-xs uppercase tracking-widest text-muted-foreground">SWE &amp; AI systems</p>
-        <h1 class="font-title text-display-sm text-foreground">Delivering end-to-end systems from scalable AI/ML pipelines while remaining deeply product-minded.</h1>
+        <p class="font-mono text-xs uppercase tracking-widest text-muted-foreground">{home?.eyebrow}</p>
+        <h1 class="font-title text-display-sm text-foreground">{home?.headline}</h1>
         <p class="max-w-md text-sm text-muted-foreground">
-          Software solutions and automation, built to scale. I lead teams from the first prototype to the production release.
+          {home?.tagline}
         </p>
         <div class="shrink-0">
           <ResumeButton resumeUrl={author?.data.resume} />

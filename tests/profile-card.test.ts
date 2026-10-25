@@ -28,12 +28,12 @@ describe('profile card', () => {
   })
 
   it('links the gallery instead of the main site', async () => {
-    const home = await read('src/pages/index.astro')
+    const home = await read('src/content/authors/raihanpk.md')
     expect(home).toContain('photogallery.raihanpk.com')
   })
 
   it('shows the role as AI Engineer', async () => {
-    expect(await read('src/pages/index.astro')).toContain('AI Engineer, Final Year CS @ IPB')
+    expect(await read('src/content/authors/raihanpk.md')).toContain('AI Engineer, Final Year CS @ IPB')
   })
 
   it('uses a camera icon for the photo gallery link', async () => {

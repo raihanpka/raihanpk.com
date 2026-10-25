@@ -3,13 +3,15 @@ import EditorialProfileCard from '@/components/EditorialProfileCard.astro'
 import PhotoCollage from '@/components/features/PhotoCollage.astro'
 import Breadcrumbs from '@/components/Breadcrumbs.astro'
 import Container from '@/components/Container.astro'
-import Link from '@/components/Link.astro'
+import AboutScene from '@/components/features/AboutScene.astro'
+import { renderInline } from '@/lib/inline-markup'
 import { Icon } from 'astro-icon/components'
 import { SITE } from '@/consts'
 import Layout from '@/layouts/Layout.astro'
 import { getEntry } from 'astro:content'
 
 const author = await getEntry('authors', 'raihanpk')
+const about = author?.data.about
 ---
 
 <Layout title="About" description={SITE.DESCRIPTION}>
@@ -34,52 +36,33 @@ const author = await getEntry('authors', 'raihanpk')
       />
     )}
 
-    <section class="reveal-stack grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-12" aria-label="About me">
-      <article class="about-card flex flex-col gap-4 p-6 lg:col-span-7">
-        <p class="font-mono text-xs uppercase tracking-widest text-muted-foreground">01 · Who</p>
-        <h2 class="font-title text-display-sm text-foreground">Hello, I'm Raihan.</h2>
-        <p class="text-base text-muted-foreground">
-          My name is Raihan Putra Kirana, but my friends often called me "Peka".
-          I am currently a <strong class="font-semibold text-foreground">final year student majoring in Computer Science</strong> at{' '}
-          <Link href="https://ipb.ac.id" class="text-foreground" external underline>IPB University</Link>.
-          I'd say I'm a person who enjoys <strong class="font-semibold text-foreground">bridging the gap between robust software systems and real-world business impact</strong>.
-        </p>
-      </article>
-
-      <article class="about-card metal flex flex-col justify-between gap-6 p-6 lg:col-span-5">
-        <p class="font-mono text-xs uppercase tracking-widest text-muted-foreground">My friends call me</p>
-        <p class="font-title text-display text-foreground">"Peka"</p>
-        <p class="font-mono text-xs text-muted-foreground">/pe'ka/ · Computer Science, IPB University</p>
-      </article>
-
-      <article class="about-card flex flex-col gap-4 p-6 lg:col-span-12">
-        <p class="font-mono text-xs uppercase tracking-widest text-muted-foreground">02 · How I build</p>
-        <p class="font-title text-display-sm text-foreground">
-          Every project is treated like production software.
-        </p>
-        <p class="text-base text-muted-foreground">
-          I treat software architecture with <strong class="font-semibold text-foreground">production-grade seriousness</strong>, even for small-scale projects or university assignments.
-          I focus on building <strong class="font-semibold text-foreground">AI-native applications</strong> with a strong obsession for <strong class="font-semibold text-foreground">modular design, clean codebases, and scalable systems</strong>.
-          This mindset of treating every project like production software has led me and my teams to multiple <strong class="font-semibold text-foreground">national hackathon podiums</strong>{' '}
-          and <strong class="font-semibold text-foreground">top finalist positions</strong>. I thrive in high-pressure environments where technical idealism meets <strong class="font-semibold text-foreground">rapid execution</strong>,
-          turning complex system challenges into functional, intelligent products.
-        </p>
-      </article>
-
-      {[
-        { icon: 'lucide:boxes', title: 'Modular by default', text: 'Clean codebases, clear boundaries, and systems that scale, even for some projects in college.' },
-        { icon: 'lucide:trophy', title: 'Love hackathons', text: 'With a passion for hackathons since my very first competition, with a finalist and podium along the way.' },
-        { icon: 'lucide:zap', title: 'Rapid execution', text: 'Technical idealism meets speed, turning complex challenges into intelligent products.' },
-      ].map((m, i) => (
-        <article class="about-card flex items-start gap-4 p-4 lg:col-span-4" style={`--i:${i}`}>
-          <span class="orb" aria-hidden="true"><Icon name={m.icon} class="size-6" /></span>
-          <div class="flex flex-col gap-1">
-            <h3 class="text-lg font-bold leading-tight text-primary/80">{m.title}</h3>
-            <p class="text-sm text-muted-foreground">{m.text}</p>
-          </div>
+    {about && (
+      <section class="reveal-stack grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-12" aria-label="About me">
+        <article class="about-card flex flex-col gap-4 p-6 lg:col-span-7">
+          <p class="font-mono text-xs uppercase tracking-widest text-muted-foreground">{about.whoLabel}</p>
+          <h2 class="font-title text-display-sm text-foreground">{about.greeting}</h2>
+          <p class="text-base text-muted-foreground" set:html={renderInline(about.intro)} />
         </article>
-      ))}
-    </section>
+
+        <AboutScene class="lg:col-span-5" label={about.sceneLabel} nickname={about.nickname} bubbles={about.bubbles} />
+
+        <article class="about-card flex flex-col gap-4 p-6 lg:col-span-12">
+          <p class="font-mono text-xs uppercase tracking-widest text-muted-foreground">{about.buildLabel}</p>
+          <p class="font-title text-display-sm text-foreground">{about.buildTitle}</p>
+          <p class="text-base text-muted-foreground" set:html={renderInline(about.buildBody)} />
+        </article>
+
+        {about.highlights.map((m, i) => (
+          <article class="about-card flex items-start gap-4 p-4 lg:col-span-4" style={`--i:${i}`}>
+            <span class="orb" aria-hidden="true"><Icon name={m.icon} class="size-6" /></span>
+            <div class="flex flex-col gap-1">
+              <h3 class="text-lg font-bold leading-tight text-primary/80">{m.title}</h3>
+              <p class="text-sm text-muted-foreground">{m.text}</p>
+            </div>
+          </article>
+        ))}
+      </section>
+    )}
 
     <PhotoCollage />
   </Container>

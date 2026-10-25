@@ -44,6 +44,31 @@ const authors = defineCollection({
     linkedin: z.url().optional(),
     instagram: z.url().optional(),
     discord: z.url().optional(),
+    home: z
+      .object({
+        role: z.string(),
+        pronunciation: z.string().optional(),
+        eyebrow: z.string(),
+        headline: z.string(),
+        tagline: z.string(),
+        galleryLabel: z.string(),
+        galleryUrl: z.url(),
+      })
+      .optional(),
+    about: z
+      .object({
+        whoLabel: z.string(),
+        greeting: z.string(),
+        intro: z.string(),
+        sceneLabel: z.string(),
+        nickname: z.string(),
+        bubbles: z.array(z.string()),
+        buildLabel: z.string(),
+        buildTitle: z.string(),
+        buildBody: z.string(),
+        highlights: z.array(z.object({ icon: z.string(), title: z.string(), text: z.string() })),
+      })
+      .optional(),
   }),
 })
 

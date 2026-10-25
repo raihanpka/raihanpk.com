@@ -118,7 +118,7 @@ export function monthLabels(weeks: Week[]): { name: string; col: number }[] {
 interface LoadOptions {
   user: string
   token?: string
-  fetchImpl?: typeof fetch
+  fetchImpl?: (input: string | URL | Request, init?: RequestInit) => Promise<Response>
 }
 
 const QUERY = `query($login: String!) { user(login: $login) { contributionsCollection { contributionCalendar { weeks { contributionDays { date contributionCount } } } } } }`
@@ -129,7 +129,10 @@ const result = (days: Day[], source: Contributions['source']): Contributions => 
   source,
 })
 
-export async function loadContributions({ user, token, fetchImpl = fetch }: LoadOptions): Promise<Contributions> {
+/** A slow or unreachable GitHub must not hold up rendering, so every request gives up after 5s. */
+const fetchWithTimeout = (input: string | URL | Request, init?: RequestInit): Promise<Response> => fetch(input, { ...init, signal: AbortSignal.timeout(5000) })
+
+export async function loadContributions({ user, token, fetchImpl = fetchWithTimeout }: LoadOptions): Promise<Contributions> {
   if (token) {
     try {
       const res = await fetchImpl('https://api.github.com/graphql', {

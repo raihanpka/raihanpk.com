@@ -18,7 +18,7 @@
   text-decoration: none;
   cursor: pointer;
   border: 1px solid hsl(var(--border));
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .obsidian-arrow-fill-btn:hover {
@@ -43,9 +43,9 @@
   z-index: 2;
   background-color: var(--btn-fill-bg, hsl(var(--primary)));
   color: var(--btn-fill-text, hsl(var(--primary-foreground)));
-  transition: clip-path 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
-    background-color 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
-    color 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+  transition: clip-path 0.26s cubic-bezier(0.785, 0.135, 0.15, 0.86),
+    background-color 0.26s cubic-bezier(0.785, 0.135, 0.15, 0.86),
+    color 0.26s cubic-bezier(0.785, 0.135, 0.15, 0.86);
 }
 
 .obsidian-arrow-fill-btn__circle-text {
@@ -68,7 +68,7 @@
 }
 
 .obsidian-arrow-fill-btn__path {
-  transition: transform 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+  transition: transform 0.26s cubic-bezier(0.785, 0.135, 0.15, 0.86);
   transform-origin: center center;
   fill: currentColor;
 }

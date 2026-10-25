@@ -356,7 +356,7 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
     <div
       ref={containerRef}
       onClick={onOpenModal}
-      className="not-prose flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border bg-card/80 backdrop-blur-sm shadow-1 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-3 will-change-transform"
+      className="not-prose flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border bg-card/80 backdrop-blur-sm shadow-1 transition-all duration-150 ease-out hover:-translate-y-1 hover:shadow-3 will-change-transform"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -377,7 +377,7 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
               if (video.error?.code === 1 || document.visibilityState === 'hidden') return
               handleError()
             }}
-            className={`h-full w-full object-cover transition-all duration-500 ease-in-out ${
+            className={`h-full w-full object-cover transition-all duration-200 ease-out ${
               hovered ? 'grayscale-0 scale-[1.02]' : 'grayscale scale-100'
             }`}
           />
@@ -389,7 +389,7 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
             loading="lazy"
             decoding="async"
             onError={handleError}
-            className={`h-full w-full object-cover transition-all duration-500 ease-in-out ${
+            className={`h-full w-full object-cover transition-all duration-200 ease-out ${
               hovered ? 'grayscale-0 scale-[1.02]' : 'grayscale scale-100'
             }`}
           />

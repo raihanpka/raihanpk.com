@@ -26,7 +26,7 @@ const ICONS = {
 } as const
 
 const TILT_MAX_DEG = 5
-const HOVER_DWELL_MS = 120
+const HOVER_DWELL_MS = 80
 
 export default function ProfileFlipCard({ name, role, pronunciation, avatar, links }: Props) {
   const [flipped, setFlipped] = React.useState(false)

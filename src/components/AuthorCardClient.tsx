@@ -63,7 +63,7 @@ export function AuthorCardClient({
 
   return (
     <motion.div
-      className="relative overflow-hidden rounded-lg border shadow-1 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-2"
+      className="relative overflow-hidden rounded-lg border shadow-1 transition-all duration-150 ease-out hover:-translate-y-0.5 hover:shadow-2"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -93,7 +93,7 @@ export function AuthorCardClient({
                   src={avatar}
                   alt={`Avatar of ${name}`}
                   fallback={name[0]}
-                  className="size-32 cursor-pointer rounded-md transition-shadow duration-300 hover:ring-2 hover:ring-primary"
+                  className="size-32 cursor-pointer rounded-md transition-shadow duration-150 hover:ring-2 hover:ring-primary"
                 />
               </motion.a>
             )}

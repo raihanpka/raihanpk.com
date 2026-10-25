@@ -209,7 +209,7 @@ const SpotifyPresence = () => {
         title="View on last.fm"
         target="_blank"
         rel="noopener noreferrer"
-        className="absolute bottom-0 right-0 m-3 flex w-fit items-end rounded-full border bg-secondary/50 p-3 text-primary transition-all duration-300 hover:rotate-12 hover:ring-1 hover:ring-primary"
+        className="absolute bottom-0 right-0 m-3 flex w-fit items-end rounded-full border bg-secondary/50 p-3 text-primary transition-all duration-150 hover:rotate-12 hover:ring-1 hover:ring-primary"
       >
         <MoveUpRight size={16} />
       </a>

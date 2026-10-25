@@ -83,12 +83,12 @@ export default function GithubGraph({ weeks, total, profileUrl }: Props) {
         </p>
       </div>
 
-      <div ref={wrapRef} className="relative flex min-w-0 flex-1 flex-col justify-center">
+      <div ref={wrapRef} className="relative flex min-w-0 flex-1 items-center justify-end overflow-x-clip">
         <div
           role="group"
           tabIndex={0}
           aria-label="GitHub contribution graph. Use the arrow keys to read each day."
-          className="relative ml-auto rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+          className="relative shrink-0 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
           style={{ width: gridWidth }}
           onKeyDown={onKeyDown}
           onBlur={() => setActive(null)}

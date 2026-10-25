@@ -76,13 +76,20 @@ export function initLinkTooltip() {
     const a = target(e)
     if (a) show(a, { x: (e as PointerEvent).clientX, y: (e as PointerEvent).clientY })
   })
+  // The move handler is the source of truth: if the pointer is not over a text link, hide.
+  // This also catches fast sweeps where a pointerout never reached us.
   document.addEventListener('pointermove', (e) => {
-    if (e.pointerType === 'touch' || !current) return
-    show(current as HTMLAnchorElement, { x: e.clientX, y: e.clientY })
+    if (e.pointerType === 'touch') return
+    const a = target(e)
+    if (a) show(a, { x: e.clientX, y: e.clientY })
+    else if (current) hide()
   })
   document.addEventListener('pointerout', (e) => {
     if (target(e)) hide()
   })
+  document.documentElement.addEventListener('pointerleave', hide)
+  window.addEventListener('blur', hide)
+  document.addEventListener('visibilitychange', hide)
   document.addEventListener('focusin', (e) => {
     const a = target(e)
     if (a) show(a)

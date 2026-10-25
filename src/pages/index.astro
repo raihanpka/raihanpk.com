@@ -12,6 +12,7 @@ import { buttonVariants } from '@/components/ui/Button'
 import GithubGraph from '@/components/features/GithubGraph.tsx'
 import { SITE } from '@/consts'
 import { loadContributions } from '@/lib/github'
+import { memo, withTimeout } from '@/lib/memo'
 import Layout from '@/layouts/Layout.astro'
 import { getImage } from 'astro:assets'
 import { getCollection, getEntry } from 'astro:content'
@@ -20,13 +21,15 @@ const author = await getEntry('authors', 'raihanpk')
 const home = author?.data.home
 // Fetch the avatar at build time and serve it from this origin as webp (falls back to the remote URL).
 const avatarRemote = (author?.data.avatar ?? '/static/profile/avatar.png').replace('size=96', 'size=192')
-const avatarSrc = await getImage({ src: avatarRemote, width: 160, height: 160, format: 'webp' }).then((i) => i.src).catch(() => avatarRemote)
+const avatarSrc = await memo('home-avatar', 60 * 60 * 1000, () =>
+  withTimeout(getImage({ src: avatarRemote, width: 160, height: 160, format: 'webp' }).then((i) => i.src), 6000, avatarRemote),
+).catch(() => avatarRemote)
 
-// Fetched once at build time. A GITHUB_TOKEN env var makes it use the GraphQL API.
-const contributions = await loadContributions({
-  user: 'raihanpka',
-  token: import.meta.env.GITHUB_TOKEN,
-})
+// Fetched at build time and cached in memory, so dev navigation does not wait on GitHub each time.
+// A GITHUB_TOKEN env var makes it use the GraphQL API.
+const contributions = await memo('home-contributions', 10 * 60 * 1000, () =>
+  loadContributions({ user: 'raihanpka', token: import.meta.env.GITHUB_TOKEN }),
+)
 
 const blog = (await getCollection('blog'))
   .filter((post) => !post.data.draft)
@@ -93,7 +96,7 @@ const projectsData = rawProjects.map((p) => ({
       </div>
 
       <div role="region" aria-label="GitHub contributions"
-        class="flex min-h-72 w-full flex-col rounded-lg border border-border bg-card/80 p-4 text-foreground shadow-1 backdrop-blur-sm lg:col-span-7">
+        class="flex min-h-72 w-full min-w-0 flex-col rounded-lg border border-border bg-card/80 p-4 text-foreground shadow-1 backdrop-blur-sm lg:col-span-7">
         <GithubGraph client:visible weeks={contributions.weeks} total={contributions.total} profileUrl="https://github.com/raihanpka" />
       </div>
 

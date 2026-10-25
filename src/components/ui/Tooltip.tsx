@@ -20,6 +20,27 @@ export function Tooltip({ label, children, open, className }: TooltipProps) {
   const pointerMode = React.useRef(false)
   const visible = open ?? hover
 
+  // While the pointer drives the tooltip, a move anywhere outside the trigger closes it.
+  // This catches fast sweeps and moving targets (marquee) where pointerleave never arrives.
+  React.useEffect(() => {
+    if (!hover) return
+    const close = () => {
+      pointerMode.current = false
+      setHover(false)
+    }
+    const onMove = (e: PointerEvent) => {
+      if (pointerMode.current && !ref.current?.contains(e.target as Node)) close()
+    }
+    document.addEventListener('pointermove', onMove)
+    window.addEventListener('blur', close)
+    document.addEventListener('scroll', close, { passive: true, capture: true })
+    return () => {
+      document.removeEventListener('pointermove', onMove)
+      window.removeEventListener('blur', close)
+      document.removeEventListener('scroll', close, { capture: true })
+    }
+  }, [hover])
+
   React.useLayoutEffect(() => {
     if (!visible || !ref.current) return setPos(null)
     // While the pointer drives the position it follows the cursor, so skip the element box.

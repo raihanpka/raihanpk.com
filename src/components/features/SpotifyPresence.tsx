@@ -172,13 +172,6 @@ const SpotifyPresence = () => {
                       animationDuration: '1.2s',
                     }}
                   />
-                  <div
-                    className="w-1 h-4.5 bg-primary/80 rounded-full animate-pulse"
-                    style={{
-                      animationDelay: '600ms',
-                      animationDuration: '1.5s',
-                    }}
-                  />
                 </div>
               ) : (
                 <FaHeadphonesAlt size={22} className="shrink-0" />

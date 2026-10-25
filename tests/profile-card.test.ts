@@ -29,7 +29,7 @@ describe('profile card', () => {
 
   it('links the gallery instead of the main site', async () => {
     const home = await read('src/content/authors/raihanpk.md')
-    expect(home).toContain('photogallery.raihanpk.com')
+    expect(home).toContain('gallery.raihanpk.com')
   })
 
   it('shows the role as AI Engineer', async () => {

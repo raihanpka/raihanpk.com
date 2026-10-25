@@ -65,7 +65,7 @@ function tick(ctx: AudioContext) {
   filter.frequency.setValueAtTime(2400, t)
   filter.Q.value = 0.9
   const noiseGain = ctx.createGain()
-  noiseGain.gain.setValueAtTime(0.05, t)
+  noiseGain.gain.setValueAtTime(0.07, t)
   noiseGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.02)
   noise.connect(filter)
   filter.connect(noiseGain)
@@ -76,7 +76,7 @@ function tick(ctx: AudioContext) {
   osc.type = 'sine'
   osc.frequency.setValueAtTime(190, t)
   const oscGain = ctx.createGain()
-  oscGain.gain.setValueAtTime(0.035, t)
+  oscGain.gain.setValueAtTime(0.05, t)
   oscGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.03)
   osc.connect(oscGain)
   oscGain.connect(ctx.destination)

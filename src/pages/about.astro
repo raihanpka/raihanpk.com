@@ -50,7 +50,6 @@ const about = author?.data.about
           <p class="font-mono text-xs uppercase tracking-widest text-muted-foreground">{about.buildLabel}</p>
           <p class="font-title text-display-sm text-foreground">{about.buildTitle}</p>
           <p class="text-base text-muted-foreground" set:html={renderInline(about.buildBody)} />
-          {about.buildCompetitions && <p class="text-base text-muted-foreground" set:html={renderInline(about.buildCompetitions)} />}
         </article>
 
         {about.highlights.map((m, i) => (

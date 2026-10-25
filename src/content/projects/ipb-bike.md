@@ -4,7 +4,7 @@ description: IPB Bike Center is a web application designed to manage bicycle ren
 tags: [Fullstack, Web]
 type: [Fullstack, Web App]
 asset: 'https://photogallery.raihanpk.com/raihanpk-com/ipb-bike-demo.mp4'
-fallback: '/static/projects/ipbbike.png'
+fallback: '/static/projects/ipbbike.webp'
 link: 'https://ipbbike.my.id'
 github: 'https://github.com/raihanpka/ipb-bike-center'
 date: May 2025

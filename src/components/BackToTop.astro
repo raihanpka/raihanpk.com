@@ -1,0 +1,77 @@
+---
+import { Icon } from 'astro-icon/components'
+---
+
+<button
+  type="button"
+  data-back-to-top
+  data-visible="false"
+  aria-label="Back to top"
+  class="back-to-top group relative h-11 overflow-hidden rounded-md border border-border bg-background/80 font-mono text-xs text-foreground shadow-1 hover:bg-secondary"
+>
+  <Icon name="lucide:arrow-up" class="btt-icon absolute left-1/2 top-1/2 size-4 -translate-x-1/2 -translate-y-1/2" />
+  <span class="btt-label absolute inset-0 grid place-items-center whitespace-nowrap" aria-hidden="true">Back to top</span>
+</button>
+
+<style>
+  /* Fades and scales in once the page is scrolled, like a floating back-to-top. */
+  .back-to-top {
+    opacity: 0;
+    transform: scale(0.8);
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s, background-color 0.2s;
+  }
+  .back-to-top[data-visible='true'] {
+    opacity: 1;
+    transform: scale(1);
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.2s;
+  }
+  .back-to-top[data-visible='true']:active { transform: scale(0.95); }
+
+  /* Idle: arrow only. Hover or focus: the button widens and the arrow gives way to the label. */
+  .back-to-top { width: 2.75rem; transition: width 0.25s ease, opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s, background-color 0.2s; }
+  .back-to-top[data-visible='true'] { transition: width 0.25s ease, opacity 0.2s ease, transform 0.2s ease, background-color 0.2s; }
+  .back-to-top:hover, .back-to-top:focus-visible { width: 6.5rem; }
+  .btt-icon, .btt-label { transition: opacity 0.2s ease, transform 0.2s ease; }
+  .btt-label { opacity: 0; transform: translateY(8px); }
+  .back-to-top:hover .btt-icon, .back-to-top:focus-visible .btt-icon { opacity: 0; transform: translate(-50%, -150%); }
+  .back-to-top:hover .btt-label, .back-to-top:focus-visible .btt-label { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .back-to-top, .back-to-top[data-visible='true'], .btt-icon, .btt-label { transition: none; }
+  }
+</style>
+
+<script>
+  const THRESHOLD = 200
+  let ticking = false
+
+  const update = () => {
+    ticking = false
+    const show = window.scrollY > THRESHOLD
+    document.querySelectorAll<HTMLElement>('[data-back-to-top]').forEach((b) => {
+      b.dataset.visible = String(show)
+    })
+  }
+
+  // Delegated and throttled to one frame, so it survives view-transition page swaps.
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(update)
+    },
+    { passive: true },
+  )
+  document.addEventListener('astro:page-load', update)
+  update()
+
+  document.addEventListener('click', (e) => {
+    if (!(e.target as Element).closest('[data-back-to-top]')) return
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
+  })
+</script>

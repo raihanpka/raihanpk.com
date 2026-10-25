@@ -30,11 +30,11 @@ const marqueeItems = photos.length <= 3
 
 <section class="mt-2 pt-4 border-t border-border/50">
   <div class="mb-5">
-    <h2 class="text-xl font-semibold text-foreground">
+    <h2 class="font-title text-display-sm text-foreground">
       Core Memories
     </h2>
     <p class="text-sm text-muted-foreground mt-1">
-      Fragments of time, shared laughter, and quiet moments with friends along the journey.
+      A few moments with the people I met along the way.
     </p>
   </div>
 
@@ -46,9 +46,9 @@ const marqueeItems = photos.length <= 3
 
     <div class="animate-core-marquee gap-4 sm:gap-5">
       {marqueeItems.map((item) => (
-        <figure class="w-72 sm:w-84 shrink-0 flex flex-col overflow-hidden rounded-xl border border-border/80 bg-card/60 p-3 sm:p-3.5 shadow-sm transition-all duration-300 hover:border-foreground/40 hover:-translate-y-1 hover:shadow-md">
+        <figure class="w-72 sm:w-84 shrink-0 flex flex-col overflow-hidden rounded-lg border border-border/80 bg-card/80 p-3 sm:p-4 shadow-1 transition-all duration-300 hover:border-foreground/40 hover:-translate-y-1 hover:shadow-2">
           {/* Uniform Aspect Ratio Photo (3:2 auto fit center) */}
-          <div class="relative w-full aspect-3/2 overflow-hidden rounded-lg bg-secondary/50 border border-border/40">
+          <div class="relative w-full aspect-3/2 overflow-hidden rounded-md bg-secondary/50 border border-border/40">
             {isRemote(item.src) ? (
               <Image
                 src={item.src}
@@ -87,9 +87,9 @@ const marqueeItems = photos.length <= 3
   {!isAlwaysMarquee && (
     <div class="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
       {photos.map((item) => (
-        <figure class="group flex flex-col overflow-hidden rounded-xl border border-border/80 bg-card/60 p-3.5 shadow-sm transition-all duration-300 hover:border-foreground/40 hover:-translate-y-1 hover:shadow-md">
+        <figure class="group flex flex-col overflow-hidden rounded-lg border border-border/80 bg-card/80 p-4 shadow-1 transition-all duration-300 hover:border-foreground/40 hover:-translate-y-1 hover:shadow-2">
           {/* Uniform Aspect Ratio Photo (3:2 auto fit center) */}
-          <div class="relative w-full aspect-3/2 overflow-hidden rounded-lg bg-secondary/50 border border-border/40">
+          <div class="relative w-full aspect-3/2 overflow-hidden rounded-md bg-secondary/50 border border-border/40">
             {isRemote(item.src) ? (
               <Image
                 src={item.src}

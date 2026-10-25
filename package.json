@@ -29,14 +29,14 @@
     "astro": "astro",
     "check": "astro sync && tsc --noEmit",
     "index-knowledge": "bun run scripts/index-knowledge.ts",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "check:tokens": "bun run scripts/check-tokens.ts"
   },
   "dependencies": {
     "@ai-sdk/google": "^4.0.104",
     "@ai-sdk/openai": "^4.0.101",
     "@astrojs/markdown-remark": "^7.3.4",
     "@astrojs/mdx": "^8.1.1",
-    "@astrojs/partytown": "^2.1.9",
     "@astrojs/react": "^7.1.1",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
@@ -89,8 +89,10 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5",
+    "@types/opentype.js": "^1.3.10",
     "bun-types": "^1.4.4",
     "dotenv": "^18.0.9",
+    "opentype.js": "^2.0.0",
     "prisma": "^7"
   }
 }

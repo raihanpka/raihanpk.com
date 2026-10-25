@@ -237,7 +237,7 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
 
   if (isLoading)
     return (
-      <div className="size-full rounded-3xl p-4">
+      <div className="size-full rounded-xl p-4">
         <div className="space-y-1.5">
           {['skeleton-1', 'skeleton-2', 'skeleton-3', 'skeleton-4'].map((id, index) => (
             <div key={id} className="flex items-center gap-x-2">

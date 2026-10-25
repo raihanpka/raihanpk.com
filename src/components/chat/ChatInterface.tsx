@@ -170,7 +170,7 @@ export default function ChatInterface() {
 
   return (
     <div className="flex h-full max-h-[85dvh] flex-col">
-      <Card className="flex-1 flex flex-col min-h-[50dvh] sm:min-h-[60dvh] rounded-2xl border-muted-foreground/20 bg-muted/20 backdrop-blur">
+      <Card className="flex-1 flex flex-col min-h-[50dvh] sm:min-h-[60dvh] rounded-xl border-muted-foreground/20 bg-muted/20 backdrop-blur">
         <CardContent className="flex-1 flex flex-col p-4 sm:p-6 min-h-0">
           {/* Messages */}
           <div className="flex-1 overflow-y-auto space-y-4 pr-1 sm:pr-2">
@@ -180,10 +180,10 @@ export default function ChatInterface() {
                 className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
              >
                 <div
-                  className={`max-w-[92%] sm:max-w-[80%] rounded-2xl px-4 py-3 shadow-sm border ${
+                  className={`max-w-[92%] sm:max-w-[80%] rounded-xl px-4 py-3 shadow-1 border ${
                     message.sender === 'user'
                       ? 'bg-primary text-primary-foreground border-transparent'
-                      : 'bg-card text-card-foreground border-border'
+                      : 'bg-transparent text-card-foreground border-border'
                   }`}
                 >
                   <div className="flex items-start gap-3">
@@ -198,7 +198,7 @@ export default function ChatInterface() {
                     )}
                     <div className="flex-1 min-w-0">
                       {message.sender === 'bot' ? (
-                        <div className="text-sm leading-relaxed prose dark:prose-invert max-w-none wrap-break-word **:my-0 [&_p]:my-0 [&_p:first-child]:mt-0 [&_p+p]:mt-2 [&_ul]:my-1.5 [&_ul]:list-disc [&_ul]:pl-4 [&_ol]:my-1.5 [&_ol]:list-decimal [&_ol]:pl-4 [&_pre]:bg-muted [&_pre]:p-2 [&_pre]:rounded-lg [&_pre]:overflow-x-auto [&_code]:bg-muted/80 [&_code]:px-1 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-xs">
+                        <div className="text-sm leading-relaxed prose dark:prose-invert max-w-none wrap-break-word **:my-0 [&_p]:my-0 [&_p:first-child]:mt-0 [&_p+p]:mt-2 [&_ul]:my-1.5 [&_ul]:list-disc [&_ul]:pl-4 [&_ol]:my-1.5 [&_ol]:list-decimal [&_ol]:pl-4 [&_pre]:bg-muted [&_pre]:p-2 [&_pre]:rounded-md [&_pre]:overflow-x-auto [&_code]:bg-muted/80 [&_code]:px-1 [&_code]:py-0.5 [&_code]:rounded-sm [&_code]:text-xs">
                           <Streamdown mode={isLoading && message.id === messages[messages.length - 1]?.id ? 'streaming' : 'static'}>
                             {message.content}
                           </Streamdown>
@@ -206,7 +206,7 @@ export default function ChatInterface() {
                       ) : (
                         <p className="text-sm whitespace-pre-wrap leading-relaxed wrap-break-word">{message.content}</p>
                       )}
-                      <p className="text-[10px] sm:text-xs opacity-70 mt-1">
+                      <p className="text-xs sm:text-xs opacity-70 mt-1">
                         {mounted && message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>
                     </div>
@@ -217,7 +217,7 @@ export default function ChatInterface() {
 
             {isLoading && (
               <div className="flex justify-start">
-                <div className="max-w-[92%] sm:max-w-[80%] rounded-2xl px-4 py-3 bg-card border shadow-sm">
+                <div className="max-w-[92%] sm:max-w-[80%] rounded-xl px-4 py-3 bg-transparent border shadow-1">
                   <div className="flex items-center gap-2">
                     <img
                       src="https://1.gravatar.com/avatar/21e49fff739353295995834a864f11194a8419f30d70d1d3cfd51ecf19958785?size=256"
@@ -245,7 +245,7 @@ export default function ChatInterface() {
                 type="button"
                 variant="secondary"
                 size="sm"
-                className="rounded-full px-3 py-1.5"
+                className="rounded-full px-3 py-2"
                 onClick={() => handleSendMessage(message)}
                 disabled={isLoading || rateLimited}
                 title={heading}
@@ -262,7 +262,7 @@ export default function ChatInterface() {
               onChange={e => setInputValue(e.target.value)}
               onKeyUp={handleKeyPress}
               placeholder="Write your message..."
-              className="flex-1 min-h-[44px] max-h-10 px-3 py-2 text-base border border-input bg-background rounded-lg resize-y focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+              className="flex-1 min-h-[44px] max-h-10 px-3 py-2 text-base border border-input bg-background rounded-md resize-y focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
               disabled={isLoading || rateLimited}
             />
             <Button

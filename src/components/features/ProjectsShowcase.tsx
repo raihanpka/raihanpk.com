@@ -155,7 +155,7 @@ export function ProjectsShowcase({ projects }: Props) {
     <section className="flex flex-col gap-y-5">
       {/* Section heading */}
       <div className="flex items-center gap-4">
-        <h2 className="shrink-0 text-2xl font-bold">
+        <h2 className="shrink-0 font-title text-display-sm">
           Projects
         </h2>
       </div>
@@ -267,7 +267,7 @@ function CopyLinkButton({ projectName, className = "h-7 w-7" }: { projectName: s
   return (
     <button
       onClick={handleCopy}
-      className={`flex items-center justify-center rounded-lg border border-border bg-background text-foreground transition-all hover:bg-secondary active:scale-95 shadow-sm ${className}`}
+      className={`flex items-center justify-center rounded-md border border-border bg-background text-foreground transition-all hover:bg-secondary active:scale-95 shadow-1 ${className}`}
       aria-label="Copy project link"
       title="Copy Link"
     >
@@ -284,6 +284,8 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
   const containerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const isInView = useInView(containerRef, { once: false, amount: 0.2 })
+  // Fetch the video's first frame only when the card is about to scroll into view.
+  const nearViewport = useInView(containerRef, { once: true, margin: '600px 0px 600px 0px' })
 
   useEffect(() => {
     setAssetSrc(project.asset)
@@ -354,7 +356,7 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
     <div
       ref={containerRef}
       onClick={onOpenModal}
-      className="not-prose flex h-full cursor-pointer flex-col overflow-hidden rounded-xl border bg-card/60 backdrop-blur-sm shadow-sm transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg will-change-transform"
+      className="not-prose flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border bg-card/80 backdrop-blur-sm shadow-1 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-3 will-change-transform"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -365,7 +367,7 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
             ref={videoRef}
             key={assetSrc}
             src={assetSrc}
-            preload="metadata"
+            preload={nearViewport ? 'metadata' : 'none'}
             loop
             muted
             playsInline
@@ -401,13 +403,11 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
       {/* Content */}
       <div className="flex flex-1 flex-col gap-3 p-4">
         {/* Name + Date */}
-        <div className="flex items-start justify-between gap-2">
+        <div className="flex items-baseline justify-between gap-2">
           <h3 className="text-lg font-bold leading-tight">{project.name}</h3>
           {project.date && (
-            <span className="shrink-0 text-right text-sm text-muted-foreground leading-tight">
-              {project.date.split(' ').map((part, i) => (
-                <span key={i} className="block">{part}</span>
-              ))}
+            <span className="shrink-0 whitespace-nowrap text-sm leading-tight text-muted-foreground">
+              {project.date}
             </span>
           )}
         </div>
@@ -447,7 +447,7 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
                 ) : null
               })}
               {project.techStack && project.techStack.length > 5 && (
-                <span className="text-[10px] text-muted-foreground shrink-0">+{project.techStack.length - 5}</span>
+                <span className="text-xs text-muted-foreground shrink-0">+{project.techStack.length - 5}</span>
               )}
             </div>
             {/* Fade gradient */}
@@ -463,7 +463,7 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub repository"
-                className="flex h-7 w-7 items-center justify-center rounded-lg border border-border bg-background text-foreground transition-colors hover:bg-secondary"
+                className="flex h-7 w-7 items-center justify-center rounded-md border border-border bg-background text-foreground transition-colors hover:bg-secondary"
               >
                 <SiGithub size={14} aria-hidden="true" />
               </a>
@@ -474,7 +474,7 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="View project"
-                className="flex h-7 w-7 items-center justify-center rounded-lg border border-border bg-background text-foreground transition-colors hover:bg-secondary"
+                className="flex h-7 w-7 items-center justify-center rounded-md border border-border bg-background text-foreground transition-colors hover:bg-secondary"
               >
                 <ArrowUpRight size={14} aria-hidden="true" />
               </a>
@@ -530,7 +530,7 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
         initial={{ opacity: 0, scale: 0.95, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 30 }}
-        className="relative w-full max-w-7xl h-fit max-h-[75dvh] sm:h-[700px] md:h-[620px] overflow-hidden rounded-2xl sm:rounded-xl border bg-background shadow-[0_32px_64px_-12px_rgba(0,0,0,0.5)] cursor-default mx-auto flex flex-col"
+        className="relative w-full max-w-7xl h-fit max-h-[75dvh] sm:h-[700px] md:h-[620px] overflow-hidden rounded-xl sm:rounded-lg border bg-background shadow-3 cursor-default mx-auto flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Mobile X close button */}
@@ -584,7 +584,7 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
                   <h3 className="text-lg sm:text-xl md:text-2xl font-bold leading-tight tracking-tight text-foreground">{project.name}</h3>
                   {project.date && (
                     <div className="flex">
-                      <span className="text-[10px] text-muted-foreground bg-secondary/50 px-2 py-0.5 rounded border border-border/50">
+                      <span className="text-xs text-muted-foreground bg-secondary/50 px-2 py-0.5 rounded-sm border border-border/50">
                         {project.date}
                       </span>
                     </div>
@@ -605,17 +605,17 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
 
                 {/* Tech Stack - Compact Grid */}
                 <div className="pt-2">
-                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/50 mb-2 sm:mb-3">Powered By</h4>
+                  <h4 className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground/50 mb-2 sm:mb-3">Powered By</h4>
                   <div className="grid grid-cols-2 gap-y-2 sm:gap-y-3 gap-x-4 sm:gap-x-6">
                     {project.techStack?.map((tech) => {
                       const Icon = techIconMap[tech]
                       return (
                         <div key={tech} className="flex items-center gap-2 sm:gap-2.5 group">
-                          <div className="flex h-6 w-6 sm:h-7 sm:w-7 shrink-0 items-center justify-center rounded-lg bg-secondary/30 border border-border/40 transition-all group-hover:bg-secondary/60 group-hover:border-foreground/20">
+                          <div className="flex h-6 w-6 sm:h-7 sm:w-7 shrink-0 items-center justify-center rounded-md bg-secondary/30 border border-border/40 transition-all group-hover:bg-secondary/60 group-hover:border-foreground/20">
                             {Icon && <Icon size={12} className="sm:hidden text-foreground/60 group-hover:text-foreground transition-colors" aria-hidden="true" />}
                             {Icon && <Icon size={14} className="hidden sm:inline text-foreground/60 group-hover:text-foreground transition-colors" aria-hidden="true" />}
                           </div>
-                          <span className="text-[10px] sm:text-[11px] font-medium text-foreground/50 group-hover:text-foreground transition-colors truncate">{tech}</span>
+                          <span className="text-xs sm:text-xs font-medium text-foreground/50 group-hover:text-foreground transition-colors truncate">{tech}</span>
                         </div>
                       )
                     })}
@@ -633,7 +633,7 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-background text-foreground transition-all hover:bg-secondary active:scale-95 shadow-sm"
+                    className="flex h-9 w-9 items-center justify-center rounded-md border border-border bg-background text-foreground transition-all hover:bg-secondary active:scale-95 shadow-1"
                     title="View Source"
                   >
                     <SiGithub size={16} aria-hidden="true" />
@@ -646,7 +646,7 @@ function ProjectModal({ project, onClose }: { project: ProjectItem; onClose: () 
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={buttonVariants({ variant: 'default' }) + " gap-2 rounded-lg h-9 px-5 text-xs font-bold shadow-sm active:scale-95 hover:bg-primary flex items-center justify-center"}
+                  className={buttonVariants({ variant: 'default' }) + " gap-2 rounded-md h-9 px-5 text-xs font-bold shadow-1 active:scale-95 hover:bg-primary flex items-center justify-center"}
                 >
                   <ArrowUpRight size={16} aria-hidden="true" />
                   <span>Live Preview</span>

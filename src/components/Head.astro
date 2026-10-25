@@ -26,6 +26,7 @@ const { title, description, image = '/static/profile/twitter-card.png' } = Astro
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link rel="preload" href="/fonts/GeistVF.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="/fonts/GeistMonoVF.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/InstrumentSerif-Regular.woff2" as="font" type="font/woff2" crossorigin />
 
 <title>{title}</title>
 <meta name="title" content={title} />
@@ -52,8 +53,24 @@ const { title, description, image = '/static/profile/twitter-card.png' } = Astro
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
 
+<link rel="preconnect" href="https://1.gravatar.com" />
+<link rel="preconnect" href="https://lastfm-last-played.biancarosa.com.br" crossorigin />
+<link rel="dns-prefetch" href="https://lastfm.freetls.fastly.net" />
+<link rel="dns-prefetch" href="https://photogallery.raihanpk.com" />
 <link rel="preload" href="/assets/sea.webp" as="image" type="image/webp" fetchpriority="high" />
 <ClientRouter />
+
+<script is:inline>
+  // The signature writes on every full page load; in-app navigation swaps <html> and clears it.
+  document.documentElement.dataset.sign = '1'
+  // First visit of a session: let intro animations play. Later page changes stay instant.
+  try {
+    if (!sessionStorage.getItem('revealed')) {
+      document.documentElement.dataset.reveal = '1'
+      sessionStorage.setItem('revealed', '1')
+    }
+  } catch (_) {}
+</script>
 
 <script is:inline>
   function setDarkMode(document) {

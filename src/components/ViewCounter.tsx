@@ -88,7 +88,7 @@ const ViewCounter = ({ slug }: ViewCounterProps) => {
     return (
       <span className="flex items-center gap-1 text-muted-foreground">
         <Eye className="h-4 w-4" />
-        <span className="inline-block h-4 w-8 animate-pulse rounded bg-muted" />
+        <span className="inline-block h-4 w-8 animate-pulse rounded-sm bg-muted" />
       </span>
     )
   }

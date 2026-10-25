@@ -4,7 +4,7 @@ description: 'SIGAP is an Agentic AI-based platform designed to evaluate perform
 tags: ['Fullstack', 'Web', 'AI & ML']
 type: ['Fullstack', 'Web App', 'AI']
 asset: 'https://photogallery.raihanpk.com/raihanpk-com/sigap-demo.mp4'
-fallback: '/static/projects/sigap.png'
+fallback: '/static/projects/sigap.webp'
 link: 'https://sigap-bkn.vercel.app'
 github: 'https://github.com/raihanpka/sigap'
 date: 'November 2025'

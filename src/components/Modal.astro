@@ -22,10 +22,10 @@ const { id, title } = Astro.props
   class="m-0 max-h-dvh max-w-full rounded-none bg-transparent p-0 backdrop:bg-black/60 backdrop:backdrop-blur-sm sm:mx-auto sm:max-w-lg"
 >
   <div
-    class="flex max-h-dvh flex-col overflow-hidden rounded-t-2xl bg-background shadow-xl pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:rounded-2xl sm:pb-6"
+    class="flex max-h-dvh flex-col overflow-hidden rounded-t-xl bg-background shadow-3 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:rounded-xl sm:pb-6"
   >
     <header class="flex items-center justify-between border-b p-4 sm:p-6">
-      <h2 class="text-fluid-lg font-semibold">{title}</h2>
+      <h2 class="text-lg font-semibold">{title}</h2>
       <button
         type="button"
         data-modal-close={id}

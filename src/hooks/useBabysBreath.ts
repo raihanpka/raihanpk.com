@@ -1,6 +1,10 @@
 import { useEffect, type RefObject } from 'react'
 import { bayer4 } from '@/lib/bayer'
-import { compose, groundField } from '@/lib/babys-breath'
+import * as babysBreath from '@/lib/babys-breath'
+import * as dandelion from '@/lib/dandelion'
+
+const SCENES = { 'babys-breath': babysBreath, dandelion } as const
+export type Scene = keyof typeof SCENES
 
 interface Options {
   /** Cell size in CSS px */
@@ -16,6 +20,8 @@ interface Options {
    * to full height at the right edge (near). Omit for a flat band.
    */
   perspective?: number
+  /** Which plant to draw. */
+  scene?: Scene
 }
 
 /**
@@ -23,7 +29,8 @@ interface Options {
  * starts after the page has loaded and the browser is idle. It stops offscreen,
  * on hidden tabs, and for reduced motion.
  */
-export function useBabysBreath(canvasRef: RefObject<HTMLCanvasElement | null>, { cell = 3, frameInterval = 40, still = 2.4, animate = true, perspective }: Options = {}) {
+export function useBabysBreath(canvasRef: RefObject<HTMLCanvasElement | null>, { cell = 3, frameInterval = 40, still = 2.4, animate = true, perspective, scene = 'babys-breath' }: Options = {}) {
+  const { compose, groundField } = SCENES[scene]
   useEffect(() => {
     const canvas = canvasRef.current
     const ctx = canvas?.getContext('2d')
@@ -50,7 +57,8 @@ export function useBabysBreath(canvasRef: RefObject<HTMLCanvasElement | null>, {
     }
 
     const resize = () => {
-      const rect = canvas.getBoundingClientRect()
+      // Layout size, not getBoundingClientRect: the rect shrinks while the card is tilted or mid-transition.
+      const rect = { width: canvas.clientWidth, height: canvas.clientHeight }
       canvas.width = Math.max(1, Math.round(rect.width * dpr))
       canvas.height = Math.max(1, Math.round(rect.height * dpr))
       if (scratch) {
@@ -158,5 +166,5 @@ export function useBabysBreath(canvasRef: RefObject<HTMLCanvasElement | null>, {
       mo.disconnect()
       document.removeEventListener('visibilitychange', onVisibility)
     }
-  }, [canvasRef, cell, frameInterval, still, animate, perspective])
+  }, [canvasRef, cell, frameInterval, still, animate, perspective, compose, groundField])
 }

@@ -9,12 +9,29 @@ import { Icon } from 'astro-icon/components'
 import { SITE } from '@/consts'
 import Layout from '@/layouts/Layout.astro'
 import { getEntry } from 'astro:content'
+import { describe, personLd, profilePageLd } from '@/lib/jsonld'
 
 const author = await getEntry('authors', 'raihanpk')
 const about = author?.data.about
+const aboutUrl = new URL('/about/', Astro.site).href
+const aboutDescription = describe(about?.intro ?? SITE.DESCRIPTION)
+const jsonLd = [
+  profilePageLd({
+    url: aboutUrl,
+    person: personLd({
+      name: author?.data.name ?? 'Raihan Putra Kirana',
+      alternateName: 'Peka',
+      url: new URL('/', Astro.site).href,
+      image: new URL('/static/profile/avatar.png', Astro.site).href,
+      jobTitle: author?.data.home?.role ?? author?.data.role,
+      description: aboutDescription,
+      sameAs: [author?.data.github, author?.data.linkedin, author?.data.instagram, author?.data.twitter],
+    }),
+  }),
+]
 ---
 
-<Layout title="About" description={SITE.DESCRIPTION}>
+<Layout title="About" description={aboutDescription} jsonLd={jsonLd}>
   <Container class="flex flex-col gap-y-6">
     <Breadcrumbs items={[{ label: 'About', icon: 'lucide:info' }]} />
 

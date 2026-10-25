@@ -11,8 +11,9 @@ import { parseAuthors } from '@/lib/server-utils'
 import { formatDate, readingTime } from '@/lib/utils'
 import { Icon } from 'astro-icon/components'
 import { Image } from 'astro:assets'
-import { type CollectionEntry, getCollection, render } from 'astro:content'
+import { type CollectionEntry, getCollection, getEntry, render } from 'astro:content'
 import ViewCounter from '@/components/ViewCounter'
+import { blogPostingLd, breadcrumbLd, personLd } from '@/lib/jsonld'
 
 export async function getStaticPaths() {
   const posts = (await getCollection('blog'))
@@ -53,12 +54,37 @@ const post = Astro.props
 const { Content, headings } = await render(post)
 
 const authors = await parseAuthors(post.data.authors ?? [])
+
+const siteUrl = new URL('/', Astro.site).href
+const postUrl = new URL(`/blog/${post.id}/`, Astro.site).href
+const owner = await getEntry('authors', post.data.authors?.[0] ?? 'raihanpk')
+const jsonLd = [
+  blogPostingLd({
+    url: postUrl,
+    title: post.data.title,
+    description: post.data.description,
+    published: post.data.date,
+    modified: post.data.updated,
+    image: post.data.image ? new URL(post.data.image.src, siteUrl).href : undefined,
+    tags: post.data.tags,
+    author: personLd({ name: owner?.data.name ?? 'Raihan Putra Kirana', url: siteUrl }),
+  }),
+  breadcrumbLd([
+    { name: 'Home', url: siteUrl },
+    { name: 'Blog', url: new URL('/blog/', siteUrl).href },
+    { name: post.data.title, url: postUrl },
+  ]),
+]
 ---
 
 <Layout
   title={post.data.title}
   description={post.data.description}
   image={post.data.image?.src ?? '/static/profile/1200x630.jpg'}
+  jsonLd={jsonLd}
+  ogType="article"
+  published={post.data.date}
+  modified={post.data.updated ?? post.data.date}
 >
   <div class="mx-auto max-w-6xl px-(--space-gutter) flex flex-col gap-y-6">
     <Breadcrumbs

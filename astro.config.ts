@@ -1,6 +1,7 @@
 import mdx from '@astrojs/mdx'
 import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
+import { lastmodFor } from './src/lib/lastmod'
 import tailwindcss from '@tailwindcss/vite'
 import vercel from '@astrojs/vercel'
 import sectionize from '@hbsnow/rehype-sectionize'
@@ -42,7 +43,19 @@ export default defineConfig({
     },
   }),
   integrations: [
-    sitemap(),
+    sitemap({
+      // /projects/* and /authors redirect to other pages, so they are not pages to index.
+      filter: (page) => {
+        const { pathname } = new URL(page)
+        return !pathname.startsWith('/projects') && pathname !== '/authors/'
+      },
+      // lastmod comes from git history, so it moves only when the content does.
+      serialize(item) {
+        const date = lastmodFor(new URL(item.url).pathname)
+        if (date) item.lastmod = date.toISOString()
+        return item
+      },
+    }),
     mdx(),
     react(),
     icon(),

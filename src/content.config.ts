@@ -19,6 +19,8 @@ const blog = defineCollection({
           'Description should be 155 characters or less for optimal Open Graph display.',
         ),
       date: z.coerce.date(),
+      /** Set when a post is edited after publishing. Feeds dateModified and the sitemap. */
+      updated: z.coerce.date().optional(),
       image: image().optional(),
       tags: z.array(z.string()).optional(),
       authors: z.array(z.string()).optional(),

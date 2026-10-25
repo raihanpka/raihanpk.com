@@ -16,6 +16,7 @@ import { memo, withTimeout } from '@/lib/memo'
 import Layout from '@/layouts/Layout.astro'
 import { getImage } from 'astro:assets'
 import { getCollection, getEntry } from 'astro:content'
+import { describe, personLd, websiteLd } from '@/lib/jsonld'
 
 const author = await getEntry('authors', 'raihanpk')
 const home = author?.data.home
@@ -54,9 +55,27 @@ const projectsData = rawProjects.map((p) => ({
   date: p.data.date,
   techStack: p.data.techStack,
 }))
+const siteUrl = new URL('/', Astro.site).href
+const homeDescription = describe(author?.data.home?.tagline ?? SITE.DESCRIPTION)
+const jsonLd = [
+  websiteLd({ name: 'raihanpk', alternateName: [SITE.TITLE, 'Raihan Putra Kirana'], url: siteUrl, description: homeDescription }),
+  {
+    '@context': 'https://schema.org',
+    ...personLd({
+      name: author?.data.name ?? 'Raihan Putra Kirana',
+      alternateName: 'Peka',
+      url: siteUrl,
+      image: new URL('/static/profile/avatar.png', siteUrl).href,
+      jobTitle: author?.data.home?.role ?? author?.data.role,
+      description: homeDescription,
+      email: author?.data.mail,
+      sameAs: [author?.data.github, author?.data.linkedin, author?.data.instagram, author?.data.twitter],
+    }),
+  },
+]
 ---
 
-<Layout title="Home" description={SITE.DESCRIPTION} fullTitle="Raihan Putra Kirana">
+<Layout title="Home" description={homeDescription} fullTitle="Raihan Putra Kirana" jsonLd={jsonLd}>
   <Container class="flex flex-col gap-y-6 reveal-stack">
     <section class="grid grid-cols-1 items-center gap-6 lg:grid-cols-[minmax(0,36rem)_1fr] lg:gap-10">
       <ProfileFlipCard

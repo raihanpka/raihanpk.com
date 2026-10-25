@@ -12,9 +12,13 @@ type Props = {
   description: string
   image?: string
   fullTitle?: string
+  jsonLd?: object[]
+  ogType?: 'website' | 'article'
+  published?: Date
+  modified?: Date
 }
 
-const { title, description, image, fullTitle } = Astro.props
+const { title, description, image, fullTitle, jsonLd, ogType, published, modified } = Astro.props
 ---
 
 <!doctype html>
@@ -24,6 +28,10 @@ const { title, description, image, fullTitle } = Astro.props
       title={fullTitle ?? `${title} | ${SITE.TITLE}`}
       description={description}
       image={image}
+      jsonLd={jsonLd}
+      ogType={ogType}
+      published={published}
+      modified={modified}
     />
   </head>
   <body class="min-h-screen bg-background text-foreground antialiased relative">

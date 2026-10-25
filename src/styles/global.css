@@ -445,29 +445,38 @@ html[data-reveal] .reveal-stack > :nth-child(n + 5) { --i: 4; }
 .metal {
   overflow: hidden;
   background:
-    radial-gradient(120% 90% at var(--mx, 30%) var(--my, 0%), hsl(var(--foreground) / 0.1), transparent 60%),
+    radial-gradient(120% 55% at 50% 0%, hsl(var(--foreground) / 0.07), transparent 70%),
     linear-gradient(165deg, hsl(var(--card) / 0.8), hsl(var(--foreground) / 0.05) 55%, hsl(var(--card) / 0.8));
   box-shadow:
     inset 0 1px 0 hsl(var(--foreground) / 0.22),
     inset 0 -1px 0 hsl(var(--foreground) / 0.08),
     0 16px 40px hsl(var(--foreground) / 0.12);
 }
-/* One diagonal sweep of light when the card is hovered. */
+/* On hover a bright arc travels once around the card edge. */
+@property --glint {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
 .metal::after {
   content: '';
   position: absolute;
-  inset: -20% auto -20% -60%;
-  width: 40%;
-  background: linear-gradient(100deg, transparent, hsl(var(--foreground) / 0.14), transparent);
-  transform: skewX(-18deg);
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--glint), transparent 0 62%, hsl(var(--foreground) / 0.85) 84%, transparent 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
   opacity: 0;
   pointer-events: none;
 }
-.flip-scene:hover .metal::after { animation: metal-sweep 1100ms ease-out 1; }
-@keyframes metal-sweep {
-  0% { transform: translateX(0) skewX(-18deg); opacity: 0; }
-  20% { opacity: 1; }
-  100% { transform: translateX(420%) skewX(-18deg); opacity: 0; }
+.flip-scene:hover .metal::after,
+.metal:hover::after { animation: metal-glint 1400ms ease-in-out 1; }
+@keyframes metal-glint {
+  0% { --glint: 0deg; opacity: 0; }
+  15%, 85% { opacity: 1; }
+  100% { --glint: 360deg; opacity: 0; }
 }
 /* Far to near: invisible at the left edge, solid toward the right, and fading out at the top. */
 .horizon-fade {
@@ -479,7 +488,8 @@ html[data-reveal] .reveal-stack > :nth-child(n + 5) { --i: 4; }
 .dither-fade { mask-image: linear-gradient(to top, black 75%, transparent); -webkit-mask-image: linear-gradient(to top, black 75%, transparent); }
 @media (prefers-reduced-motion: reduce) {
   .flip-inner, .flip-tilt { transition: none; }
-  .flip-scene:hover .metal::after { animation: none; }
+  .flip-scene:hover .metal::after,
+  .metal:hover::after { animation: none; }
 }
 
 /* Recharts focuses its surface on click; keep the ring for keyboard users only. */
@@ -519,8 +529,6 @@ html[data-reveal] .reveal-stack > :nth-child(n + 5) { --i: 4; }
   .about-card { transition: none; }
 }
 
-/* Sweep of light on hover for the about hero card. */
-.metal:hover::after { animation: metal-sweep 1100ms ease-out 1; }
 
 /* Footer: readable panel over the dithered background. */
 .footer-panel {

@@ -9,6 +9,8 @@ interface Options {
   frameInterval?: number
   /** Time in seconds used for the still frame, chosen so a petal or two is already in the air */
   still?: number
+  /** Set false for a static picture: the still frame is drawn once and the wind never starts. */
+  animate?: boolean
 }
 
 /**
@@ -16,7 +18,7 @@ interface Options {
  * starts after the page has loaded and the browser is idle. It stops offscreen,
  * on hidden tabs, and for reduced motion.
  */
-export function useBabysBreath(canvasRef: RefObject<HTMLCanvasElement | null>, { cell = 3, frameInterval = 40, still = 2.4 }: Options = {}) {
+export function useBabysBreath(canvasRef: RefObject<HTMLCanvasElement | null>, { cell = 3, frameInterval = 40, still = 2.4, animate = true }: Options = {}) {
   useEffect(() => {
     const canvas = canvasRef.current
     const ctx = canvas?.getContext('2d')
@@ -88,7 +90,7 @@ export function useBabysBreath(canvasRef: RefObject<HTMLCanvasElement | null>, {
     canvas.style.removeProperty('opacity')
 
     const begin = () => {
-      if (disposed || reduceMotion) return
+      if (disposed || reduceMotion || !animate) return
       animating = true
       start()
     }
@@ -130,5 +132,5 @@ export function useBabysBreath(canvasRef: RefObject<HTMLCanvasElement | null>, {
       mo.disconnect()
       document.removeEventListener('visibilitychange', onVisibility)
     }
-  }, [canvasRef, cell, frameInterval, still])
+  }, [canvasRef, cell, frameInterval, still, animate])
 }

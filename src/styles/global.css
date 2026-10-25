@@ -508,24 +508,7 @@ html[data-reveal] .reveal-stack > :nth-child(n + 5) { --i: 4; }
   .about-card { transition: none; }
 }
 
-/* About hero card: faint ASCII field behind the content, plus a sweep of light on hover. */
-.ascii-corner::before {
-  content: '+  .  ·  +  .  ·  +  .  ·  +\A ·  +  .  ·  +  .  ·  +  .  ·\A .  ·  +  .  ·  +  .  ·  +  .\A +  .  ·  +  .  ·  +  .  ·  +\A ·  +  .  ·  +  .  ·  +  .  ·';
-  position: absolute;
-  inset: 50% 1.5rem auto auto;
-  transform: translateY(-50%);
-  z-index: -1;
-  white-space: pre;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  line-height: 1.6;
-  color: hsl(var(--foreground));
-  opacity: 0.2;
-  pointer-events: none;
-  mask-image: linear-gradient(to left, black, transparent);
-  -webkit-mask-image: linear-gradient(to left, black, transparent);
-}
-@media (max-width: 767px) { .ascii-corner::before { display: none; } }
+/* Sweep of light on hover for the about hero card. */
 .metal:hover::after { animation: metal-sweep 1100ms ease-out 1; }
 
 /* Footer: readable panel over the dithered background. */

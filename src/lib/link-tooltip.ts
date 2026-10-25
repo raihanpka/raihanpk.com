@@ -5,6 +5,7 @@
  */
 
 const EDGE = 8
+const GAP = 14
 
 export function describeLink(a: HTMLAnchorElement, origin = location.origin): string {
   const named = a.getAttribute('title') || a.getAttribute('aria-label')
@@ -36,22 +37,33 @@ export function initLinkTooltip() {
     tip?.remove()
   }
 
-  const show = (a: HTMLAnchorElement) => {
-    if (current === a) return
-    current = a
-    // A view-transition swap can detach the element, so create it on demand.
-    tip ??= document.createElement('span')
-    tip.setAttribute('role', 'tooltip')
-    tip.className =
-      'pointer-events-none fixed z-50 whitespace-nowrap rounded-lg border border-border bg-background px-3 py-1 text-sm font-medium text-foreground shadow-2'
-    tip.textContent = describeLink(a)
-    document.body.append(tip)
-    const r = a.getBoundingClientRect()
+  /** Put the tooltip at a point: above it, or below when there is no room. Clamped to the viewport. */
+  const place = (x: number, y: number, gap: number) => {
+    if (!tip) return
     const half = tip.offsetWidth / 2
-    const x = Math.min(Math.max(r.left + r.width / 2, half + EDGE), window.innerWidth - half - EDGE)
-    tip.style.left = `${x}px`
-    tip.style.top = `${r.top - EDGE}px`
-    tip.style.transform = 'translate(-50%, -100%)'
+    tip.style.left = `${Math.min(Math.max(x, half + EDGE), window.innerWidth - half - EDGE)}px`
+    const above = y - gap > tip.offsetHeight + EDGE
+    tip.style.top = `${above ? y - gap : y + gap}px`
+    tip.style.transform = above ? 'translate(-50%, -100%)' : 'translate(-50%, 0)'
+  }
+
+  // pointer: follow the cursor. Without one (keyboard focus) sit above the link.
+  const show = (a: HTMLAnchorElement, pointer?: { x: number; y: number }) => {
+    if (current !== a) {
+      current = a
+      // A view-transition swap can detach the element, so create it on demand.
+      tip ??= document.createElement('span')
+      tip.setAttribute('role', 'tooltip')
+      tip.className =
+        'pointer-events-none fixed z-50 whitespace-nowrap rounded-lg border border-border bg-background px-3 py-1 text-sm font-medium text-foreground shadow-2'
+      tip.textContent = describeLink(a)
+      document.body.append(tip)
+    }
+    if (pointer) place(pointer.x, pointer.y, GAP)
+    else {
+      const r = a.getBoundingClientRect()
+      place(r.left + r.width / 2, r.top, EDGE)
+    }
   }
 
   const target = (e: Event) => {
@@ -62,7 +74,11 @@ export function initLinkTooltip() {
   document.addEventListener('pointerover', (e) => {
     if ((e as PointerEvent).pointerType === 'touch') return
     const a = target(e)
-    if (a) show(a)
+    if (a) show(a, { x: (e as PointerEvent).clientX, y: (e as PointerEvent).clientY })
+  })
+  document.addEventListener('pointermove', (e) => {
+    if (e.pointerType === 'touch' || !current) return
+    show(current as HTMLAnchorElement, { x: e.clientX, y: e.clientY })
   })
   document.addEventListener('pointerout', (e) => {
     if (target(e)) hide()

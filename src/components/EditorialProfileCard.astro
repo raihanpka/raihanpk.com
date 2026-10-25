@@ -97,14 +97,14 @@ const socialLinks = [
         {(role || location) && (
           <div class="flex flex-col gap-1 font-mono text-xs text-foreground sm:text-sm">
             {role && (
-              <span class="flex items-center gap-1.5">
-                <PiBriefcase className="size-3.5 shrink-0 sm:size-4" />
+              <span class="flex items-center gap-1.5 max-sm:items-start">
+                <PiBriefcase className="size-3.5 shrink-0 max-sm:mt-px sm:size-4" />
                 {role}
               </span>
             )}
             {location && (
-              <span class="flex items-center gap-1.5">
-                <PiMapPin className="size-3.5 shrink-0 sm:size-4" />
+              <span class="flex items-center gap-1.5 max-sm:items-start">
+                <PiMapPin className="size-3.5 shrink-0 max-sm:mt-px sm:size-4" />
                 {location}
               </span>
             )}

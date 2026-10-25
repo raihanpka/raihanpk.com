@@ -5,8 +5,6 @@ import {
   PiGlobe,
   PiInstagramLogo,
   PiLinkedinLogo,
-  PiMapPin,
-  PiBriefcase,
   PiStarFourFill,
 } from 'react-icons/pi'
 interface Props {
@@ -56,59 +54,43 @@ const socialLinks = [
 
   <div class="flex flex-col md:flex-row md:items-start justify-between gap-5">
     {/* Identity Left Column */}
-    <div class="flex items-start gap-4 sm:gap-5 flex-1 min-w-0">
+    <div class="flex items-start gap-4 flex-1 min-w-0">
       <div class="relative shrink-0">
         {linkDisabled ? (
           <img
             src={avatar || '/static/profile/avatar.png'}
             alt={`Profile photo of ${name}`}
-            width="96"
-            height="96"
+            width="80"
+            height="80"
             loading="eager"
             decoding="async"
-            class="size-20 sm:size-24 rounded-lg border-1 border-border/80 ring-1 ring-foreground/10 ring-offset-4 ring-offset-card grayscale contrast-125 object-cover bg-secondary/40 shadow-2"
+            class="size-16 sm:size-20 rounded-lg grayscale contrast-125 object-cover bg-secondary/40"
           />
         ) : (
           <a href={`/authors/${id}`} class="block focus:outline-none focus:ring-2 focus:ring-primary rounded-lg">
             <img
               src={avatar || '/static/profile/avatar.png'}
               alt={`Profile photo of ${name}`}
-              width="96"
-              height="96"
+              width="80"
+              height="80"
               loading="eager"
               decoding="async"
-              class="size-20 sm:size-24 rounded-lg border-1 border-border/80 grayscale contrast-125 hover:grayscale-0 transition-all duration-300 object-cover bg-secondary/40 cursor-pointer shadow-1"
+              class="size-16 sm:size-20 rounded-lg grayscale contrast-125 hover:grayscale-0 transition-all duration-300 object-cover bg-secondary/40 cursor-pointer shadow-1"
             />
           </a>
         )}
       </div>
 
-      <div class="flex flex-col gap-y-1.5 flex-1 min-w-0">
-        <div class="flex flex-wrap items-center gap-x-2.5">
+      <div class="flex flex-col gap-y-3 flex-1 min-w-0">
+        <div class="flex min-w-0 flex-col justify-between gap-1 sm:min-h-20">
           <h1 class="font-title text-display-sm text-foreground">{name}</h1>
-          {pronouns && (
-            <span class="text-xs font-mono text-muted-foreground border-1 border-border/60 px-2 py-0.5 rounded-sm">
-              {pronouns}
-            </span>
+          {role && <p class="text-base font-medium text-foreground">{role}</p>}
+          {(pronouns || location) && (
+            <p class="font-mono text-xs text-muted-foreground">
+              {[pronouns, location].filter(Boolean).join(' · ')}
+            </p>
           )}
         </div>
-
-        {(role || location) && (
-          <div class="flex flex-wrap items-center gap-x-3.5 gap-y-1 text-xs sm:text-sm font-mono text-muted-foreground">
-            {role && (
-              <span class="flex items-center gap-1.5">
-                <PiBriefcase className="size-3.5 sm:size-4 shrink-0" />
-                {role}
-              </span>
-            )}
-            {location && (
-              <span class="flex items-center gap-1.5">
-                <PiMapPin className="size-3.5 sm:size-4 shrink-0" />
-                {location}
-              </span>
-            )}
-          </div>
-        )}
 
         {/* Mobile Animated Socials Trigger & Drawer */}
         {socialLinks.length > 0 && (

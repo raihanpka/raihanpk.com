@@ -39,5 +39,9 @@ const { title, description, image, fullTitle } = Astro.props
       <Footer />
     </div>
     <SpeedInsights />
+    <script>
+      import { initUiSound } from '@/lib/ui-sound'
+      initUiSound()
+    </script>
   </body>
 </html>

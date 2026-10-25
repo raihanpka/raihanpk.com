@@ -10,6 +10,7 @@ import {
   transformerNotationDiff,
 } from '@shikijs/transformers'
 import { defineConfig } from 'astro/config'
+import { loadEnv } from 'vite'
 import icon from 'astro-icon'
 import rehypeExternalLinks from 'rehype-external-links'
 import rehypeKatex from 'rehype-katex'
@@ -18,6 +19,12 @@ import remarkEmoji from 'remark-emoji'
 import remarkMath from 'remark-math'
 import remarkToc from 'remark-toc'
 import { unified } from '@astrojs/markdown-remark'
+
+// Astro dev only puts .env values on import.meta.env. Server code such as the Prisma client reads
+// process.env, so fill it here. Existing variables win, and on Vercel there is no .env file.
+const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development'
+for (const [key, value] of Object.entries(loadEnv(mode, process.cwd(), ''))) process.env[key] ??= value
+
 
 // https://astro.build/config
 export default defineConfig({

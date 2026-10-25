@@ -20,8 +20,8 @@ home:
     Delivering end-to-end systems and robust AI/ML pipelines through solutions that are product-minded.
   tagline: >-
     Software solutions and automation, built to scale. I lead teams from the first prototype to the production release.
-  galleryLabel: 'photogallery.raihanpk.com'
-  galleryUrl: 'https://photogallery.raihanpk.com'
+  galleryLabel: 'gallery.raihanpk.com'
+  galleryUrl: 'https://gallery.raihanpk.com'
 about:
   whoLabel: '01 · Who'
   greeting: "Hello, I'm Raihan."
@@ -35,9 +35,9 @@ about:
     - >-
       It started back in elementary school, and it has been my identity ever since.
   buildLabel: '02 · How I build'
-  buildTitle: 'Product-minded, built to production standards.'
+  buildTitle: 'Product-minded, treating software to production standards.'
   buildBody: >-
-    I work close to the problem, combining software engineering with AI: **agentic platforms**, **scalable backends**, and **predictive models** built around real client cases. My team won **1st Place in the Industry Sector** and **Overall Winner in the General Category** at AI Open Innovation Challenge 2026, and placed **Top 5** with [SIGAP](https://github.com/raihanpka/sigap) at BKN's ASN Digital AI Hackathon and **Top 10** with [SATRIA](https://github.com/raihanpka/satria-ml) at Astranauts 2025. Whatever the size, I build with the product in mind, because good engineering only matters when it makes an impact.
+    I work close to the problem, combining software engineering with AI, like **agentic platforms**, **scalable backends**, and **predictive models** built around real client cases. My team won **1st Place in the Industry Sector** and **Overall Winner in the General Category** at AI Open Innovation Challenge 2026, and placed **Top 5** with [SIGAP](https://github.com/raihanpka/sigap) at BKN's ASN Digital AI Hackathon and **Top 10** with [SATRIA](https://github.com/raihanpka/satria-ml) at Astranauts 2025. Whatever the size, I build with the product in mind, because good engineering only matters when it makes an impact.
   highlights:
     - icon: 'lucide:boxes'
       title: 'Modular by default'

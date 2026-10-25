@@ -57,6 +57,16 @@ const { title, description, image = '/static/profile/twitter-card.png' } = Astro
 <ClientRouter />
 
 <script is:inline>
+  // First visit of a session: let intro animations play. Later page changes stay instant.
+  try {
+    if (!sessionStorage.getItem('revealed')) {
+      document.documentElement.dataset.reveal = '1'
+      sessionStorage.setItem('revealed', '1')
+    }
+  } catch (_) {}
+</script>
+
+<script is:inline>
   function setDarkMode(document) {
     const getThemePreference = () => {
       if (

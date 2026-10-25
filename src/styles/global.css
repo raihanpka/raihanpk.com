@@ -383,3 +383,15 @@
   .py-section    { padding-top: var(--space-sec); padding-bottom: var(--space-sec); }
   .py-section-sm { padding-top: 1.5rem; padding-bottom: 1.5rem; }
 }
+
+/* Signature write-on: reveals left to right, first visit of a session only. */
+@keyframes signature-write {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+html[data-reveal] .signature {
+  animation: signature-write 1.4s cubic-bezier(0.65, 0, 0.35, 1) 0.15s both;
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-reveal] .signature { animation: none; }
+}

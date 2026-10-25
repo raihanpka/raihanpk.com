@@ -5,15 +5,61 @@ import { Icon } from 'astro-icon/components'
 <button
   type="button"
   data-back-to-top
+  data-visible="false"
   aria-label="Back to top"
-  class="group inline-flex h-9 items-center gap-2 rounded-md border border-border bg-background/80 px-3 font-mono text-xs text-foreground shadow-1 transition-all duration-200 hover:bg-secondary active:scale-95"
+  class="back-to-top group inline-flex h-11 items-center gap-2 rounded-md border border-border bg-background/80 px-4 font-mono text-xs text-foreground shadow-1 hover:bg-secondary"
 >
   <Icon name="lucide:arrow-up" class="size-4 transition-transform duration-200 group-hover:-translate-y-0.5" />
-  Top
+  Back to top
 </button>
 
+<style>
+  /* Fades and scales in once the page is scrolled, like a floating back-to-top. */
+  .back-to-top {
+    opacity: 0;
+    transform: scale(0.8);
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s, background-color 0.2s;
+  }
+  .back-to-top[data-visible='true'] {
+    opacity: 1;
+    transform: scale(1);
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.2s;
+  }
+  .back-to-top[data-visible='true']:active { transform: scale(0.95); }
+  @media (prefers-reduced-motion: reduce) {
+    .back-to-top, .back-to-top[data-visible='true'] { transition: none; }
+  }
+</style>
+
 <script>
-  // Delegated, so it keeps working after view-transition page swaps.
+  const THRESHOLD = 200
+  let ticking = false
+
+  const update = () => {
+    ticking = false
+    const show = window.scrollY > THRESHOLD
+    document.querySelectorAll<HTMLElement>('[data-back-to-top]').forEach((b) => {
+      b.dataset.visible = String(show)
+    })
+  }
+
+  // Delegated and throttled to one frame, so it survives view-transition page swaps.
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(update)
+    },
+    { passive: true },
+  )
+  document.addEventListener('astro:page-load', update)
+  update()
+
   document.addEventListener('click', (e) => {
     if (!(e.target as Element).closest('[data-back-to-top]')) return
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches

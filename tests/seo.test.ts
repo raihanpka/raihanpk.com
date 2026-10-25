@@ -1,6 +1,6 @@
 import { describe as suite, it, expect } from 'bun:test'
 import { robotsTxt, TRAINING_BOTS } from '../src/lib/robots'
-import { sourcesFor, frontmatterDate } from '../src/lib/lastmod'
+import { sourcesFor, frontmatterDate, newestPostDate } from '../src/lib/lastmod'
 import { blogPostingLd, breadcrumbLd, describe, personLd, plainText, serializeLd } from '../src/lib/jsonld'
 import { llmsFullTxt, llmsTxt, stripMdx, type LlmsInput } from '../src/lib/llms'
 
@@ -23,6 +23,9 @@ suite('lastmod sources', () => {
     expect(sourcesFor('/blog/hello-world/')[0]).toBe('src/content/blog/hello-world')
     expect(sourcesFor('/blog/2/')).toEqual(['src/content/blog'])
     expect(sourcesFor('/unknown/')).toEqual([])
+  })
+  it('finds the newest post date for list pages', () => {
+    expect(newestPostDate()).toBeInstanceOf(Date)
   })
   it('reads a post date from frontmatter when git is not usable', () => {
     expect(frontmatterDate(['src/content/blog/migrating-to-a-new-stack-for-my-website'])).toBeInstanceOf(Date)

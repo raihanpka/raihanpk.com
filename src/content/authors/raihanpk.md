@@ -37,7 +37,7 @@ about:
   buildLabel: '02 · How I build'
   buildTitle: 'Every project is treated like production software.'
   buildBody: >-
-    I work close to the problem, pairing software engineering with AI: **agentic platforms**, **scalable backends**, and **predictive models** built around real client cases. My team won **1st Place in the Industry Sector** and **Overall Winner in the General Category** at AI Open Innovation Challenge 2026 (Blibli's logistics case), with [SIGAP](https://github.com/raihanpka/sigap) in the **Top 5** at BKN's ASN Digital AI Hackathon and [SATRIA](https://github.com/raihanpka/satria-ml) in the **Top 10** at Astranauts 2025. Whatever the size, I build every project like production software.
+    I work close to the problem, combining software engineering with AI: **agentic platforms**, **scalable backends**, and **predictive models** built around real client cases. My team won **1st Place in the Industry Sector** and **Overall Winner in the General Category** at AI Open Innovation Challenge 2026, and placed **Top 5** with [SIGAP](https://github.com/raihanpka/sigap) at BKN's ASN Digital AI Hackathon and **Top 10** with [SATRIA](https://github.com/raihanpka/satria-ml) at Astranauts 2025. Every project, big or small, gets built like production software.
   highlights:
     - icon: 'lucide:boxes'
       title: 'Modular by default'

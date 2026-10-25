@@ -4,6 +4,7 @@ import PhotoCollage from '@/components/features/PhotoCollage.astro'
 import Breadcrumbs from '@/components/Breadcrumbs.astro'
 import Container from '@/components/Container.astro'
 import Link from '@/components/Link.astro'
+import { Icon } from 'astro-icon/components'
 import { SITE } from '@/consts'
 import Layout from '@/layouts/Layout.astro'
 import { getEntry } from 'astro:content'
@@ -33,29 +34,51 @@ const author = await getEntry('authors', 'raihanpk')
       />
     )}
 
-    <section>
-      <div class="min-w-full">
-        <div class="prose prose-neutral max-w-none mb-3 dark:prose-invert">
-          <h2 class="mb-4 font-title text-display-sm">Hello, I'm Raihan.</h2>
-          <p class="mb-4">
-            My name is Raihan Putra Kirana, but my friends often called me "Peka". 
-            I am currently a final year student majoring in Computer Science at 
-            <Link
-              href="https://ipb.ac.id"
-              class="text-foreground"
-              external
-              underline>IPB University</Link>. 
-            I'd say I'm a person who enjoys bridging the gap between robust software systems and real-world business impact.
-          </p>
-          <p>
-            I treat software architecture with production-grade seriousness, even for small-scale projects or university assignments. 
-            I focus on building AI-native applications with a strong obsession for modular design, clean codebases, and scalable systems. 
-            This mindset of treating every project like production software has led me and my teams to multiple national hackathon podiums 
-            and top finalist positions. I thrive in high-pressure environments where technical idealism meets rapid execution, 
-            turning complex system challenges into functional, intelligent products.
-          </p>
-        </div>
-      </div>
+    <section class="reveal-stack grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-12" aria-label="About me">
+      <article class="about-card flex flex-col gap-4 p-6 lg:col-span-7">
+        <p class="font-mono text-xs uppercase tracking-widest text-muted-foreground">01 · Who</p>
+        <h2 class="font-title text-display-sm text-foreground">Hello, I'm Raihan.</h2>
+        <p class="text-base text-muted-foreground">
+          My name is Raihan Putra Kirana, but my friends often called me "Peka".
+          I am currently a final year student majoring in Computer Science at{' '}
+          <Link href="https://ipb.ac.id" class="text-foreground" external underline>IPB University</Link>.
+          I'd say I'm a person who enjoys bridging the gap between robust software systems and real-world business impact.
+        </p>
+      </article>
+
+      <article class="about-card metal flex flex-col justify-between gap-6 p-6 lg:col-span-5">
+        <p class="font-mono text-xs uppercase tracking-widest text-muted-foreground">Friends call me</p>
+        <p class="font-title text-display text-foreground">Peka</p>
+        <p class="font-mono text-xs text-muted-foreground">/ˈraɪ.han pe'ka/ · Computer Science, IPB University</p>
+      </article>
+
+      <article class="about-card flex flex-col gap-4 p-6 lg:col-span-12">
+        <p class="font-mono text-xs uppercase tracking-widest text-muted-foreground">02 · How I build</p>
+        <p class="font-title text-display-sm text-foreground">
+          Every project is treated like production software.
+        </p>
+        <p class="max-w-3xl text-base text-muted-foreground">
+          I treat software architecture with production-grade seriousness, even for small-scale projects or university assignments.
+          I focus on building AI-native applications with a strong obsession for modular design, clean codebases, and scalable systems.
+          This mindset of treating every project like production software has led me and my teams to multiple national hackathon podiums
+          and top finalist positions. I thrive in high-pressure environments where technical idealism meets rapid execution,
+          turning complex system challenges into functional, intelligent products.
+        </p>
+      </article>
+
+      {[
+        { icon: 'lucide:boxes', title: 'Modular by default', text: 'Clean codebases and scalable systems, even for small projects.' },
+        { icon: 'lucide:trophy', title: 'National podiums', text: 'Multiple hackathon podiums and top finalist positions with my teams.' },
+        { icon: 'lucide:zap', title: 'Rapid execution', text: 'Technical idealism meets speed, turning complex challenges into intelligent products.' },
+      ].map((m, i) => (
+        <article class="about-card flex items-start gap-4 p-4 lg:col-span-4" style={`--i:${i}`}>
+          <span class="orb" aria-hidden="true"><Icon name={m.icon} class="size-6" /></span>
+          <div class="flex flex-col gap-1">
+            <h3 class="text-lg font-bold leading-tight text-primary/80">{m.title}</h3>
+            <p class="text-sm text-muted-foreground">{m.text}</p>
+          </div>
+        </article>
+      ))}
     </section>
 
     <PhotoCollage />

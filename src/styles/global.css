@@ -476,3 +476,34 @@ html[data-reveal] .reveal-stack > :nth-child(n + 5) { --i: 4; }
 .recharts-wrapper *:focus:not(:focus-visible) {
   outline: none;
 }
+
+/* About: bento cards and memory orbs (monochrome, from tokens). */
+.about-card {
+  border-radius: var(--radius-lg);
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card) / 0.6);
+  box-shadow: var(--shadow-1);
+  backdrop-filter: blur(8px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.about-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); }
+.orb {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 9999px;
+  color: hsl(var(--background));
+  background: radial-gradient(circle at 30% 25%, hsl(var(--foreground) / 0.55), hsl(var(--foreground)) 70%);
+  box-shadow: inset 0 2px 4px hsl(var(--background) / 0.35), 0 8px 20px hsl(var(--foreground) / 0.2);
+  animation: orb-float 5s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * -1.2s);
+}
+@keyframes orb-float {
+  50% { transform: translateY(-4px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .orb { animation: none; }
+  .about-card { transition: none; }
+}

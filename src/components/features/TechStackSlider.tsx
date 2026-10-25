@@ -293,9 +293,10 @@ export default function TechStackSlider() {
 
   return (
     <div
-      className="relative mx-auto w-full overflow-hidden rounded-lg p-4"
+      className="relative mx-auto flex w-full flex-1 flex-col overflow-hidden rounded-lg"
       style={{ background: 'transparent' }}
     >
+      <div className="flex flex-1 flex-col justify-center">
       {/* Row 1 */}
       <Marquee
         key={`row1-${marqueeKey}`}
@@ -312,24 +313,24 @@ export default function TechStackSlider() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={stack.alt}
-            className="relative mx-1 sm:mx-2 flex h-11 w-12 cursor-pointer items-center justify-center rounded-md bg-linear-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-2 sm:p-2 shadow-2"
+            className="relative mx-1 sm:mx-2 flex h-12 w-14 cursor-pointer items-center justify-center rounded-md bg-linear-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-2 sm:p-2 shadow-2"
             onMouseEnter={() => setHoveredKey(`row1-${index}`)}
             onMouseLeave={() => setHoveredKey(null)}
           >
-            <div className="absolute h-11 w-12 rounded-md border-2 border-b-0 border-r-0 border-white dark:border-[#2a2a2a] pointer-events-none" />
+            <div className="absolute h-12 w-14 rounded-md border-2 border-b-0 border-r-0 border-white dark:border-[#2a2a2a] pointer-events-none" />
             <span
               className="h-full w-full select-none flex items-center justify-center transition-all duration-150 text-neutral-900 dark:text-white"
               draggable={false}
             >
               {hoveredKey === `row1-${index}` ? (
-                <ExternalLink size="1.4em" className="sm:hidden text-neutral-800 dark:text-white/80" aria-hidden="true" />
+                <ExternalLink size="1.6em" className="sm:hidden text-neutral-800 dark:text-white/80" aria-hidden="true" />
               ) : (
-                <StackIcon name={stack.name} size="1.75em" className="sm:hidden text-neutral-900 dark:text-white" />
+                <StackIcon name={stack.name} size="2em" className="sm:hidden text-neutral-900 dark:text-white" />
               )}
               {hoveredKey === `row1-${index}` ? (
-                <ExternalLink size="1.4em" className="hidden sm:inline text-neutral-800 dark:text-white/80" aria-hidden="true" />
+                <ExternalLink size="1.6em" className="hidden sm:inline text-neutral-800 dark:text-white/80" aria-hidden="true" />
               ) : (
-                <StackIcon name={stack.name} size="1.75em" className="hidden sm:inline text-neutral-900 dark:text-white" />
+                <StackIcon name={stack.name} size="2em" className="hidden sm:inline text-neutral-900 dark:text-white" />
               )}
             </span>
           </a>
@@ -354,24 +355,24 @@ export default function TechStackSlider() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={stack.alt}
-            className="relative mx-1 sm:mx-2 flex h-11 w-12 cursor-pointer items-center justify-center rounded-md bg-linear-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-2 sm:p-2 shadow-2"
+            className="relative mx-1 sm:mx-2 flex h-12 w-14 cursor-pointer items-center justify-center rounded-md bg-linear-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-2 sm:p-2 shadow-2"
             onMouseEnter={() => setHoveredKey(`row2-${index}`)}
             onMouseLeave={() => setHoveredKey(null)}
           >
-            <div className="absolute h-11 w-12 rounded-md border-2 border-b-0 border-r-0 border-white dark:border-[#2a2a2a] pointer-events-none" />
+            <div className="absolute h-12 w-14 rounded-md border-2 border-b-0 border-r-0 border-white dark:border-[#2a2a2a] pointer-events-none" />
             <span
               className="h-full w-full select-none flex items-center justify-center transition-all duration-150 text-neutral-900 dark:text-white"
               draggable={false}
             >
               {hoveredKey === `row2-${index}` ? (
-                <ExternalLink size="1.4em" className="sm:hidden text-neutral-800 dark:text-white/80" aria-hidden="true" />
+                <ExternalLink size="1.6em" className="sm:hidden text-neutral-800 dark:text-white/80" aria-hidden="true" />
               ) : (
-                <StackIcon name={stack.name} size="1.75em" className="sm:hidden text-neutral-900 dark:text-white" />
+                <StackIcon name={stack.name} size="2em" className="sm:hidden text-neutral-900 dark:text-white" />
               )}
               {hoveredKey === `row2-${index}` ? (
-                <ExternalLink size="1.4em" className="hidden sm:inline text-neutral-800 dark:text-white/80" aria-hidden="true" />
+                <ExternalLink size="1.6em" className="hidden sm:inline text-neutral-800 dark:text-white/80" aria-hidden="true" />
               ) : (
-                <StackIcon name={stack.name} size="1.75em" className="hidden sm:inline text-neutral-900 dark:text-white" />
+                <StackIcon name={stack.name} size="2em" className="hidden sm:inline text-neutral-900 dark:text-white" />
               )}
             </span>
           </a>
@@ -395,33 +396,34 @@ export default function TechStackSlider() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={stack.alt}
-            className="relative mx-1 sm:mx-2 flex h-11 w-12 cursor-pointer items-center justify-center rounded-md bg-linear-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-2 sm:p-2 shadow-2"
+            className="relative mx-1 sm:mx-2 flex h-12 w-14 cursor-pointer items-center justify-center rounded-md bg-linear-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-2 sm:p-2 shadow-2"
             onMouseEnter={() => setHoveredKey(`row3-${index}`)}
             onMouseLeave={() => setHoveredKey(null)}
           >
-            <div className="absolute h-11 w-12 rounded-md border-2 border-b-0 border-r-0 border-white dark:border-[#2a2a2a] pointer-events-none" />
+            <div className="absolute h-12 w-14 rounded-md border-2 border-b-0 border-r-0 border-white dark:border-[#2a2a2a] pointer-events-none" />
             <span
               className="h-full w-full select-none flex items-center justify-center transition-all duration-150 text-neutral-900 dark:text-white"
               draggable={false}
             >
               {hoveredKey === `row3-${index}` ? (
-                <ExternalLink size="1.4em" className="sm:hidden text-neutral-800 dark:text-white/80" aria-hidden="true" />
+                <ExternalLink size="1.6em" className="sm:hidden text-neutral-800 dark:text-white/80" aria-hidden="true" />
               ) : (
-                <StackIcon name={stack.name} size="1.75em" className="sm:hidden text-neutral-900 dark:text-white" />
+                <StackIcon name={stack.name} size="2em" className="sm:hidden text-neutral-900 dark:text-white" />
               )}
               {hoveredKey === `row3-${index}` ? (
-                <ExternalLink size="1.4em" className="hidden sm:inline text-neutral-800 dark:text-white/80" aria-hidden="true" />
+                <ExternalLink size="1.6em" className="hidden sm:inline text-neutral-800 dark:text-white/80" aria-hidden="true" />
               ) : (
-                <StackIcon name={stack.name} size="1.75em" className="hidden sm:inline text-neutral-900 dark:text-white" />
+                <StackIcon name={stack.name} size="2em" className="hidden sm:inline text-neutral-900 dark:text-white" />
               )}
             </span>
           </a>
           </Tooltip>
         ))}
       </Marquee>
+      </div>
 
-      <div className="flex justify-center pt-2 sm:mt-4">
-        <Badge variant="outline" className="text-xs font-mono mb-1">
+      <div className="flex h-6 items-center justify-center">
+        <Badge variant="outline" className="text-xs font-mono">
           My tech stack & tools
         </Badge>
       </div>

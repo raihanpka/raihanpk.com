@@ -237,17 +237,20 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
 
   if (isLoading)
     return (
-      <div className="size-full rounded-xl p-4">
-        <div className="space-y-1.5">
-          {['skeleton-1', 'skeleton-2', 'skeleton-3', 'skeleton-4'].map((id, index) => (
-            <div key={id} className="flex items-center gap-x-2">
-              <div className="h-6 w-6 animate-pulse rounded-full bg-primary/10" />
-              <div className="flex-1">
-                <div
-                  className="h-6 animate-pulse rounded-md bg-primary/10"
-                  style={{ width: `${90 * 0.8 ** index}%` }}
-                />
+      // Mirrors the real chart: p-4 content box split into four equal bands, a 22px icon slot, and bars
+      // at 80% of the band. The spacer on the right keeps room for the value label.
+      <div className="size-full p-4">
+        <div className="grid h-full grid-rows-4">
+          {['100%', '72%', '45%', '30%'].map((width) => (
+            <div key={width} className="flex">
+              <div className="flex w-10 shrink-0 items-center pl-1">
+                <div className="size-[22px] animate-pulse rounded-full bg-primary/10" />
               </div>
+              <div className="flex min-w-0 flex-1 items-center">
+                <div className="h-4/5 animate-pulse rounded-md bg-primary/10" style={{ width }} />
+              </div>
+              {/* Room for the value label that follows each real bar. */}
+              <div className="w-[43px] shrink-0" />
             </div>
           ))}
         </div>

@@ -20,13 +20,18 @@ const LEVEL_CLASS = ['bg-foreground/10', 'bg-foreground/25', 'bg-foreground/45',
 export default function GithubGraph({ weeks, total, profileUrl }: Props) {
   const wrapRef = React.useRef<HTMLDivElement>(null)
   const [count, setCount] = React.useState(DEFAULT_WEEKS)
+  // False for the server render and until the width is known, so we show a skeleton instead of a graph
+  // that is about to change size.
+  const [ready, setReady] = React.useState(false)
   const [active, setActive] = React.useState<{ w: number; d: number } | null>(null)
 
   React.useEffect(() => {
     const el = wrapRef.current
     if (!el) return
     const measure = () => {
-      setCount(visibleWeeks(el.clientWidth, CELL, GAP))
+      // The wrapper has 4px of padding on each side (see its classes), which is not available to the grid.
+      setCount(visibleWeeks(el.clientWidth - 8, CELL, GAP))
+      setReady(true)
     }
     measure()
     const ro = new ResizeObserver(measure)
@@ -37,7 +42,8 @@ export default function GithubGraph({ weeks, total, profileUrl }: Props) {
   const shown = React.useMemo(() => weeks.slice(-count), [weeks, count])
   const max = React.useMemo(() => Math.max(0, ...shown.flatMap((w) => w.map((d) => d?.count ?? 0))), [shown])
   const labels = React.useMemo(() => monthLabels(shown), [shown])
-  const gridWidth = shown.length * STEP - GAP
+  const columns = ready ? shown : weeks
+  const gridWidth = columns.length * STEP - GAP
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     const move = (dw: number, dd: number) => {
@@ -83,19 +89,19 @@ export default function GithubGraph({ weeks, total, profileUrl }: Props) {
         </p>
       </div>
 
-      <div ref={wrapRef} className="relative flex min-w-0 flex-1 items-center justify-end overflow-x-clip">
+      <div ref={wrapRef} className="relative -m-1 flex min-w-0 flex-1 items-center justify-end overflow-hidden p-1">
         <div
-          role="group"
-          tabIndex={0}
-          aria-label="GitHub contribution graph. Use the arrow keys to read each day."
-          className="relative shrink-0 rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+          {...(ready
+            ? { role: 'group', tabIndex: 0, 'aria-label': 'GitHub contribution graph. Use the arrow keys to read each day.' }
+            : { 'aria-hidden': true })}
+          className="relative shrink-0 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           style={{ width: gridWidth }}
           onKeyDown={onKeyDown}
           onBlur={() => setActive(null)}
           onPointerLeave={() => setActive(null)}
         >
           <div className="relative mb-2 h-4 text-xs text-muted-foreground" aria-hidden="true">
-            {labels.map((l) => (
+            {(ready ? labels : []).map((l) => (
               <span key={`${l.name}-${l.col}`} className="absolute top-0" style={{ left: l.col * STEP }}>
                 {l.name}
               </span>
@@ -103,10 +109,12 @@ export default function GithubGraph({ weeks, total, profileUrl }: Props) {
           </div>
 
           <div className="flex" style={{ gap: GAP }}>
-            {shown.map((week, w) => (
+            {columns.map((week, w) => (
               <div key={w} className="flex flex-col" style={{ gap: GAP }}>
                 {week.map((day, d) =>
-                  day ? (
+                  !ready ? (
+                    <span key={d} className="size-3 animate-pulse rounded-sm bg-foreground/10" aria-hidden="true" />
+                  ) : day ? (
                     <Tooltip key={day.date} label={describeDay(day)} open={active?.w === w && active.d === d}>
                       <span
                         role="img"
@@ -128,7 +136,7 @@ export default function GithubGraph({ weeks, total, profileUrl }: Props) {
         </div>
       </div>
 
-      <div className="flex items-center justify-end gap-2 text-xs text-muted-foreground" aria-hidden="true">
+      <div className="flex h-6 items-center justify-end gap-2 text-xs text-muted-foreground" aria-hidden="true">
         Less
         {LEVEL_CLASS.map((c) => (
           <span key={c} className={`size-3 rounded-sm ${c}`} />

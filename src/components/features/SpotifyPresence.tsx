@@ -52,32 +52,34 @@ const SpotifyPresence = () => {
     return (
       <div className="relative flex h-full w-full flex-col items-start justify-between gap-4 p-2 md:flex-row md:items-center">
         <div className="relative flex h-full w-full flex-row items-start justify-between gap-4">
-          {/* Album art skeleton */}
-          <div className="mb-2 w-28 max-w-[170px] h-28 max-h-[160px] animate-pulse rounded-lg border border-border bg-primary/10" />
+          {/* Album art skeleton, same box as the real image */}
+          <div className="mb-2 aspect-square w-28 max-w-[160px] animate-pulse rounded-lg border border-border bg-primary/10 md:w-full" />
           <div className="flex min-w-0 flex-1 flex-col justify-end overflow-hidden">
             <div className="flex flex-col">
-              {/* Icon + "Listening to..." text skeleton */}
-              <span className="mb-2.5 sm:mb-3 flex gap-2 items-center">
-                <div className="h-5 w-5 animate-pulse rounded-sm bg-primary/10" />
-                <div className="h-5 w-28 animate-pulse rounded-sm bg-primary/10" />
+              {/* Icon row: same height as the real icon and label, with the Spotify logo slot on md */}
+              <span className="mt-1 mb-1 flex h-[22px] w-full items-center gap-2 sm:h-6">
+                <div className="size-[22px] shrink-0 animate-pulse rounded-full bg-primary/10" />
+                <div className="h-4 w-28 animate-pulse rounded-sm bg-primary/10" />
+                <div className="ml-auto hidden size-[22px] shrink-0 animate-pulse rounded-full bg-primary/10 md:block" />
               </span>
-              <div className="flex flex-col gap-1">
-                {/* Song title skeleton */}
-                <div className="h-6 w-48 animate-pulse rounded-sm bg-primary/10" />
-                {/* Artist skeleton */}
-                <div className="h-4 w-[60%] animate-pulse rounded-sm bg-primary/10" />
-                {/* Album skeleton */}
-                <div className="h-4 w-[50%] animate-pulse rounded-sm bg-primary/10" />
+              <div className="flex flex-col">
+                {/* Song title: line box of text-base sm:text-xl leading-snug */}
+                <div className="flex h-[22px] items-center sm:h-[27.5px]">
+                  <div className="h-4 w-48 animate-pulse rounded-sm bg-primary/10 sm:h-5" />
+                </div>
+                {/* Artist and album: line box of text-sm sm:text-base */}
+                <div className="flex h-5 items-center sm:h-6">
+                  <div className="h-3.5 w-[60%] animate-pulse rounded-sm bg-primary/10" />
+                </div>
+                <div className="flex h-5 items-center sm:h-6">
+                  <div className="h-3.5 w-[50%] animate-pulse rounded-sm bg-primary/10" />
+                </div>
               </div>
             </div>
           </div>
         </div>
-        {/* Spotify icon skeleton */}
-        <div className="absolute right-1 top-0 m-2 hidden md:block">
-          <div className="h-6 w-6 animate-pulse rounded-full bg-primary/10" />
-        </div>
-        {/* Link button skeleton */}
-        <div className="absolute bottom-0 right-0 m-3 h-10 w-10 animate-pulse rounded-full bg-primary/10" />
+        {/* Link button skeleton, same 44px circle as the real button */}
+        <div className="absolute bottom-0 right-0 m-3 size-11 animate-pulse rounded-full bg-primary/10" />
       </div>
     )
   }

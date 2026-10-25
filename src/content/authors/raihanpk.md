@@ -31,9 +31,9 @@ about:
   nickname: '"Peka"'
   bubbles:
     - >-
-      My friends call me "Peka".
+      "Peka" is my name shortened: raihanpk.
     - >-
-      Keep your expectations low and you`ll never be disappointed.
+      It started back in elementary school, and it has been my identity ever since.
   buildLabel: '02 · How I build'
   buildTitle: 'Every project is treated like production software.'
   buildBody: >-
@@ -43,7 +43,7 @@ about:
       title: 'Modular by default'
       text: 'Clean codebases, clear boundaries, and systems that scale, even for some projects in college.'
     - icon: 'lucide:trophy'
-      title: 'Love hackathons'
+      title: 'Competitive spirit'
       text: 'With a passion for hackathons since my very first competition, with a finalist and podium along the way.'
     - icon: 'lucide:zap'
       title: 'Rapid execution'

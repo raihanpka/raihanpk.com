@@ -9,11 +9,19 @@ import WakatimeBox from '@/components/features/WakatimeBox.tsx'
 import ResumeButton from '@/components/features/ResumeButton.astro'
 import ProfileFlipCard from '@/components/profile/ProfileFlipCard.tsx'
 import { buttonVariants } from '@/components/ui/Button'
+import GithubGraph from '@/components/features/GithubGraph.tsx'
 import { SITE } from '@/consts'
+import { loadContributions } from '@/lib/github'
 import Layout from '@/layouts/Layout.astro'
 import { getCollection, getEntry } from 'astro:content'
 
 const author = await getEntry('authors', 'raihanpk')
+
+// Fetched once at build time. A GITHUB_TOKEN env var makes it use the GraphQL API.
+const contributions = await loadContributions({
+  user: 'raihanpka',
+  token: import.meta.env.GITHUB_TOKEN,
+})
 
 const blog = (await getCollection('blog'))
   .filter((post) => !post.data.draft)
@@ -58,7 +66,7 @@ const projectsData = rawProjects.map((p) => ({
       />
       <div class="flex flex-col gap-4 border-l-2 border-border pl-4 sm:pl-6">
         <p class="font-mono text-xs uppercase tracking-widest text-muted-foreground">SWE &amp; AI systems</p>
-        <h1 class="font-title text-display-sm text-foreground">End-to-end systems, from AI/ML pipelines to product minded.</h1>
+        <h1 class="font-title text-display-sm text-foreground">Delivering end-to-end systems from scalable AI/ML pipelines while remaining deeply product-minded.</h1>
         <p class="max-w-md text-sm text-muted-foreground">
           Software solutions and automation, built to scale. I lead teams from the first prototype to the production release.
         </p>
@@ -68,19 +76,24 @@ const projectsData = rawProjects.map((p) => ({
       </div>
     </section>
 
-    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+    <section class="grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-12">
       <div role="region" aria-label="Wakatime Section"
-        class="lg:col-span-2 flex h-[190px] sm:h-[210px] w-full flex-col items-start whitespace-nowrap rounded-lg border border-border bg-card/60 backdrop-blur-sm shadow-1 p-3 text-xs leading-loose text-foreground">
+        class="lg:col-span-6 flex h-[190px] sm:h-[210px] w-full flex-col items-start whitespace-nowrap rounded-lg border border-border bg-card/60 backdrop-blur-sm shadow-1 p-3 text-xs leading-loose text-foreground">
         <WakatimeBox omitLanguages={['Markdown', 'JSON']} client:only="react" />
       </div>
 
       <div role="region" aria-label="Spotify Section"
-        class="lg:col-span-2 flex h-[190px] sm:h-[210px] w-full flex-col items-start whitespace-nowrap rounded-lg border border-border bg-card/60 backdrop-blur-sm shadow-1 p-3 text-xs leading-loose text-foreground">
+        class="lg:col-span-6 flex h-[190px] sm:h-[210px] w-full flex-col items-start whitespace-nowrap rounded-lg border border-border bg-card/60 backdrop-blur-sm shadow-1 p-3 text-xs leading-loose text-foreground">
         <SpotifyPresence client:idle />
       </div>
 
+      <div role="region" aria-label="GitHub contributions"
+        class="flex min-h-72 w-full flex-col rounded-lg border border-border bg-card/60 p-4 text-foreground shadow-1 backdrop-blur-sm lg:col-span-7">
+        <GithubGraph client:visible weeks={contributions.weeks} total={contributions.total} profileUrl="https://github.com/raihanpka" />
+      </div>
+
       <div role="region" aria-label="Tech Stack"
-        class="col-span-1 md:col-span-2 lg:col-span-4 h-auto w-full flex flex-col rounded-lg border border-border bg-card/60 backdrop-blur-sm shadow-1 p-2 sm:p-4 text-xs text-foreground">
+        class="flex min-h-72 w-full flex-col overflow-hidden rounded-lg border border-border bg-card/60 p-2 text-xs text-foreground shadow-1 backdrop-blur-sm sm:p-4 lg:col-span-5">
         <TechStackSlider client:idle />
       </div>
 

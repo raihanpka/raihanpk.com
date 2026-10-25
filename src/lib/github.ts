@@ -67,7 +67,8 @@ export function shapeWeeks(days: Day[]): Week[] {
 export function levelFor(count: number, max: number): 0 | 1 | 2 | 3 | 4 {
   if (count <= 0) return 0
   if (max <= 0) return 4
-  const r = count / max
+  // Square root, so a quiet day still shows next to one huge day.
+  const r = Math.sqrt(count / max)
   if (r >= 0.75) return 4
   if (r >= 0.5) return 3
   if (r >= 0.25) return 2
@@ -77,6 +78,41 @@ export function levelFor(count: number, max: number): 0 | 1 | 2 | 3 | 4 {
 /** How many weeks fit in `width` px. Never fewer than a quarter (13 weeks), never more than a year. */
 export function visibleWeeks(width: number, cell: number, gap: number, min = 13, max = 53): number {
   return Math.max(min, Math.min(max, Math.floor((width + gap) / (cell + gap))))
+}
+
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+function ordinal(n: number): string {
+  if (n % 100 >= 11 && n % 100 <= 13) return `${n}th`
+  return `${n}${({ 1: 'st', 2: 'nd', 3: 'rd' } as Record<number, string>)[n % 10] ?? 'th'}`
+}
+
+/** The tooltip text for one day, for example "57 contributions on July 4th." */
+export function describeDay(day: Day): string {
+  const [, m, d] = day.date.split('-').map(Number)
+  const what = day.count === 0 ? 'No contributions' : `${day.count} contribution${day.count === 1 ? '' : 's'}`
+  return `${what} on ${MONTHS[m - 1]} ${ordinal(d)}.`
+}
+
+/**
+ * Month names above the grid: one where a month starts, at least 3 columns apart.
+ * If the first label would crowd the second one, the second replaces it.
+ */
+export function monthLabels(weeks: Week[]): { name: string; col: number }[] {
+  const labels: { name: string; col: number }[] = []
+  let current = -1
+  weeks.forEach((week, col) => {
+    const day = week.find((d) => d !== null)
+    if (!day) return
+    const month = Number(day.date.split('-')[1]) - 1
+    if (month === current) return
+    current = month
+    const name = MONTHS[month].slice(0, 3)
+    const last = labels[labels.length - 1]
+    if (!last || col - last.col >= 3) labels.push({ name, col })
+    else if (labels.length === 1) labels[0] = { name, col }
+  })
+  return labels
 }
 
 interface LoadOptions {

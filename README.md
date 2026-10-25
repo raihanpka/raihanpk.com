@@ -28,18 +28,38 @@ Additional features developed from built-in features of the public template [Ast
 - **Projects Showcase**: Interactive portfolio grid featuring smooth media video previews, modal dialogs, and responsive category filtering.
 - **Tech Stack Slider**: 3D-sculpted marquee slider displaying programming languages, frameworks, and cloud infrastructure tools.
 - **Blog & View Counter**: MDX content collections with live view counter persistence backed by [PostgreSQL](https://postgresql.org) and [Prisma Accelerate](https://www.prisma.io/accelerate).
-- **High Performance**: Optimized for Core Web Vitals (100 Lighthouse score across Performance, Accessibility, Best Practices, and SEO) featuring font preloading, responsive WebP asset compression, and lazy loading.
+- **GitHub Contributions**: Contribution graph that adapts its number of weeks to the card width, with a keyboard-friendly tooltip. Data is loaded at build time from the GitHub GraphQL API when `GITHUB_TOKEN` is set, with a public-page fallback.
+- **Profile Card**: Flip card with a dithered baby's breath band and a chat entry on the back.
+- **About Page**: Bento cards and a hover scene built from the logo. All the copy for Home and About lives as fields in `src/content/authors/raihanpk.md`.
+- **Details**: Hand-drawn signature that writes on at each full page load, soft click sounds with a mute toggle, and link tooltips that follow the pointer.
+- **Design System**: Tokens for spacing, type, radius, and shadow in `src/styles/global.css`, documented in [`docs/design-system.md`](./docs/design-system.md) and enforced by `bun run check:tokens`.
+- **High Performance**: Tuned for Core Web Vitals (Lighthouse desktop on Home: 98 Performance, 100 Accessibility, 100 Best Practices, 100 SEO) with font preloading, WebP assets, deferred islands and media, and build-time avatar optimization. The report is in [`public/scratch`](./public/scratch).
 
 <div align="center">
-  <img src="./public/static/profile/lighthouse.png" alt="Lighthouse Score - 100/100/100/100" width="850">
+  <img src="./public/scratch/lighthouse.png" alt="Lighthouse desktop score on Home: Performance 98, Accessibility 100, Best Practices 100, SEO 100" width="850">
 </div>
+
+---
+
+### getting started
+
+This project uses [Bun](https://bun.sh).
+
+```bash
+bun install
+bun run dev
+```
+
+Useful scripts: `bun run build` (type check and build), `bun run check:tokens` (design token lint), `bun test`, and `bun run index-knowledge` (rebuild the chatbot index).
+
+Environment variables go in `.env`. Names only, never commit values: `DATABASE_URL`, `GITHUB_TOKEN` (optional, read-only), `PINECONE_API_KEY`, `PINECONE_INDEX`, `PINECONE_NAMESPACE`, `GOOGLE_GENERATIVE_AI_API_KEY`, `OPENAI_API_KEY`, `RATE_LIMIT_SECRET`.
 
 ---
 
 ### tech stack
 
 - **Framework & Core**: [Astro](https://astro.build), [React](https://react.dev), [TypeScript](https://www.typescriptlang.org)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com), [Tailwind Animate](https://github.com/jamiebuilds/tailwindcss-animate)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com), [tw-animate-css](https://github.com/Wombosvideo/tw-animate-css)
 - **Database & ORM**: [PostgreSQL](https://postgresql.org), [Prisma ORM](https://prisma.io) with [Prisma Accelerate](https://www.prisma.io/accelerate)
 - **Vector & AI**: [Pinecone](https://pinecone.io), [Vercel AI SDK](https://sdk.vercel.ai), [Google Generative AI](https://ai.google.dev), [OpenAI](https://openai.com)
 - **UI Components & Animation**: [Radix UI](https://www.radix-ui.com), [Lucide Icons](https://lucide.dev), [React Icons](https://react-icons.github.io/react-icons), [Motion](https://motion.dev), [Recharts](https://recharts.org), [@devnomic/marquee](https://github.com/devnomic/marquee)

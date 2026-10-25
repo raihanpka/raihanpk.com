@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { FaGithub } from 'react-icons/fa'
+import { Tooltip } from '@/components/ui/Tooltip'
 import { describeDay, levelFor, monthLabels, visibleWeeks, type Week } from '@/lib/github'
 
 interface Props {
@@ -37,10 +39,6 @@ export default function GithubGraph({ weeks, total, profileUrl }: Props) {
   const labels = React.useMemo(() => monthLabels(shown), [shown])
   const gridWidth = shown.length * STEP - GAP
 
-  const activeDay = active ? shown[active.w]?.[active.d] ?? null : null
-  // Keep the tooltip (about 180px wide) inside the grid's left and right edges.
-  const tipLeft = active ? Math.min(Math.max(active.w * STEP + CELL / 2, 90), Math.max(90, gridWidth - 90)) : 0
-
   const onKeyDown = (e: React.KeyboardEvent) => {
     const move = (dw: number, dd: number) => {
       e.preventDefault()
@@ -74,11 +72,15 @@ export default function GithubGraph({ weeks, total, profileUrl }: Props) {
 
   return (
     <div className="flex h-full flex-col gap-3">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <a href={profileUrl} target="_blank" rel="noreferrer noopener" className="text-sm font-medium text-foreground hover:underline underline-offset-4">
+      <div className="flex flex-col gap-1">
+        <a href={profileUrl} target="_blank" rel="noreferrer noopener" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+          <FaGithub size={14} className="shrink-0" />
           GitHub
         </a>
-        <p className="font-mono text-xs text-muted-foreground">{total.toLocaleString('en-US')} contributions in the last year</p>
+        <p className="text-lg font-bold leading-tight text-primary/80">
+          {total.toLocaleString('en-US')} contributions{' '}
+          <span className="text-sm font-normal text-muted-foreground">in the last year</span>
+        </p>
       </div>
 
       <div ref={wrapRef} className="relative flex min-w-0 flex-1 flex-col justify-center">
@@ -105,15 +107,16 @@ export default function GithubGraph({ weeks, total, profileUrl }: Props) {
               <div key={w} className="flex flex-col" style={{ gap: GAP }}>
                 {week.map((day, d) =>
                   day ? (
-                    <span
-                      key={day.date}
-                      role="img"
-                      aria-label={describeDay(day)}
-                      onPointerEnter={() => setActive({ w, d })}
-                      className={`size-3 rounded-sm transition-transform hover:scale-125 ${LEVEL_CLASS[levelFor(day.count, max)]} ${
-                        active?.w === w && active.d === d ? 'ring-2 ring-ring' : ''
-                      }`}
-                    />
+                    <Tooltip key={day.date} label={describeDay(day)} open={active?.w === w && active.d === d}>
+                      <span
+                        role="img"
+                        aria-label={describeDay(day)}
+                        onPointerEnter={() => setActive({ w, d })}
+                        className={`size-3 rounded-sm transition-transform hover:scale-125 ${LEVEL_CLASS[levelFor(day.count, max)]} ${
+                          active?.w === w && active.d === d ? 'ring-2 ring-ring' : ''
+                        }`}
+                      />
+                    </Tooltip>
                   ) : (
                     <span key={`pad-${d}`} className="size-3" aria-hidden="true" />
                   ),
@@ -122,15 +125,6 @@ export default function GithubGraph({ weeks, total, profileUrl }: Props) {
             ))}
           </div>
 
-          {activeDay && active && (
-            <div
-              role="status"
-              className="pointer-events-none absolute z-20 whitespace-nowrap rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-2"
-              style={{ left: tipLeft, top: 24 + active.d * STEP + CELL + 8, transform: 'translateX(-50%)' }}
-            >
-              {describeDay(activeDay)}
-            </div>
-          )}
         </div>
       </div>
 

@@ -55,10 +55,10 @@ describe('signature in the header', () => {
     expect(header).toContain('aria-label="raihanpk"')
   })
 
-  it('draws only on the first visit of a session, and respects reduced motion', async () => {
-    expect(await read('src/components/Head.astro')).toContain("dataset.reveal")
+  it('draws on every full page load, and respects reduced motion', async () => {
+    expect(await read('src/components/Head.astro')).toContain("dataset.sign")
     const css = await read('src/styles/global.css')
-    expect(css).toMatch(/html\[data-reveal\]\s+\.signature/)
+    expect(css).toMatch(/html\[data-sign\]\s+\.signature/)
     expect(css).toMatch(/prefers-reduced-motion[^}]*\{[^}]*\.signature/s)
   })
 })

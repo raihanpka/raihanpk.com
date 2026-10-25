@@ -1,7 +1,7 @@
 ---
 /**
- * About scene: dithered baby's breath with the logo character drawn faintly.
- * On hover, focus or tap the character fills in and speech bubbles slide in.
+ * Scene card: a dithered plant with the logo character drawn faintly. It is the About card and the
+ * base of the error pages. On hover, focus or tap the character fills in and speech bubbles slide in.
  */
 import BabysBreathField from '@/components/profile/BabysBreathField'
 
@@ -10,9 +10,13 @@ interface Props {
   nickname: string
   bubbles: string[]
   class?: string
+  /** Baby's breath stands still by default. A dandelion has no horizon, so it is drawn flat. */
+  plant?: 'babys-breath' | 'dandelion'
+  animate?: boolean
 }
 
-const { label, nickname, bubbles, class: className } = Astro.props
+const { label, nickname, bubbles, class: className, plant = 'babys-breath', animate = false } = Astro.props
+const dandelion = plant === 'dandelion'
 ---
 
 <div
@@ -21,7 +25,11 @@ const { label, nickname, bubbles, class: className } = Astro.props
   role="group"
   aria-label={`${label} ${nickname}`}
 >
-  <BabysBreathField client:visible animate={false} perspective={0.25} className="horizon-fade absolute inset-x-0 bottom-0 h-3/5 w-full text-foreground/60" />
+  {dandelion ? (
+    <BabysBreathField client:visible scene="dandelion" cell={2} animate={animate} className="absolute inset-x-0 bottom-0 h-3/5 w-full text-foreground/60" />
+  ) : (
+    <BabysBreathField client:visible animate={animate} perspective={0.25} className="horizon-fade absolute inset-x-0 bottom-0 h-3/5 w-full text-foreground/60" />
+  )}
 
   <div class="scene-person absolute -bottom-22 left-3 flex w-24 flex-col-reverse items-center sm:w-28" aria-hidden="true">
     <svg class="scene-body h-40 w-[150%] -translate-y-6 text-foreground" viewBox="0 0 140 130" preserveAspectRatio="none" focusable="false">
@@ -44,14 +52,14 @@ const { label, nickname, bubbles, class: className } = Astro.props
     </div>
   </div>
 
-  <div class="scene-idle absolute right-5 top-5 flex max-w-[45%] flex-col items-end gap-2 text-right">
-    <p class="font-mono text-xs uppercase tracking-widest text-muted-foreground">{label}</p>
+  <div class="scene-idle absolute right-5 top-5 flex max-w-3/4 flex-col sm:max-w-[45%] items-end gap-2 text-right">
+    <p data-scene="label" class="font-mono text-xs uppercase tracking-widest text-muted-foreground">{label}</p>
     <p class="font-title text-4xl sm:text-display text-foreground">{nickname}</p>
   </div>
 
   <div class="absolute inset-y-4 right-4 left-[44%] flex flex-col justify-center gap-2" aria-hidden="false">
     {bubbles.map((text, i) => (
-      <p class="scene-bubble rounded-lg border border-border bg-background/90 p-3 text-sm text-foreground shadow-2 backdrop-blur-sm" style={`--i:${i}`}>
+      <p data-scene="bubble" class="scene-bubble rounded-lg border border-border bg-background/90 p-3 text-sm text-foreground shadow-2 backdrop-blur-sm" style={`--i:${i}`}>
         {text}
       </p>
     ))}

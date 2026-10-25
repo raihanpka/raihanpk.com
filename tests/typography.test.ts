@@ -36,7 +36,7 @@ describe('Instrument Serif', () => {
     for (const expected of [
       'src/pages/index.astro',
       'src/pages/about.astro',
-      'src/pages/404.astro',
+      'src/components/ErrorPage.astro',
       'src/components/features/ProjectsShowcase.tsx',
       'src/components/EditorialProfileCard.astro',
     ]) {

@@ -13,13 +13,14 @@ interface Props {
   /** schema.org objects for this page, written as JSON-LD. */
   jsonLd?: object[]
   ogType?: 'website' | 'article'
+  noindex?: boolean
   published?: Date
   modified?: Date
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 
-const { title, description, image = '/static/profile/twitter-card.png', jsonLd = [], ogType = 'website', published, modified } = Astro.props
+const { title, description, image = '/static/profile/twitter-card.png', jsonLd = [], ogType = 'website', noindex = false, published, modified } = Astro.props
 ---
 
 <meta charset="utf-8" />
@@ -39,6 +40,7 @@ const { title, description, image = '/static/profile/twitter-card.png', jsonLd =
 <title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
+{noindex && <meta name="robots" content="noindex" />}
 
 <link rel="apple-touch-icon" href="/favicons/apple-touch-icon.png"/>
 <link rel="icon" href="/favicons/favicon.ico" type="image/x-icon">

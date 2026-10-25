@@ -13,10 +13,14 @@ import GithubGraph from '@/components/features/GithubGraph.tsx'
 import { SITE } from '@/consts'
 import { loadContributions } from '@/lib/github'
 import Layout from '@/layouts/Layout.astro'
+import { getImage } from 'astro:assets'
 import { getCollection, getEntry } from 'astro:content'
 
 const author = await getEntry('authors', 'raihanpk')
 const home = author?.data.home
+// Fetch the avatar at build time and serve it from this origin as webp (falls back to the remote URL).
+const avatarRemote = (author?.data.avatar ?? '/static/profile/avatar.png').replace('size=96', 'size=192')
+const avatarSrc = await getImage({ src: avatarRemote, width: 160, height: 160, format: 'webp' }).then((i) => i.src).catch(() => avatarRemote)
 
 // Fetched once at build time. A GITHUB_TOKEN env var makes it use the GraphQL API.
 const contributions = await loadContributions({
@@ -57,7 +61,7 @@ const projectsData = rawProjects.map((p) => ({
         name={author?.data.name ?? 'Raihan Putra Kirana'}
         role={home?.role ?? ''}
         pronunciation={home?.pronunciation}
-        avatar={(author?.data.avatar ?? '/static/profile/avatar.png').replace('size=96', 'size=192')}
+        avatar={avatarSrc}
         links={[
           { kind: 'mail', label: author?.data.mail ?? 'me@raihanpk.com', href: `mailto:${author?.data.mail ?? 'me@raihanpk.com'}` },
           { kind: 'linkedin', label: 'raihanpk', href: author?.data.linkedin ?? 'https://linkedin.com/in/raihanpk' },
@@ -80,12 +84,12 @@ const projectsData = rawProjects.map((p) => ({
     <section class="grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-12">
       <div role="region" aria-label="Wakatime Section"
         class="lg:col-span-6 flex h-[190px] sm:h-[210px] w-full flex-col items-start whitespace-nowrap rounded-lg border border-border bg-card/60 backdrop-blur-sm shadow-1 p-3 text-xs leading-loose text-foreground">
-        <WakatimeBox omitLanguages={['Markdown', 'JSON']} client:only="react" />
+        <WakatimeBox omitLanguages={['Markdown', 'JSON']} client:visible />
       </div>
 
       <div role="region" aria-label="Spotify Section"
         class="lg:col-span-6 flex h-[190px] sm:h-[210px] w-full flex-col items-start whitespace-nowrap rounded-lg border border-border bg-card/60 backdrop-blur-sm shadow-1 p-3 text-xs leading-loose text-foreground">
-        <SpotifyPresence client:idle />
+        <SpotifyPresence client:visible />
       </div>
 
       <div role="region" aria-label="GitHub contributions"

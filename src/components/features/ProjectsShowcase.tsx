@@ -284,6 +284,8 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
   const containerRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const isInView = useInView(containerRef, { once: false, amount: 0.2 })
+  // Fetch the video's first frame only when the card is about to scroll into view.
+  const nearViewport = useInView(containerRef, { once: true, margin: '600px 0px 600px 0px' })
 
   useEffect(() => {
     setAssetSrc(project.asset)
@@ -365,7 +367,7 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
             ref={videoRef}
             key={assetSrc}
             src={assetSrc}
-            preload="metadata"
+            preload={nearViewport ? 'metadata' : 'none'}
             loop
             muted
             playsInline

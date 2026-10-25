@@ -53,6 +53,10 @@ const { title, description, image = '/static/profile/twitter-card.png' } = Astro
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
 
+<link rel="preconnect" href="https://1.gravatar.com" />
+<link rel="preconnect" href="https://lastfm-last-played.biancarosa.com.br" crossorigin />
+<link rel="dns-prefetch" href="https://lastfm.freetls.fastly.net" />
+<link rel="dns-prefetch" href="https://photogallery.raihanpk.com" />
 <link rel="preload" href="/assets/sea.webp" as="image" type="image/webp" fetchpriority="high" />
 <ClientRouter />
 

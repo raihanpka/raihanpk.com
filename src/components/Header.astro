@@ -21,7 +21,7 @@ import logo from '../../public/static/profile/avatar.png'
         aria-label="raihanpk"
         class="flex shrink-0 items-center gap-2 transition-colors duration-300 hover:text-primary"
       >
-        <Image src={logo} alt="" width={64} height={64} format="webp" class="size-8" style="max-width:2rem;max-height:2rem;" />
+        <Image src={logo} alt="" width={64} height={64} format="webp" loading="eager" fetchpriority="high" class="size-8" style="max-width:2rem;max-height:2rem;" />
         <Signature />
       </Link>
       <div class="flex items-center gap-2 md:gap-4">
@@ -37,7 +37,7 @@ import logo from '../../public/static/profile/avatar.png'
             ))
           }
         </nav>
-        <MobileMenu client:load />
+        <MobileMenu client:media="(max-width: 767px)" />
         <SoundToggle client:load />
         <ModeToggle client:load />
       </div>

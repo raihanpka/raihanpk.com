@@ -396,6 +396,23 @@ html[data-reveal] .signature {
   html[data-reveal] .signature { animation: none; }
 }
 
+/* First visit: home blocks fade in top to bottom (opacity/transform only, no layout shift). */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+html[data-reveal] .reveal-stack > * {
+  animation: reveal-up 0.5s ease-out both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+html[data-reveal] .reveal-stack > :nth-child(2) { --i: 1; }
+html[data-reveal] .reveal-stack > :nth-child(3) { --i: 2; }
+html[data-reveal] .reveal-stack > :nth-child(4) { --i: 3; }
+html[data-reveal] .reveal-stack > :nth-child(n + 5) { --i: 4; }
+@media (prefers-reduced-motion: reduce) {
+  html[data-reveal] .reveal-stack > * { animation: none; }
+}
+
 /* ── Profile card: 3D flip, tilt, brushed-metal surface and shine ─────────────── */
 .flip-scene { perspective: 1200px; }
 .flip-tilt {

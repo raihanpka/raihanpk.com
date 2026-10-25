@@ -3,9 +3,17 @@ import { useBabysBreath } from '@/hooks/useBabysBreath'
 import { cn } from '@/lib/utils'
 
 /** Decorative dithered baby's breath band. Hidden from assistive tech. */
-export default function BabysBreathField({ className, animate = true }: { className?: string; animate?: boolean }) {
+export default function BabysBreathField({
+  className,
+  animate = true,
+  perspective,
+}: {
+  className?: string
+  animate?: boolean
+  perspective?: number
+}) {
   const ref = useRef<HTMLCanvasElement>(null)
-  useBabysBreath(ref, { animate })
+  useBabysBreath(ref, { animate, perspective })
   return (
     <canvas
       ref={ref}

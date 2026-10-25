@@ -11,6 +11,11 @@ interface Options {
   still?: number
   /** Set false for a static picture: the still frame is drawn once and the wind never starts. */
   animate?: boolean
+  /**
+   * Horizon effect: plants grow from this fraction of their height at the left edge (far away)
+   * to full height at the right edge (near). Omit for a flat band.
+   */
+  perspective?: number
 }
 
 /**
@@ -18,11 +23,14 @@ interface Options {
  * starts after the page has loaded and the browser is idle. It stops offscreen,
  * on hidden tabs, and for reduced motion.
  */
-export function useBabysBreath(canvasRef: RefObject<HTMLCanvasElement | null>, { cell = 3, frameInterval = 40, still = 2.4, animate = true }: Options = {}) {
+export function useBabysBreath(canvasRef: RefObject<HTMLCanvasElement | null>, { cell = 3, frameInterval = 40, still = 2.4, animate = true, perspective }: Options = {}) {
   useEffect(() => {
     const canvas = canvasRef.current
     const ctx = canvas?.getContext('2d')
     if (!canvas || !ctx) return
+    // With a perspective the field is drawn flat to a scratch canvas, then squeezed strip by strip.
+    const scratch = perspective === undefined ? null : document.createElement('canvas')
+    const scratchCtx = scratch?.getContext('2d') ?? null
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const dpr = Math.min(window.devicePixelRatio || 1, 2)
@@ -45,22 +53,40 @@ export function useBabysBreath(canvasRef: RefObject<HTMLCanvasElement | null>, {
       const rect = canvas.getBoundingClientRect()
       canvas.width = Math.max(1, Math.round(rect.width * dpr))
       canvas.height = Math.max(1, Math.round(rect.height * dpr))
+      if (scratch) {
+        scratch.width = canvas.width
+        scratch.height = canvas.height
+      }
       cols = Math.floor(rect.width / cell)
       rows = Math.floor(rect.height / cell)
       ground = groundField(cols, rows)
     }
 
-    const draw = (t: number) => {
-      if (disposed || cols === 0 || rows === 0) return
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.fillStyle = color
+    const paint = (target: CanvasRenderingContext2D, t: number) => {
+      target.clearRect(0, 0, canvas.width, canvas.height)
+      target.fillStyle = color
       const px = cell * dpr
       const dot = Math.max(1, px - dpr)
       const field = compose(cols, rows, t, ground)
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
-          if (field[r * cols + c] > bayer4(c, r)) ctx.fillRect(c * px, r * px, dot, dot)
+          if (field[r * cols + c] > bayer4(c, r)) target.fillRect(c * px, r * px, dot, dot)
         }
+      }
+    }
+
+    const draw = (t: number) => {
+      if (disposed || cols === 0 || rows === 0) return
+      if (!scratch || !scratchCtx || perspective === undefined) return paint(ctx, t)
+      paint(scratchCtx, t)
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.imageSmoothingEnabled = false
+      const strip = Math.max(2, Math.round(3 * dpr))
+      for (let sx = 0; sx < canvas.width; sx += strip) {
+        const u = (sx + strip / 2) / canvas.width
+        const k = perspective + (1 - perspective) * Math.pow(u, 1.3)
+        const dh = canvas.height * k
+        ctx.drawImage(scratch, sx, 0, strip, canvas.height, sx, canvas.height - dh, strip, dh)
       }
     }
 
@@ -132,5 +158,5 @@ export function useBabysBreath(canvasRef: RefObject<HTMLCanvasElement | null>, {
       mo.disconnect()
       document.removeEventListener('visibilitychange', onVisibility)
     }
-  }, [canvasRef, cell, frameInterval, still, animate])
+  }, [canvasRef, cell, frameInterval, still, animate, perspective])
 }

@@ -465,6 +465,13 @@ html[data-reveal] .reveal-stack > :nth-child(n + 5) { --i: 4; }
   20% { opacity: 1; }
   100% { transform: translateX(420%) skewX(-18deg); opacity: 0; }
 }
+/* Far to near: invisible at the left edge, solid toward the right, and fading out at the top. */
+.horizon-fade {
+  mask-image: linear-gradient(to right, transparent 0%, black 80%), linear-gradient(to top, black 70%, transparent);
+  mask-composite: intersect;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 80%), linear-gradient(to top, black 70%, transparent);
+  -webkit-mask-composite: source-in;
+}
 .dither-fade { mask-image: linear-gradient(to top, black 75%, transparent); -webkit-mask-image: linear-gradient(to top, black 75%, transparent); }
 @media (prefers-reduced-motion: reduce) {
   .flip-inner, .flip-tilt { transition: none; }

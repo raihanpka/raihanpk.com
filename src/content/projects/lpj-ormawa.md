@@ -4,7 +4,7 @@ description: 'The official 2025 digital annual report website for student organi
 tags: ['Frontend', 'Web']
 type: ['Frontend', 'Web App']
 asset: 'https://photogallery.raihanpk.com/raihanpk-com/lpjormawa-demo.mp4'
-fallback: '/static/projects/lpj-ormawa.png'
+fallback: '/static/projects/lpj-ormawa.webp'
 link: 'https://laporanormawaipb2025.id'
 github: 'https://github.com/raihanpka/lpjormawaipb2025'
 date: 'January 2026'

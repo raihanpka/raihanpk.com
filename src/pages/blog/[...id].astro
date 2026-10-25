@@ -60,7 +60,7 @@ const authors = await parseAuthors(post.data.authors ?? [])
   description={post.data.description}
   image={post.data.image?.src ?? '/static/profile/1200x630.jpg'}
 >
-  <div class="mx-auto max-w-6xl px-[clamp(1rem,0.75rem+2vw,2.5rem)] flex flex-col gap-y-6">
+  <div class="mx-auto max-w-6xl px-(--space-gutter) flex flex-col gap-y-6">
     <Breadcrumbs
       items={[
         { href: '/blog', label: 'Blog', icon: 'lucide:archive' },
@@ -74,13 +74,13 @@ const authors = await parseAuthors(post.data.authors ?? [])
           alt={post.data.title} loading="eager" fetchpriority="high"
           width={1200} format="webp"
           height={630}
-          class="mx-auto w-full rounded-xl object-cover"
+          class="mx-auto w-full rounded-lg object-cover"
         />
       )
     }
     <section class="flex flex-col gap-y-6 text-center">
       <div class="flex flex-col gap-y-4">
-        <h1 class="text-[clamp(1.75rem,1.2rem+2.8vw,3rem)] font-bold leading-tight">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
           {post.data.title}
         </h1>
 
@@ -169,7 +169,7 @@ const authors = await parseAuthors(post.data.authors ?? [])
   <Button
     variant="outline"
     size="icon"
-    className="group fixed bottom-24 md:bottom-28 right-5 md:right-8 z-40 hidden shadow-md"
+    className="group fixed bottom-24 md:bottom-28 right-5 md:right-8 z-40 hidden shadow-2"
     id="scroll-to-top"
     title="Scroll to top"
     aria-label="Scroll to top"

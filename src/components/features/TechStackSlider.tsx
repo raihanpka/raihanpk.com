@@ -298,7 +298,7 @@ export default function TechStackSlider() {
 
   return (
     <div
-      className="relative mx-auto w-full overflow-hidden rounded-xl p-4"
+      className="relative mx-auto w-full overflow-hidden rounded-lg p-4"
       style={{ background: 'transparent' }}
     >
       {/* Row 1 */}
@@ -318,11 +318,11 @@ export default function TechStackSlider() {
             rel="noopener noreferrer"
             title={stack.alt}
             aria-label={stack.alt}
-            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-linear-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-1.5 sm:p-2 shadow-md"
+            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-md bg-linear-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-2 sm:p-2 shadow-2"
             onMouseEnter={() => setHoveredKey(`row1-${index}`)}
             onMouseLeave={() => setHoveredKey(null)}
           >
-            <div className="absolute h-10 w-12 sm:h-14 sm:w-16 rounded-lg border-2 border-b-0 border-r-0 border-white dark:border-[#2a2a2a] pointer-events-none" />
+            <div className="absolute h-10 w-12 sm:h-14 sm:w-16 rounded-md border-2 border-b-0 border-r-0 border-white dark:border-[#2a2a2a] pointer-events-none" />
             <span
               className="h-full w-full select-none flex items-center justify-center transition-all duration-150 text-neutral-900 dark:text-white"
               draggable={false}
@@ -360,11 +360,11 @@ export default function TechStackSlider() {
             rel="noopener noreferrer"
             title={stack.alt}
             aria-label={stack.alt}
-            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-linear-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-1.5 sm:p-2 shadow-md"
+            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-md bg-linear-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-2 sm:p-2 shadow-2"
             onMouseEnter={() => setHoveredKey(`row2-${index}`)}
             onMouseLeave={() => setHoveredKey(null)}
           >
-            <div className="absolute h-10 w-12 sm:h-14 sm:w-16 rounded-lg border-2 border-b-0 border-r-0 border-white dark:border-[#2a2a2a] pointer-events-none" />
+            <div className="absolute h-10 w-12 sm:h-14 sm:w-16 rounded-md border-2 border-b-0 border-r-0 border-white dark:border-[#2a2a2a] pointer-events-none" />
             <span
               className="h-full w-full select-none flex items-center justify-center transition-all duration-150 text-neutral-900 dark:text-white"
               draggable={false}
@@ -401,11 +401,11 @@ export default function TechStackSlider() {
             rel="noopener noreferrer"
             title={stack.alt}
             aria-label={stack.alt}
-            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-lg bg-linear-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-1.5 sm:p-2 shadow-md"
+            className="relative mx-1 sm:mx-2 flex h-10 w-12 sm:h-14 sm:w-16 cursor-pointer items-center justify-center rounded-md bg-linear-to-br from-[#ffffff] to-[#e6e6e6] dark:from-[#1f1f1f] dark:to-[#0e0e0e] border border-black/10 dark:border-transparent p-2 sm:p-2 shadow-2"
             onMouseEnter={() => setHoveredKey(`row3-${index}`)}
             onMouseLeave={() => setHoveredKey(null)}
           >
-            <div className="absolute h-10 w-12 sm:h-14 sm:w-16 rounded-lg border-2 border-b-0 border-r-0 border-white dark:border-[#2a2a2a] pointer-events-none" />
+            <div className="absolute h-10 w-12 sm:h-14 sm:w-16 rounded-md border-2 border-b-0 border-r-0 border-white dark:border-[#2a2a2a] pointer-events-none" />
             <span
               className="h-full w-full select-none flex items-center justify-center transition-all duration-150 text-neutral-900 dark:text-white"
               draggable={false}

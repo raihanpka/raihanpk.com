@@ -41,13 +41,13 @@ const { title, subtitle, videoSrc, posterSrc } = Astro.props
     class="flex min-h-dvh-safe flex-col items-center justify-center px-(--space-card) py-section text-center"
   >
     <h1
-      class="max-w-4xl text-balance font-bold tracking-tight text-hero text-foreground"
+      class="max-w-4xl text-balance font-bold tracking-tight text-display text-foreground"
     >
       {title}
     </h1>
     {subtitle && (
       <p
-        class="mt-4 max-w-2xl text-balance text-fluid-lg text-muted-foreground sm:mt-6"
+        class="mt-4 max-w-2xl text-balance text-lg text-muted-foreground sm:mt-6"
       >
         {subtitle}
       </p>

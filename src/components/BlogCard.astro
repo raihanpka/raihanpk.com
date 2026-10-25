@@ -18,7 +18,7 @@ const authors = await parseAuthors(entry.data.authors ?? [])
 ---
 
 <div
-  class="not-prose rounded-xl border bg-card/60 backdrop-blur-sm p-(--space-card) shadow-sm transition-shadow duration-300 ease-in-out hover:shadow-md motion-reduce:transition-none"
+  class="not-prose rounded-lg border bg-card/60 backdrop-blur-sm p-(--space-card) shadow-1 transition-shadow duration-300 ease-in-out hover:shadow-2 motion-reduce:transition-none"
 >
   <Link
     href={`/${entry.collection}/${entry.id}`}
@@ -33,16 +33,16 @@ const authors = await parseAuthors(entry.data.authors ?? [])
             width={1300}
             height={700}
             format="webp"
-            class="aspect-video w-full rounded-lg object-cover sm:h-full grayscale"
+            class="aspect-video w-full rounded-md object-cover sm:h-full grayscale"
           />
         </div>
       )
     }
     <div class="grow">
-      <h3 class="mb-1 text-fluid-xl font-semibold sm:text-2xl">
+      <h3 class="mb-1 text-xl font-semibold sm:text-2xl">
         {entry.data.title}
       </h3>
-      <p class="mb-2 text-fluid-base text-muted-foreground line-clamp-3 sm:line-clamp-2">
+      <p class="mb-2 text-base text-muted-foreground line-clamp-3 sm:line-clamp-2">
         {entry.data.description}
       </p>
       <div

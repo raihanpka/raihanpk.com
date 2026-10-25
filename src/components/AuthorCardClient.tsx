@@ -63,7 +63,7 @@ export function AuthorCardClient({
 
   return (
     <motion.div
-      className="relative overflow-hidden rounded-xl border shadow-sm transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-md"
+      className="relative overflow-hidden rounded-lg border shadow-1 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-2"
       variants={containerVariants}
       initial="hidden"
       animate="visible"

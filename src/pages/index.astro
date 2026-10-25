@@ -64,7 +64,7 @@ const projectsData = rawProjects.map((p) => ({
           </div>
         </CardHeader>
         <CardContent>
-          <p class="mb-2 text-md text-foreground">
+          <p class="mb-2 text-base text-foreground">
             From software solutions, automation, to cloud pipelines. I engineer end-to-end systems transforming my expertise into scalable applications, leading teams to deliver real product wins.
           </p>
         </CardContent>
@@ -73,17 +73,17 @@ const projectsData = rawProjects.map((p) => ({
 
     <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       <div role="region" aria-label="Wakatime Section"
-        class="lg:col-span-2 flex h-[190px] sm:h-[210px] w-full flex-col items-start whitespace-nowrap rounded-xl border border-border bg-card/60 backdrop-blur-sm shadow-sm p-3 text-xs leading-loose text-foreground">
+        class="lg:col-span-2 flex h-[190px] sm:h-[210px] w-full flex-col items-start whitespace-nowrap rounded-lg border border-border bg-card/60 backdrop-blur-sm shadow-1 p-3 text-xs leading-loose text-foreground">
         <WakatimeBox omitLanguages={['Markdown', 'JSON']} client:only="react" />
       </div>
 
       <div role="region" aria-label="Spotify Section"
-        class="lg:col-span-2 flex h-[190px] sm:h-[210px] w-full flex-col items-start whitespace-nowrap rounded-xl border border-border bg-card/60 backdrop-blur-sm shadow-sm p-3 text-xs leading-loose text-foreground">
+        class="lg:col-span-2 flex h-[190px] sm:h-[210px] w-full flex-col items-start whitespace-nowrap rounded-lg border border-border bg-card/60 backdrop-blur-sm shadow-1 p-3 text-xs leading-loose text-foreground">
         <SpotifyPresence client:idle />
       </div>
 
       <div role="region" aria-label="Tech Stack"
-        class="col-span-1 md:col-span-2 lg:col-span-4 h-auto w-full flex flex-col rounded-xl border border-border bg-card/60 backdrop-blur-sm shadow-sm p-2 sm:p-4 text-xs text-foreground">
+        class="col-span-1 md:col-span-2 lg:col-span-4 h-auto w-full flex flex-col rounded-lg border border-border bg-card/60 backdrop-blur-sm shadow-1 p-2 sm:p-4 text-xs text-foreground">
         <TechStackSlider client:idle />
       </div>
 

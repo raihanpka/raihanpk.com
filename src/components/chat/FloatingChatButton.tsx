@@ -16,7 +16,7 @@ export default function FloatingChatButton() {
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         className={cn(
-          'group relative flex h-16 w-16 md:h-16 md:w-16 items-center justify-center rounded-full border border-border/80 bg-background/80 backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-lg',
+          'group relative flex h-16 w-16 md:h-16 md:w-16 items-center justify-center rounded-full border border-border/80 bg-background/80 backdrop-blur-md transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-primary/50 shadow-3',
         )}
         aria-label="Ask Assistant"
       >
@@ -41,7 +41,7 @@ export default function FloatingChatButton() {
         >
           <div className="relative">
             <div 
-              className="whitespace-nowrap rounded-xl border border-white/20 bg-white/10 dark:border-white/10 dark:bg-black/40 px-4 py-2 text-xs font-bold text-foreground shadow-2xl"
+              className="whitespace-nowrap rounded-lg border border-white/20 bg-white/10 dark:border-white/10 dark:bg-black/40 px-4 py-2 text-xs font-bold text-foreground shadow-3"
               style={{
                 backdropFilter: 'blur(8px) saturate(150%)',
                 WebkitBackdropFilter: 'blur(8px) saturate(150%)',

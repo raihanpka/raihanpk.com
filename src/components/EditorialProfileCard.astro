@@ -50,7 +50,7 @@ const socialLinks = [
 ].filter(Boolean) as { href: string; label: string; icon: any }[]
 ---
 
-<div class="relative overflow-hidden rounded-2xl border border-border/80 bg-card/60 backdrop-blur-md p-5 sm:p-6 shadow-sm transition-all duration-300 hover:border-foreground/30">
+<div class="relative overflow-hidden rounded-xl border border-border/80 bg-card/60 backdrop-blur-md p-5 sm:p-6 shadow-1 transition-all duration-300 hover:border-foreground/30">
   {/* Top Specular Edge */}
   <div class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-foreground/20 to-transparent pointer-events-none" />
 
@@ -66,10 +66,10 @@ const socialLinks = [
             height="96"
             loading="eager"
             decoding="async"
-            class="size-20 sm:size-24 rounded-xl border border-border/80 grayscale contrast-125 object-cover bg-secondary/40 shadow-sm"
+            class="size-20 sm:size-24 rounded-lg border border-border/80 grayscale contrast-125 object-cover bg-secondary/40 shadow-1"
           />
         ) : (
-          <a href={`/authors/${id}`} class="block focus:outline-none focus:ring-2 focus:ring-primary rounded-xl">
+          <a href={`/authors/${id}`} class="block focus:outline-none focus:ring-2 focus:ring-primary rounded-lg">
             <img
               src={avatar || '/static/profile/avatar.png'}
               alt={`Profile photo of ${name}`}
@@ -77,7 +77,7 @@ const socialLinks = [
               height="96"
               loading="eager"
               decoding="async"
-              class="size-20 sm:size-24 rounded-xl border border-border/80 grayscale contrast-125 hover:grayscale-0 transition-all duration-300 object-cover bg-secondary/40 cursor-pointer shadow-sm"
+              class="size-20 sm:size-24 rounded-lg border border-border/80 grayscale contrast-125 hover:grayscale-0 transition-all duration-300 object-cover bg-secondary/40 cursor-pointer shadow-1"
             />
           </a>
         )}
@@ -87,7 +87,7 @@ const socialLinks = [
         <div class="flex flex-wrap items-center gap-x-2.5">
           <h1 class="text-xl sm:text-2xl font-bold font-mono text-foreground tracking-tight">{name}</h1>
           {pronouns && (
-            <span class="text-xs font-mono text-muted-foreground border border-border/60 px-1.5 py-0.5 rounded">
+            <span class="text-xs font-mono text-muted-foreground border border-border/60 px-2 py-0.5 rounded-sm">
               {pronouns}
             </span>
           )}
@@ -118,7 +118,7 @@ const socialLinks = [
               id="mobile-socials-toggle"
               aria-expanded="false"
               aria-controls="mobile-socials-dock"
-              class="group inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-border/80 bg-secondary/60 text-xs font-mono text-foreground hover:bg-secondary transition-all active:scale-95"
+              class="group inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-border/80 bg-secondary/60 text-xs font-mono text-foreground hover:bg-secondary transition-all active:scale-95"
             >
               <PiStarFourFill className="size-2 text-foreground/80" />
               <span>Connect & Links</span>
@@ -142,13 +142,13 @@ const socialLinks = [
               data-state="closed"
             >
               <div class="overflow-hidden min-h-0">
-                <div class="flex flex-wrap items-center gap-2 pt-2.5 pb-1">
+                <div class="flex flex-wrap items-center gap-2 pt-3 pb-1">
                   {socialLinks.map((item) => (
                     <a
                       href={item.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="inline-flex size-8 items-center justify-center rounded-lg border border-border bg-background/80 text-foreground transition-all duration-200 hover:bg-secondary active:scale-95 shadow-sm"
+                      class="inline-flex size-8 items-center justify-center rounded-md border border-border bg-background/80 text-foreground transition-all duration-200 hover:bg-secondary active:scale-95 shadow-1"
                       aria-label={item.label}
                       title={item.label}
                     >
@@ -176,7 +176,7 @@ const socialLinks = [
           href={item.href}
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex size-9 items-center justify-center rounded-lg border border-border bg-background/80 text-foreground transition-all duration-200 hover:bg-secondary hover:scale-105 active:scale-95 shadow-sm"
+          class="inline-flex size-9 items-center justify-center rounded-md border border-border bg-background/80 text-foreground transition-all duration-200 hover:bg-secondary hover:scale-105 active:scale-95 shadow-1"
           aria-label={item.label}
           title={item.label}
         >

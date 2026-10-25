@@ -53,21 +53,21 @@ const SpotifyPresence = () => {
       <div className="relative flex h-full w-full flex-col items-start justify-between gap-4 p-2 md:flex-row md:items-center">
         <div className="relative flex h-full w-full flex-row items-start justify-between gap-4">
           {/* Album art skeleton */}
-          <div className="mb-2 w-28 max-w-[170px] h-28 max-h-[160px] animate-pulse rounded-xl border border-border bg-primary/10" />
+          <div className="mb-2 w-28 max-w-[170px] h-28 max-h-[160px] animate-pulse rounded-lg border border-border bg-primary/10" />
           <div className="flex min-w-0 flex-1 flex-col justify-end overflow-hidden">
             <div className="flex flex-col">
               {/* Icon + "Listening to..." text skeleton */}
               <span className="mb-2.5 sm:mb-3 flex gap-2 items-center">
-                <div className="h-5 w-5 animate-pulse rounded bg-primary/10" />
-                <div className="h-5 w-28 animate-pulse rounded bg-primary/10" />
+                <div className="h-5 w-5 animate-pulse rounded-sm bg-primary/10" />
+                <div className="h-5 w-28 animate-pulse rounded-sm bg-primary/10" />
               </span>
               <div className="flex flex-col gap-1">
                 {/* Song title skeleton */}
-                <div className="h-6 w-48 animate-pulse rounded bg-primary/10" />
+                <div className="h-6 w-48 animate-pulse rounded-sm bg-primary/10" />
                 {/* Artist skeleton */}
-                <div className="h-4 w-[60%] animate-pulse rounded bg-primary/10" />
+                <div className="h-4 w-[60%] animate-pulse rounded-sm bg-primary/10" />
                 {/* Album skeleton */}
-                <div className="h-4 w-[50%] animate-pulse rounded bg-primary/10" />
+                <div className="h-4 w-[50%] animate-pulse rounded-sm bg-primary/10" />
               </div>
             </div>
           </div>
@@ -91,7 +91,7 @@ const SpotifyPresence = () => {
         transition={{ duration: 0.4, ease: 'easeOut' }}
       >
         {/* Album art placeholder */}
-        <div className="mb-2 flex w-28 max-w-[160px] shrink-0 items-center justify-center rounded-xl border border-border bg-secondary/40 aspect-square">
+        <div className="mb-2 flex w-28 max-w-[160px] shrink-0 items-center justify-center rounded-lg border border-border bg-secondary/40 aspect-square">
           <motion.div
             className="hidden md:block"
             animate={{ rotate: [0, -8, 8, -4, 4, 0] }}
@@ -138,7 +138,7 @@ const SpotifyPresence = () => {
           height={160}
           loading="eager"
           decoding="async"
-          className="mb-2 w-28 max-w-[160px] rounded-xl border border-border grayscale md:w-full"
+          className="mb-2 w-28 max-w-[160px] rounded-lg border border-border grayscale md:w-full"
           whileHover={{ scale: 1.05, rotate: 1.5 }}
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
         />

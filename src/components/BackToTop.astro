@@ -7,10 +7,10 @@ import { Icon } from 'astro-icon/components'
   data-back-to-top
   data-visible="false"
   aria-label="Back to top"
-  class="back-to-top group inline-flex h-11 items-center gap-2 rounded-md border border-border bg-background/80 px-4 font-mono text-xs text-foreground shadow-1 hover:bg-secondary"
+  class="back-to-top group relative h-11 overflow-hidden rounded-md border border-border bg-background/80 font-mono text-xs text-foreground shadow-1 hover:bg-secondary"
 >
-  <Icon name="lucide:arrow-up" class="size-4 transition-transform duration-200 group-hover:-translate-y-0.5" />
-  Back to top
+  <Icon name="lucide:arrow-up" class="btt-icon absolute left-1/2 top-1/2 size-4 -translate-x-1/2 -translate-y-1/2" />
+  <span class="btt-label absolute inset-0 grid place-items-center whitespace-nowrap" aria-hidden="true">Back to top</span>
 </button>
 
 <style>
@@ -30,8 +30,17 @@ import { Icon } from 'astro-icon/components'
     transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.2s;
   }
   .back-to-top[data-visible='true']:active { transform: scale(0.95); }
+
+  /* Idle: arrow only. Hover or focus: the button widens and the arrow gives way to the label. */
+  .back-to-top { width: 2.75rem; transition: width 0.25s ease, opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s, background-color 0.2s; }
+  .back-to-top[data-visible='true'] { transition: width 0.25s ease, opacity 0.2s ease, transform 0.2s ease, background-color 0.2s; }
+  .back-to-top:hover, .back-to-top:focus-visible { width: 6.5rem; }
+  .btt-icon, .btt-label { transition: opacity 0.2s ease, transform 0.2s ease; }
+  .btt-label { opacity: 0; transform: translateY(8px); }
+  .back-to-top:hover .btt-icon, .back-to-top:focus-visible .btt-icon { opacity: 0; transform: translate(-50%, -150%); }
+  .back-to-top:hover .btt-label, .back-to-top:focus-visible .btt-label { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) {
-    .back-to-top, .back-to-top[data-visible='true'] { transition: none; }
+    .back-to-top, .back-to-top[data-visible='true'], .btt-icon, .btt-label { transition: none; }
   }
 </style>
 

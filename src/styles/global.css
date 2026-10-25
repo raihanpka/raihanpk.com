@@ -453,3 +453,9 @@ html[data-reveal] .signature {
   .flip-inner, .flip-tilt { transition: none; }
   .flip-scene:hover .metal::after { animation: none; }
 }
+
+/* Recharts focuses its surface on click; keep the ring for keyboard users only. */
+.recharts-wrapper:focus:not(:focus-visible),
+.recharts-wrapper *:focus:not(:focus-visible) {
+  outline: none;
+}

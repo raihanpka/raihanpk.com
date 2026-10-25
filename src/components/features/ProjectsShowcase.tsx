@@ -401,13 +401,11 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
       {/* Content */}
       <div className="flex flex-1 flex-col gap-3 p-4">
         {/* Name + Date */}
-        <div className="flex items-start justify-between gap-2">
+        <div className="flex items-baseline justify-between gap-2">
           <h3 className="text-lg font-bold leading-tight">{project.name}</h3>
           {project.date && (
-            <span className="shrink-0 text-right text-sm text-muted-foreground leading-tight">
-              {project.date.split(' ').map((part, i) => (
-                <span key={i} className="block">{part}</span>
-              ))}
+            <span className="shrink-0 whitespace-nowrap text-sm leading-tight text-muted-foreground">
+              {project.date}
             </span>
           )}
         </div>

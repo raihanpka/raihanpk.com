@@ -8,6 +8,14 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Serif for page and section titles. The font only has weight 400, so the utility
+   pins it. Bold would be faux bold. Never use it on blog pages. */
+@utility font-title {
+  font-family: "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
 @utility direction-reverse {
   animation-direction: reverse;
 }
@@ -92,6 +100,14 @@
   font-family: "Geist";
   src: url("/fonts/GeistVF.woff2") format("woff2");
   font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("/fonts/InstrumentSerif-Regular.woff2") format("woff2");
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }

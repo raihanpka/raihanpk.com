@@ -384,16 +384,16 @@
   .py-section-sm { padding-top: 1.5rem; padding-bottom: 1.5rem; }
 }
 
-/* Signature write-on: reveals left to right, first visit of a session only. */
+/* Signature write-on: reveals left to right on every full page load. */
 @keyframes signature-write {
   from { clip-path: inset(0 100% 0 0); }
   to   { clip-path: inset(0 0 0 0); }
 }
-html[data-reveal] .signature {
+html[data-sign] .signature {
   animation: signature-write 1.4s cubic-bezier(0.65, 0, 0.35, 1) 0.15s both;
 }
 @media (prefers-reduced-motion: reduce) {
-  html[data-reveal] .signature { animation: none; }
+  html[data-sign] .signature { animation: none; }
 }
 
 /* First visit: home blocks fade in top to bottom (opacity/transform only, no layout shift). */
@@ -506,4 +506,27 @@ html[data-reveal] .reveal-stack > :nth-child(n + 5) { --i: 4; }
 @media (prefers-reduced-motion: reduce) {
   .orb { animation: none; }
   .about-card { transition: none; }
+}
+
+/* About hero card: metal surface, dotted corner and a sweep of light on hover. */
+.dots-corner::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: 45%;
+  background-image: radial-gradient(hsl(var(--foreground) / 0.3) 1px, transparent 1.5px);
+  background-size: 8px 8px;
+  mask-image: linear-gradient(to left, black, transparent);
+  -webkit-mask-image: linear-gradient(to left, black, transparent);
+  pointer-events: none;
+}
+.metal:hover::after { animation: metal-sweep 1100ms ease-out 1; }
+
+/* Footer: readable panel over the dithered background. */
+.footer-panel {
+  border-radius: var(--radius-lg);
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card) / 0.7);
+  box-shadow: var(--shadow-1);
+  backdrop-filter: blur(8px);
 }

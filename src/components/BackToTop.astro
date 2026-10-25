@@ -1,0 +1,22 @@
+---
+import { Icon } from 'astro-icon/components'
+---
+
+<button
+  type="button"
+  data-back-to-top
+  aria-label="Back to top"
+  class="group inline-flex h-9 items-center gap-2 rounded-md border border-border bg-background/80 px-3 font-mono text-xs text-foreground shadow-1 transition-all duration-200 hover:bg-secondary active:scale-95"
+>
+  <Icon name="lucide:arrow-up" class="size-4 transition-transform duration-200 group-hover:-translate-y-0.5" />
+  Top
+</button>
+
+<script>
+  // Delegated, so it keeps working after view-transition page swaps.
+  document.addEventListener('click', (e) => {
+    if (!(e.target as Element).closest('[data-back-to-top]')) return
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
+  })
+</script>

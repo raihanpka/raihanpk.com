@@ -57,6 +57,8 @@ const { title, description, image = '/static/profile/twitter-card.png' } = Astro
 <ClientRouter />
 
 <script is:inline>
+  // The signature writes on every full page load; in-app navigation swaps <html> and clears it.
+  document.documentElement.dataset.sign = '1'
   // First visit of a session: let intro animations play. Later page changes stay instant.
   try {
     if (!sessionStorage.getItem('revealed')) {

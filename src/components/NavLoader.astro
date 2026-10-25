@@ -1,0 +1,85 @@
+---
+/**
+ * A small mascot that hops while a page change is slow. It does nothing on the first page load and
+ * for fast navigations, see src/lib/nav-loader.ts for the timing. It persists across page swaps.
+ */
+---
+
+<div id="nav-loader" class="nav-loader" data-state="idle" role="status" aria-live="polite" transition:persist>
+  <div class="nav-stage" aria-hidden="true">
+    <img class="nav-mascot" data-src="/static/profile/avatar-ink-sm.png" alt="" width="50" height="56" decoding="async" />
+    <span class="nav-ground"></span>
+  </div>
+  <span class="sr-only" data-label>Loading page</span>
+</div>
+
+<style>
+  .nav-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: grid;
+    place-items: center;
+    background: hsl(var(--background) / 0.88);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.15s ease-out, visibility 0s 0.15s;
+  }
+  .nav-loader[data-state='visible'] {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.15s ease-out;
+  }
+  .nav-stage {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 0.75rem;
+  }
+  .nav-mascot {
+    width: 3.125rem;
+    height: 3.5rem;
+    transform-origin: 50% 100%;
+  }
+  :global(.dark) .nav-mascot { filter: invert(1); }
+  .nav-ground {
+    width: 2.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    background: hsl(var(--foreground) / 0.18);
+  }
+  /* A hop with a little squash and stretch, and the ground mark shrinks as the head leaves the ground. */
+  .nav-loader[data-state='visible'] .nav-mascot { animation: nav-hop 0.8s ease-in-out infinite; }
+  .nav-loader[data-state='visible'] .nav-ground { animation: nav-ground 0.8s ease-in-out infinite; }
+  @keyframes nav-hop {
+    0%, 100% { transform: translateY(0) scale(1.06, 0.94) rotate(-3deg); }
+    50% { transform: translateY(-0.875rem) scale(0.96, 1.04) rotate(3deg); }
+  }
+  @keyframes nav-ground {
+    0%, 100% { transform: scaleX(1); opacity: 1; }
+    50% { transform: scaleX(0.6); opacity: 0.6; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .nav-loader[data-state='visible'] .nav-mascot,
+    .nav-loader[data-state='visible'] .nav-ground { animation: none; }
+  }
+</style>
+
+<script>
+  import { createNavLoader } from '@/lib/nav-loader'
+
+  const root = () => document.getElementById('nav-loader')
+  const loader = createNavLoader({
+    show: () => root()?.setAttribute('data-state', 'visible'),
+    hide: () => root()?.setAttribute('data-state', 'idle'),
+  })
+
+  document.addEventListener('astro:before-preparation', () => {
+    // The image is only needed once a page change starts, so it is not part of the first load.
+    const img = root()?.querySelector<HTMLImageElement>('img[data-src]')
+    if (img && !img.src) img.src = img.dataset.src ?? ''
+    loader.start()
+  })
+  document.addEventListener('astro:after-swap', () => loader.done())
+</script>

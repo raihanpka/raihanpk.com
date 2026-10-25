@@ -79,13 +79,13 @@ export default function GithubGraph({ weeks, total, profileUrl }: Props) {
   return (
     <div className="flex h-full flex-col gap-3">
       <div className="flex flex-col gap-1">
-        <a href={profileUrl} target="_blank" rel="noreferrer noopener" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+        <a href={profileUrl} target="_blank" rel="noreferrer noopener" className="flex items-center gap-2 text-sm text-foreground">
           <FaGithub size={14} className="shrink-0" />
           GitHub
         </a>
-        <p className="text-lg font-bold leading-tight text-primary/80">
+        <p className="text-lg font-bold leading-tight text-foreground">
           {total.toLocaleString('en-US')} contributions{' '}
-          <span className="text-sm font-normal text-muted-foreground">in the last year</span>
+          <span className="text-sm font-normal text-foreground">in the last year</span>
         </p>
       </div>
 

@@ -57,6 +57,7 @@
   --default-border-width: 2px;
 
   --color-background: hsl(var(--background));
+  --color-card: hsl(var(--card));
   --color-foreground: hsl(var(--foreground));
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
@@ -123,6 +124,7 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
+    --card: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --primary: 0 0% 9%;
     --primary-foreground: 0 0% 98%;
@@ -146,6 +148,7 @@
   }
   .dark {
     --background: 0 0% 3.9%;
+    --card: 0 0% 7%;
     --foreground: 0 0% 98%;
     --primary: 0 0% 98%;
     --primary-foreground: 0 0% 9%;
@@ -398,7 +401,8 @@ html[data-sign] .signature {
 
 /* First visit: home blocks fade in top to bottom (opacity/transform only, no layout shift). */
 @keyframes reveal-up {
-  from { opacity: 0; transform: translateY(8px); }
+  /* Starts at 0.01, not 0, so the text still counts as a largest contentful paint candidate. */
+  from { opacity: 0.01; transform: translateY(8px); }
   to   { opacity: 1; transform: none; }
 }
 html[data-reveal] .reveal-stack > * {
@@ -442,7 +446,7 @@ html[data-reveal] .reveal-stack > :nth-child(n + 5) { --i: 4; }
   overflow: hidden;
   background:
     radial-gradient(120% 90% at var(--mx, 30%) var(--my, 0%), hsl(var(--foreground) / 0.1), transparent 60%),
-    linear-gradient(165deg, hsl(var(--card)), hsl(var(--secondary)) 55%, hsl(var(--card)));
+    linear-gradient(165deg, hsl(var(--card) / 0.8), hsl(var(--foreground) / 0.05) 55%, hsl(var(--card) / 0.8));
   box-shadow:
     inset 0 1px 0 hsl(var(--foreground) / 0.22),
     inset 0 -1px 0 hsl(var(--foreground) / 0.08),
@@ -488,7 +492,7 @@ html[data-reveal] .reveal-stack > :nth-child(n + 5) { --i: 4; }
 .about-card {
   border-radius: var(--radius-lg);
   border: 1px solid hsl(var(--border));
-  background: hsl(var(--card) / 0.6);
+  background: hsl(var(--card) / 0.8);
   box-shadow: var(--shadow-1);
   backdrop-filter: blur(8px);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -522,7 +526,7 @@ html[data-reveal] .reveal-stack > :nth-child(n + 5) { --i: 4; }
 .footer-panel {
   border-radius: var(--radius-lg);
   border: 1px solid hsl(var(--border));
-  background: hsl(var(--card) / 0.7);
+  background: hsl(var(--card) / 0.8);
   box-shadow: var(--shadow-1);
   backdrop-filter: blur(8px);
 }

@@ -183,7 +183,7 @@ export default function ChatInterface() {
                   className={`max-w-[92%] sm:max-w-[80%] rounded-xl px-4 py-3 shadow-1 border ${
                     message.sender === 'user'
                       ? 'bg-primary text-primary-foreground border-transparent'
-                      : 'bg-card text-card-foreground border-border'
+                      : 'bg-transparent text-card-foreground border-border'
                   }`}
                 >
                   <div className="flex items-start gap-3">
@@ -217,7 +217,7 @@ export default function ChatInterface() {
 
             {isLoading && (
               <div className="flex justify-start">
-                <div className="max-w-[92%] sm:max-w-[80%] rounded-xl px-4 py-3 bg-card border shadow-1">
+                <div className="max-w-[92%] sm:max-w-[80%] rounded-xl px-4 py-3 bg-transparent border shadow-1">
                   <div className="flex items-center gap-2">
                     <img
                       src="https://1.gravatar.com/avatar/21e49fff739353295995834a864f11194a8419f30d70d1d3cfd51ecf19958785?size=256"

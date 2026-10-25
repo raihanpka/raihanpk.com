@@ -356,7 +356,7 @@ function ProjectCard({ project, onOpenModal }: { project: ProjectItem; onOpenMod
     <div
       ref={containerRef}
       onClick={onOpenModal}
-      className="not-prose flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border bg-card/60 backdrop-blur-sm shadow-1 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-3 will-change-transform"
+      className="not-prose flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border bg-card/80 backdrop-blur-sm shadow-1 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-3 will-change-transform"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >

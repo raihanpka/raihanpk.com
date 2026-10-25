@@ -1,0 +1,55 @@
+---
+/**
+ * Core Memories as a diary: small photos on a thin thread, each with a short caption.
+ * Static on purpose. The list is the order in src/data/memories.json, and it can grow without
+ * changing the layout. Thumbnails are made at build time and inlined, so the page never loads full photos
+ * and a missing photo cannot fail the build.
+ */
+import memoriesData from '@/data/memories.json'
+import { validateMemories } from '@/lib/memories'
+import { makeThumb } from '@/lib/memory-thumb'
+import { memo } from '@/lib/memo'
+
+const memories = validateMemories(memoriesData)
+
+// Falls back to the original photo if a thumbnail cannot be made. One at a time, because the gallery host
+// is slow, and cached so dev navigation stays fast.
+const thumbs: string[] = []
+for (const m of memories) thumbs.push((await memo(`memory-thumb:${m.src}`, 60 * 60 * 1000, () => makeThumb(m.src))) ?? m.src)
+---
+
+<section class="mt-2 border-t border-border/50 pt-4" aria-labelledby="core-memories-title">
+  <h2 id="core-memories-title" class="font-title text-2xl max-sm:leading-tight sm:text-display-sm text-foreground">Core Memories</h2>
+  <p class="mt-1 text-sm text-muted-foreground">A few moments with the people I met along the way.</p>
+
+  <ol class="mt-5 ml-1 flex flex-col gap-6 border-l border-border">
+    {memories.map((m, i) => (
+      <li class="relative pl-6">
+        <span class="absolute top-7 -left-1 size-2 rounded-full bg-foreground/40 sm:top-9" aria-hidden="true"></span>
+        <div class="flex items-start gap-4">
+          <a
+            href={m.src}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Open the photo. ${m.caption}`}
+            class="group shrink-0 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          >
+            <img
+              src={thumbs[i]}
+              alt=""
+              width="72"
+              height="72"
+              loading="lazy"
+              decoding="async"
+              class="size-14 rounded-md border border-border object-cover grayscale transition-[filter] duration-150 ease-out group-hover:grayscale-0 group-focus-visible:grayscale-0 sm:size-18"
+            />
+          </a>
+          <div class="min-w-0 py-1">
+            <p class="text-sm text-foreground sm:text-base">{m.caption}</p>
+            {m.when && <p class="mt-1 text-xs text-muted-foreground">{m.when}</p>}
+          </div>
+        </div>
+      </li>
+    ))}
+  </ol>
+</section>

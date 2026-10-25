@@ -1,11 +1,11 @@
-import { ArrowUpRight, Check, Copy, Globe, Mail, MessageCircle, RotateCw } from 'lucide-react'
+import { ArrowUpRight, Camera, Check, Copy, Mail, MessageCircle } from 'lucide-react'
 import * as React from 'react'
 import { FaGithub, FaLinkedinIn } from 'react-icons/fa'
 import BabysBreathField from '@/components/profile/BabysBreathField'
 import { isLinkTarget, nextFlip, tiltFromPointer, type FlipEvent } from '@/lib/flip'
 
 export interface ProfileLink {
-  kind: 'mail' | 'linkedin' | 'github' | 'web'
+  kind: 'mail' | 'linkedin' | 'github' | 'photo'
   label: string
   href: string
 }
@@ -22,7 +22,7 @@ const ICONS = {
   mail: Mail,
   linkedin: FaLinkedinIn,
   github: FaGithub,
-  web: Globe,
+  photo: Camera,
 } as const
 
 const TILT_MAX_DEG = 5
@@ -103,7 +103,7 @@ export default function ProfileFlipCard({ name, role, pronunciation, avatar, lin
   return (
     <div
       ref={sceneRef}
-      className="flip-scene relative h-104 sm:h-88"
+      className="flip-scene relative h-96 sm:h-72"
       data-flipped={flipped}
       onPointerMove={onPointerMove}
       onPointerLeave={onPointerLeave}
@@ -121,7 +121,7 @@ export default function ProfileFlipCard({ name, role, pronunciation, avatar, lin
           >
             <div
               data-flip-zone
-              className="relative z-10 flex items-start gap-4"
+              className="relative z-10 flex items-stretch gap-4"
               onPointerEnter={onZoneEnter}
               onPointerLeave={onZoneLeave}
               onClick={onZoneClick}
@@ -129,20 +129,20 @@ export default function ProfileFlipCard({ name, role, pronunciation, avatar, lin
               <img
                 src={avatar}
                 alt=""
-                width={96}
-                height={96}
+                width={80}
+                height={80}
                 decoding="async"
                 fetchPriority="high"
-                className="size-20 sm:size-24 shrink-0 rounded-lg object-cover grayscale border border-border"
+                className="size-16 sm:size-20 shrink-0 rounded-lg object-cover grayscale contrast-125 bg-secondary/40"
               />
-              <div className="min-w-0">
+              <div className="min-w-0 flex flex-col justify-between">
                 <h2 className="font-title text-display-sm text-foreground">{name}</h2>
-                <p className="mt-1 text-sm text-muted-foreground">{role}</p>
-                {pronunciation && <p className="mt-1 font-mono text-xs text-muted-foreground">{pronunciation}</p>}
+                <p className="text-base font-medium text-foreground">{role}</p>
+                {pronunciation && <p className="font-mono text-xs text-muted-foreground">{pronunciation}</p>}
               </div>
             </div>
 
-            <div className="relative z-10 my-4 h-px bg-border" />
+            <div className="relative z-10 my-3 h-px bg-border" />
 
             <ul className="relative z-10 grid grid-cols-1 gap-x-6 gap-y-2 font-mono text-sm sm:grid-cols-2" data-no-flip>
               {links.map((link) => {
@@ -173,7 +173,15 @@ export default function ProfileFlipCard({ name, role, pronunciation, avatar, lin
               })}
             </ul>
 
-            <BabysBreathField className="dither-fade absolute inset-x-0 bottom-0 h-1/3 w-full text-foreground/45 sm:h-2/5" />
+            <button
+              type="button"
+              onClick={() => send('button')}
+              data-no-flip
+              className="sr-only focus-visible:not-sr-only focus-visible:absolute focus-visible:right-3 focus-visible:top-3 focus-visible:z-20 focus-visible:rounded-full focus-visible:border focus-visible:border-border focus-visible:bg-background focus-visible:px-3 focus-visible:py-2 focus-visible:text-xs"
+            >
+              Ask my assistant
+            </button>
+            <BabysBreathField className="dither-fade absolute inset-x-0 bottom-0 h-1/4 w-full text-foreground/45 sm:h-1/3" />
           </section>
 
           {/* Back: the way into the chatbot */}
@@ -181,17 +189,26 @@ export default function ProfileFlipCard({ name, role, pronunciation, avatar, lin
             className="flip-face flip-face-back metal rounded-xl border border-border p-6 flex flex-col justify-between"
             aria-label="Ask my assistant"
             inert={!flipped}
+            onClick={onZoneClick}
           >
             <div>
               <p className="inline-flex items-center gap-2 font-mono text-xs text-muted-foreground">
                 <MessageCircle className="size-4" aria-hidden="true" />
-                assistant
+                Assistant
               </p>
               <h2 className="mt-3 font-title text-display-sm text-foreground">Ask me anything.</h2>
               <p className="mt-2 max-w-sm text-sm text-muted-foreground">
                 A chatbot that has read my projects, stack, and write-ups. Ask about the work, not just the résumé.
               </p>
             </div>
+            <button
+              type="button"
+              onClick={() => send('button')}
+              data-no-flip
+              className="sr-only focus-visible:not-sr-only focus-visible:absolute focus-visible:right-3 focus-visible:top-3 focus-visible:z-20 focus-visible:rounded-full focus-visible:border focus-visible:border-border focus-visible:bg-background focus-visible:px-3 focus-visible:py-2 focus-visible:text-xs"
+            >
+              Back to profile
+            </button>
             <a
               href="/chat"
               className="group flex items-center justify-between rounded-lg border border-border bg-background/70 p-4 text-sm text-muted-foreground shadow-1 transition-colors hover:text-foreground"
@@ -202,17 +219,6 @@ export default function ProfileFlipCard({ name, role, pronunciation, avatar, lin
           </section>
         </div>
       </div>
-
-      <button
-        type="button"
-        onClick={() => send('button')}
-        aria-pressed={flipped}
-        aria-label={flipped ? 'Show profile' : 'Ask my assistant'}
-        data-no-flip
-        className="absolute right-3 top-3 z-10 rounded-full border border-border bg-background/70 p-2 text-muted-foreground backdrop-blur-sm transition-colors hover:text-foreground"
-      >
-        <RotateCw className="size-4" aria-hidden="true" />
-      </button>
     </div>
   )
 }

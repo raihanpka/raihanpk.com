@@ -31,13 +31,13 @@ about:
   nickname: '"Peka"'
   bubbles:
     - >-
-      "Peka" is my name shortened: raihanpk.
+      "Peka" is my name shortened from Putra Kirana.
     - >-
       It started back in elementary school, and it has been my identity ever since.
   buildLabel: '02 · How I build'
   buildTitle: 'Every project is treated like production software.'
   buildBody: >-
-    I treat software architecture with **production-grade seriousness**, even for small-scale projects or university assignments. I focus on building **AI-native applications** with a strong obsession for **modular design, clean codebases, and scalable systems**. This mindset of treating every project like production software has led me and my teams to multiple **national hackathon podiums** and **top finalist positions**. I thrive in high-pressure environments where technical idealism meets **rapid execution**, turning complex system challenges into functional, intelligent products.
+    I work close to the problem, pairing software engineering with AI: **agentic platforms**, **scalable backends**, and **predictive models** built around real client cases. My team won **1st Place in the Industry Sector** and **Overall Winner in the General Category** at AI Open Innovation Challenge 2026 (Blibli's logistics case), with [SIGAP](https://github.com/raihanpka/sigap) in the **Top 5** at BKN's ASN Digital AI Hackathon and [SATRIA](https://github.com/raihanpka/satria-ml) in the **Top 10** at Astranauts 2025. Whatever the size, I build every project like production software.
   highlights:
     - icon: 'lucide:boxes'
       title: 'Modular by default'

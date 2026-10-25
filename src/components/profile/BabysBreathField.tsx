@@ -1,19 +1,23 @@
 import { useRef } from 'react'
-import { useBabysBreath } from '@/hooks/useBabysBreath'
+import { useBabysBreath, type Scene } from '@/hooks/useBabysBreath'
 import { cn } from '@/lib/utils'
 
-/** Decorative dithered baby's breath band. Hidden from assistive tech. */
+/** Decorative dithered plant band (baby's breath or dandelion). Hidden from assistive tech. */
 export default function BabysBreathField({
   className,
   animate = true,
   perspective,
+  scene,
+  cell,
 }: {
   className?: string
   animate?: boolean
   perspective?: number
+  scene?: Scene
+  cell?: number
 }) {
   const ref = useRef<HTMLCanvasElement>(null)
-  useBabysBreath(ref, { animate, perspective })
+  useBabysBreath(ref, { animate, perspective, scene, cell })
   return (
     <canvas
       ref={ref}

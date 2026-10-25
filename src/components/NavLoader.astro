@@ -1,0 +1,123 @@
+---
+/**
+ * A small text character that hops while a page change is slow. It does nothing on the first page load and
+ * for fast navigations, see src/lib/nav-loader.ts for the timing. It persists across page swaps.
+ */
+---
+
+<div id="nav-loader" class="nav-loader" data-state="idle" role="status" aria-live="polite" transition:persist>
+  <div class="nav-stage" aria-hidden="true">
+    <!-- A small character made of text. The hair is the username, the glasses are round like the logo. -->
+    <pre class="nav-face">  <span class="hair"><span>r</span><span>a</span><span>i</span><span>h</span><span>a</span><span>n</span><span>p</span><span>k</span></span>
+ .--------.
+ | <span class="eyes"><span class="open">(o)(o)</span><span class="shut">(-)(-)</span></span> |
+ |   <span class="mouth">&lt;&gt;</span>   |
+ '--------'</pre>
+    <span class="nav-ground"></span>
+    <p class="nav-text">loading<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></p>
+  </div>
+  <span class="sr-only" data-label>Loading page</span>
+</div>
+
+<style>
+  .nav-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: grid;
+    place-items: center;
+    background: hsl(var(--background) / 0.9);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.15s ease-out, visibility 0s 0.15s;
+  }
+  .nav-loader[data-state='visible'] {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.15s ease-out;
+  }
+  .nav-stage {
+    display: grid;
+    justify-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    color: hsl(var(--foreground));
+  }
+  .nav-face {
+    margin: 0;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.25;
+    white-space: pre;
+    transform-origin: 50% 100%;
+  }
+  .nav-ground {
+    width: 5rem;
+    height: 0.25rem;
+    border-radius: 9999px;
+    background: hsl(var(--foreground) / 0.18);
+  }
+  .nav-text { margin: 0; font-size: 0.75rem; color: hsl(var(--muted-foreground)); }
+
+  /* The two pairs of eyes sit in one spot and swap, so the face blinks without moving. */
+  .eyes { display: inline-grid; }
+  .eyes > span { grid-area: 1 / 1; }
+  .shut { opacity: 0; }
+
+  .nav-loader[data-state='visible'] .nav-face { animation: nav-hop 0.8s ease-in-out infinite; }
+  .nav-loader[data-state='visible'] .nav-ground { animation: nav-ground 0.8s ease-in-out infinite; }
+  .nav-loader[data-state='visible'] .open { animation: nav-open 2.4s steps(1) infinite; }
+  .nav-loader[data-state='visible'] .shut { animation: nav-shut 2.4s steps(1) infinite; }
+  .nav-loader[data-state='visible'] .hair > span { animation: nav-hair 1.2s ease-in-out infinite; }
+  .nav-loader[data-state='visible'] .dot { animation: nav-dot 1.2s steps(1) infinite; }
+  .hair > span:nth-child(1) { animation-delay: 0s; }
+  .hair > span:nth-child(2) { animation-delay: 0.08s; }
+  .hair > span:nth-child(3) { animation-delay: 0.16s; }
+  .hair > span:nth-child(4) { animation-delay: 0.24s; }
+  .hair > span:nth-child(5) { animation-delay: 0.32s; }
+  .hair > span:nth-child(6) { animation-delay: 0.4s; }
+  .hair > span:nth-child(7) { animation-delay: 0.48s; }
+  .hair > span:nth-child(8) { animation-delay: 0.56s; }
+  .dot:nth-child(2) { animation-delay: 0.3s; }
+  .dot:nth-child(3) { animation-delay: 0.6s; }
+  .dot { opacity: 0.2; }
+
+  @keyframes nav-hop {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-0.75rem); }
+  }
+  @keyframes nav-ground {
+    0%, 100% { transform: scaleX(1); opacity: 1; }
+    50% { transform: scaleX(0.6); opacity: 0.6; }
+  }
+  @keyframes nav-open { 0%, 88% { opacity: 1; } 92%, 100% { opacity: 0; } }
+  @keyframes nav-shut { 0%, 88% { opacity: 0; } 92%, 100% { opacity: 1; } }
+  /* The hair letters lift in a small wave, like the ASCII ornaments elsewhere on the site. */
+  @keyframes nav-hair { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-0.2em); } }
+  @keyframes nav-dot { 0%, 100% { opacity: 0.2; } 33%, 66% { opacity: 1; } }
+  .hair > span { display: inline-block; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-loader[data-state='visible'] .nav-face,
+    .nav-loader[data-state='visible'] .nav-ground,
+    .nav-loader[data-state='visible'] .open,
+    .nav-loader[data-state='visible'] .shut,
+    .nav-loader[data-state='visible'] .hair > span,
+    .nav-loader[data-state='visible'] .dot { animation: none; }
+    .dot { opacity: 1; }
+  }
+</style>
+
+<script>
+  import { createNavLoader } from '@/lib/nav-loader'
+
+  const root = () => document.getElementById('nav-loader')
+  const loader = createNavLoader({
+    show: () => root()?.setAttribute('data-state', 'visible'),
+    hide: () => root()?.setAttribute('data-state', 'idle'),
+  })
+
+  document.addEventListener('astro:before-preparation', () => loader.start())
+  document.addEventListener('astro:after-swap', () => loader.done())
+</script>

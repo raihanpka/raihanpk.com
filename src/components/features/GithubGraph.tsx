@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { FaGithub } from 'react-icons/fa'
 import { Tooltip } from '@/components/ui/Tooltip'
-import { describeDay, levelFor, monthLabels, visibleWeeks, type Week } from '@/lib/github'
+import { describeDay, levelFor, monthLabels, visibleWeeks, type Contributions, type Week } from '@/lib/github'
 
 interface Props {
   weeks: Week[]
@@ -17,13 +17,25 @@ const DEFAULT_WEEKS = 26
 
 const LEVEL_CLASS = ['bg-foreground/10', 'bg-foreground/25', 'bg-foreground/45', 'bg-foreground/70', 'bg-foreground/95'] as const
 
-export default function GithubGraph({ weeks, total, profileUrl }: Props) {
+export default function GithubGraph({ weeks: initialWeeks, total: initialTotal, profileUrl }: Props) {
+  // Starts with the build-time data, then swaps in fresh data from /api/contributions after mount.
+  const [data, setData] = React.useState<Pick<Contributions, 'weeks' | 'total'>>({ weeks: initialWeeks, total: initialTotal })
+  const { weeks, total } = data
   const wrapRef = React.useRef<HTMLDivElement>(null)
   const [count, setCount] = React.useState(DEFAULT_WEEKS)
   // False for the server render and until the width is known, so we show a skeleton instead of a graph
   // that is about to change size.
   const [ready, setReady] = React.useState(false)
   const [active, setActive] = React.useState<{ w: number; d: number } | null>(null)
+
+  React.useEffect(() => {
+    fetch('/api/contributions')
+      .then((res) => (res.ok ? (res.json() as Promise<Contributions>) : null))
+      .then((fresh) => {
+        if (fresh?.weeks.length) setData({ weeks: fresh.weeks, total: fresh.total })
+      })
+      .catch(() => {})
+  }, [])
 
   React.useEffect(() => {
     const el = wrapRef.current

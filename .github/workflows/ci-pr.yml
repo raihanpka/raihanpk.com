@@ -1,32 +1,78 @@
-# Pull Request Gate. Runs once per pull request and never on a plain push to a feature branch.
-# Make it a required status check in branch protection. Keep it fast: no services, no deploy.
-# Same commands the agent runs locally (see the gate line in AGENTS.md).
+# Pull Request Web Gate. Runs on pull requests to main only. Feature branches without a PR cost nothing.
+# gate: type check, token lint, test, build once. lighthouse: reuses that build, mobile then desktop, one Chrome at a time.
 
 name: Pull Request Web Gate
 
 on:
   pull_request:
     branches: [main]
-  workflow_dispatch:
 
 jobs:
   gate:
     name: Gate
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    # prisma.config.ts needs DATABASE_URL at postinstall. Dummy value, CI never connects to a database.
     env:
+      # prisma.config.ts reads DATABASE_URL at postinstall. Dummy value, CI never connects to a database.
       DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
     steps:
       - uses: actions/checkout@v5
       - uses: oven-sh/setup-bun@v2
+      - uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ hashFiles('bun.lock') }}
       - name: Install
         run: bun install --frozen-lockfile
+      - uses: actions/cache@v4
+        with:
+          path: .astro
+          key: astro-${{ github.head_ref }}-${{ github.sha }}
+          restore-keys: astro-${{ github.head_ref }}-
       - name: Type check
         run: bun run check
       - name: Token lint
         run: bun run check:tokens
-      - name: Build
-        run: bun run build
       - name: Test
         run: bun test
+      - name: Build
+        run: bun run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/client
+          retention-days: 1
+
+  lighthouse:
+    name: Lighthouse
+    needs: gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/client
+      - name: Serve dist
+        run: bun scripts/serve-dist.ts 4400 dist/client &
+      - name: Wait for server
+        run: until curl -sf http://localhost:4400/ > /dev/null; do sleep 1; done
+      - name: Lighthouse mobile
+        id: mobile
+        run: bun scripts/lighthouse-check.ts mobile
+        continue-on-error: true
+      - name: Lighthouse desktop
+        id: desktop
+        run: bun scripts/lighthouse-check.ts desktop
+        continue-on-error: true
+      - name: Fail if a budget missed
+        if: steps.mobile.outcome == 'failure' || steps.desktop.outcome == 'failure'
+        run: exit 1
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: lighthouse-reports
+          path: .lighthouse/
+          retention-days: 3

@@ -1,5 +1,5 @@
 // Runs Lighthouse 3 times on the served home page and fails when the median misses the budget. CI only.
-// Usage: node scripts/lighthouse-check.mjs <mobile|desktop> <perf|layout>
+// Usage: bun scripts/lighthouse-check.ts <mobile|desktop> <perf|layout>
 // perf: every category at 90 or more, SEO at 100. layout: Cumulative Layout Shift at 0.1 or less.
 // Lighthouse is pinned here, not in package.json, so the lockfile stays untouched.
 import { execFileSync } from 'node:child_process'
@@ -10,10 +10,10 @@ const url = 'http://localhost:4400/'
 const dir = `.lighthouse/${check}-${preset}`
 const flags = ['--headless=new', '--no-sandbox']
 const budgets = { performance: 0.9, accessibility: 0.9, 'best-practices': 0.9, seo: 1 }
-const median = (xs) => [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)]
+const median = (xs: number[]) => [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)]
 
 fs.mkdirSync(dir, { recursive: true })
-const scores = Object.fromEntries(Object.keys(budgets).map((k) => [k, []]))
+const scores: Record<string, number[]> = Object.fromEntries(Object.keys(budgets).map((k) => [k, []]))
 const shifts = []
 for (let run = 1; run <= 3; run++) {
   const file = `${dir}/run-${run}.json`

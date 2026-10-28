@@ -5,7 +5,7 @@ Personal site for raihanpk. Astro (static output, Vercel adapter) with React isl
 ## Start here
 
 - Tokens and UI rules: `docs/design-system.md`
-- Open work: `tasks/todo.md` (plan in `tasks/plan.md`)
+- Open work: `docs/TODO.md`
 - Setup and env var names: `README.md`
 
 ## Commands

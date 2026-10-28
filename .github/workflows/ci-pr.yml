@@ -58,14 +58,16 @@ jobs:
       - name: Serve dist
         run: bun scripts/serve-dist.ts 4400 dist/client &
       - name: Wait for server
-        run: until curl -sf http://localhost:4400/ > /dev/null; do sleep 1; done
+        run: for i in $(seq 30); do curl -sf http://localhost:4400/ > /dev/null && exit 0; sleep 1; done; exit 1
       - name: Lighthouse mobile
         id: mobile
         run: bun scripts/lighthouse-check.ts mobile
+        timeout-minutes: 8
         continue-on-error: true
       - name: Lighthouse desktop
         id: desktop
         run: bun scripts/lighthouse-check.ts desktop
+        timeout-minutes: 8
         continue-on-error: true
       - name: Fail if a budget missed
         if: steps.mobile.outcome == 'failure' || steps.desktop.outcome == 'failure'

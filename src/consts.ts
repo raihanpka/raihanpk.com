@@ -13,7 +13,7 @@ export type Link = {
 }
 
 export const SITE: Site = {
-  TITLE: 'pk',
+  TITLE: 'Raihan Putra Kirana',
   DESCRIPTION: 'pk is his nickname. raihanpk.com is his digital home.',
   EMAIL: 'me@raihanpk.com',
   NUM_POSTS_ON_HOMEPAGE: 2,

@@ -58,7 +58,7 @@ const projectsData = rawProjects.map((p) => ({
 const siteUrl = new URL('/', Astro.site).href
 const homeDescription = describe(author?.data.home?.tagline ?? SITE.DESCRIPTION)
 const jsonLd = [
-  websiteLd({ name: 'raihanpk', alternateName: [SITE.TITLE, 'Raihan Putra Kirana'], url: siteUrl, description: homeDescription }),
+  websiteLd({ name: 'raihanpk', alternateName: ['pk', 'Raihan Putra Kirana'], url: siteUrl, description: homeDescription }),
   {
     '@context': 'https://schema.org',
     ...personLd({

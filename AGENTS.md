@@ -14,11 +14,12 @@ Personal site for raihanpk. Astro (static output, Vercel adapter) with React isl
 - Dev: `bun install`, `bun run dev`
 - Type check: `bun run check`. Token lint: `bun run check:tokens`. Build: `bun run build`. Test: `bun test` (one file: `bun test tests/github.test.ts`)
 - No format or lint tool is set up yet. Add one before wiring a format or lint step in CI.
+- Runtime is Bun, not Node. Scripts in `scripts/` are `.ts` and run with `bun scripts/<name>.ts`. CI uses `oven-sh/setup-bun`.
+- Vercel: Bun is supported as package manager (confirm `bun install` in the build log). Serverless functions in `src/pages/api/` run on Node unless the Bun runtime is enabled, and Vercel's Bun runtime docs do not list Astro. Check before turning it on.
 
 ## Workflow
 
 - Branch from `main`. One task is one branch and one PR.
-- To ship a task, follow `.agents/skills/dotagent-ship/SKILL.md`.
 - Commits are one line, `type(scope): summary`, no trailer. Types: `feat`, `fix`, `style`, `perf`, `docs`, `test`, `chore`, `refactor`, `ci`, `build`. Scope is required.
 - Names say what changed. Never a plan label (`milestone-1`, `task-2`, `wip`, "finishing task") and never `(#N)`.
 - Never edit protected paths: `bun.lock`, `.env*`, `prisma/migrations/**`. A hook refuses it.

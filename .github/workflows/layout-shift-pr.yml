@@ -1,0 +1,45 @@
+# Pull Request Web Layout Shift. Lighthouse Cumulative Layout Shift on the built home page, mobile and desktop.
+# Asserts CLS only. Performance lives in its own workflow.
+# Runs on pull requests to main only, so feature branches without a PR cost nothing.
+
+name: Pull Request Web Layout Shift
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'astro.config.ts'
+      - 'package.json'
+      - 'bun.lock'
+      - 'scripts/lighthouse-check.mjs'
+      - 'scripts/serve-dist.mjs'
+
+jobs:
+  layout:
+    name: Layout shift ${{ matrix.preset }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        preset: [mobile, desktop]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+      - name: Install
+        run: bun install --frozen-lockfile
+      - name: Build
+        run: bun run build
+      - name: Serve dist
+        run: bun scripts/serve-dist.mjs 4400 dist/client &
+      - name: Wait for server
+        run: until curl -sf http://localhost:4400/ > /dev/null; do sleep 1; done
+      - name: Lighthouse layout shift
+        run: bun scripts/lighthouse-check.mjs ${{ matrix.preset }} layout
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-layout-${{ matrix.preset }}
+          path: .lighthouse/

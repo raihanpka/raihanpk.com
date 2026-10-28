@@ -1,0 +1,45 @@
+# Pull Request Web Performance. Lighthouse on the built home page, mobile and desktop in parallel.
+# Asserts every category: performance, accessibility, best practices at 90, SEO at 100. Layout shift lives in its own workflow.
+# Runs on pull requests to main only, so feature branches without a PR cost nothing.
+
+name: Pull Request Web Performance
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'astro.config.ts'
+      - 'package.json'
+      - 'bun.lock'
+      - 'scripts/lighthouse-check.mjs'
+      - 'scripts/serve-dist.mjs'
+
+jobs:
+  lighthouse:
+    name: Lighthouse ${{ matrix.preset }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        preset: [mobile, desktop]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+      - name: Install
+        run: bun install --frozen-lockfile
+      - name: Build
+        run: bun run build
+      - name: Serve dist
+        run: bun scripts/serve-dist.mjs 4400 dist/client &
+      - name: Wait for server
+        run: until curl -sf http://localhost:4400/ > /dev/null; do sleep 1; done
+      - name: Lighthouse performance
+        run: bun scripts/lighthouse-check.mjs ${{ matrix.preset }} perf
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-perf-${{ matrix.preset }}
+          path: .lighthouse/

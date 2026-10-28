@@ -13,8 +13,8 @@ on:
       - 'astro.config.ts'
       - 'package.json'
       - 'bun.lock'
-      - 'scripts/lighthouse-check.mjs'
-      - 'scripts/serve-dist.mjs'
+      - 'scripts/lighthouse-check.ts'
+      - 'scripts/serve-dist.ts'
 
 jobs:
   lighthouse:
@@ -33,11 +33,11 @@ jobs:
       - name: Build
         run: bun run build
       - name: Serve dist
-        run: bun scripts/serve-dist.mjs 4400 dist/client &
+        run: bun scripts/serve-dist.ts 4400 dist/client &
       - name: Wait for server
         run: until curl -sf http://localhost:4400/ > /dev/null; do sleep 1; done
       - name: Lighthouse performance
-        run: bun scripts/lighthouse-check.mjs ${{ matrix.preset }} perf
+        run: bun scripts/lighthouse-check.ts ${{ matrix.preset }} perf
       - uses: actions/upload-artifact@v4
         if: always()
         with:

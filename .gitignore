@@ -41,3 +41,9 @@ public/static/memories/
 
 # prisma generated client
 src/generated/
+
+# dotagent
+.dotagent
+docs/DOTAGENT-SETUP.md
+docs/TODO.md
+.lighthouse/

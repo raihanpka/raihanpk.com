@@ -28,15 +28,15 @@ Additional features developed from built-in features of the public template [Ast
 - **Projects Showcase**: Interactive portfolio grid featuring smooth media video previews, modal dialogs, and responsive category filtering.
 - **Tech Stack Slider**: 3D-sculpted marquee slider displaying programming languages, frameworks, and cloud infrastructure tools.
 - **Blog & View Counter**: MDX content collections with live view counter persistence backed by [PostgreSQL](https://postgresql.org).
-- **GitHub Contributions**: Contribution graph that adapts its number of weeks to the card width, with a keyboard-friendly tooltip. Data is loaded at build time from the GitHub GraphQL API when `GITHUB_TOKEN` is set, with a public-page fallback.
+- **GitHub Contributions**: Contribution graph that adapts its number of weeks to the card width, with a keyboard-friendly tooltip. Build-time data is refreshed at runtime from `/api/contributions`, which uses the GitHub GraphQL API when `GITHUB_TOKEN` is set, with a public-page fallback.
 - **Profile Card**: Flip card with a dithered baby's breath band and a chat entry on the back.
 - **About Page**: Bento cards and a hover scene built from the logo. All the copy for Home and About lives as fields in `src/content/authors/raihanpk.md`.
 - **Details**: Hand-drawn signature that writes on at each full page load, soft click sounds with a mute toggle, and link tooltips that follow the pointer.
 - **Design System**: Tokens for spacing, type, radius, and shadow in `src/styles/global.css`, documented in [`docs/design-system.md`](./docs/design-system.md) and enforced by `bun run check:tokens`.
-- **High Performance**: Tuned for Core Web Vitals (Lighthouse desktop on Home: 98 Performance, 100 Accessibility, 100 Best Practices, 100 SEO) with font preloading, WebP assets, deferred islands and media, and build-time avatar optimization. The report is in [`public/scratch`](./public/scratch).
+- **High Performance**: Tuned for Core Web Vitals (Lighthouse desktop on Home: 100 Performance, 100 Accessibility, 100 Best Practices, 100 SEO) with font preloading, WebP assets, deferred islands and media, and build-time avatar optimization. The report is in [`public/scratch`](./public/scratch).
 
 <div align="center">
-  <img src="./public/scratch/lighthouse.png" alt="Lighthouse desktop score on Home: Performance 98, Accessibility 100, Best Practices 100, SEO 100" width="850">
+  <img src="./public/scratch/lighthouse.png" alt="Lighthouse desktop score on Home: Performance 100, Accessibility 100, Best Practices 100, SEO 100" width="850">
 </div>
 
 ---

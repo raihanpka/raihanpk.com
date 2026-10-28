@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Personal site for raihanpk. Astro (static output, Vercel adapter) with React islands, Tailwind v4, Bun.
+Personal site for raihanpk. Astro (static output, Vercel adapter) with React islands, Tailwind v4, Bun. Generic working rules come from the dotagent, the facts below are this repo's.
 
 ## Start here
 
@@ -10,11 +10,20 @@ Personal site for raihanpk. Astro (static output, Vercel adapter) with React isl
 
 ## Commands
 
-- `bun install`, `bun run dev`
-- `bun run check:tokens`: fails on forbidden classes
-- `bun run check`: type check
-- `bun test`
-- `bun run build`: check, then build
+- Gate (run before every PR, same as CI): `bun run check:tokens && bun run check && bun run build && bun test`
+- Dev: `bun install`, `bun run dev`
+- Type check: `bun run check`. Token lint: `bun run check:tokens`. Build: `bun run build`. Test: `bun test` (one file: `bun test tests/github.test.ts`)
+- No format or lint tool is set up yet. Add one before wiring a format or lint step in CI.
+
+## Workflow
+
+- Branch from `main`. One task is one branch and one PR.
+- To ship a task, follow `.agents/skills/dotagent-ship/SKILL.md`.
+- Commits are one line, `type(scope): summary`, no trailer. Types: `feat`, `fix`, `style`, `perf`, `docs`, `test`, `chore`, `refactor`, `ci`, `build`. Scope is required.
+- Names say what changed. Never a plan label (`milestone-1`, `task-2`, `wip`, "finishing task") and never `(#N)`.
+- Never edit protected paths: `bun.lock`, `.env*`, `prisma/migrations/**`. A hook refuses it.
+- Never edit `src/generated/` (Prisma client). Regenerate with `bun install`.
+- Touch only what the task needs. Do not add a dependency without asking.
 
 ## Editing UI
 
@@ -33,18 +42,16 @@ Personal site for raihanpk. Astro (static output, Vercel adapter) with React isl
 
 - Islands: `client:visible` or `client:idle` for anything below the fold. `client:load` only if needed on first paint.
 - Images: WebP, explicit width and height, lazy unless above the fold.
-- Measure before and after: build, serve `dist/client` with gzip, then run Lighthouse. Mobile and desktop.
+- Measure before and after: build, serve `dist/client` with gzip, then run Lighthouse on mobile and desktop.
 - Data that must stay fresh is fetched at runtime (see `GithubGraph.tsx` and `/api/contributions`), not baked at build.
 
 ## Done means
 
-- `bun run check:tokens`, `bun run check`, and `bun test` pass.
+- The gate passes.
 - Visual check on the pages you touched. No layout shift.
 - Update `docs/design-system.md` if a token changed, `README.md` if a claim changed, and `tasks/todo.md` for finished tasks.
 - Update `public/scratch/lighthouse.png` when the desktop scores change.
 
-## Git
+## Secrets
 
-- One-line commit subject, no body (the dotagent hook rejects bodies).
-- Conventional type prefixes: `feat`, `fix`, `style`, `docs`, `chore`.
-- Never commit values from `.env`.
+- Never commit values from `.env`. Names only in `README.md`.

@@ -514,9 +514,9 @@ html[data-reveal] .reveal-stack > :nth-child(n + 5) { --i: 4; }
   background: hsl(var(--card) / 0.8);
   box-shadow: var(--shadow-1);
   backdrop-filter: blur(8px);
-  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+  transition: box-shadow 0.15s ease-out;
 }
-.about-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-2); }
+.about-card:hover { box-shadow: var(--shadow-2); }
 .orb {
   display: grid;
   flex-shrink: 0;

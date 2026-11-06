@@ -40,8 +40,8 @@ about:
     I work close to the problem, combining software engineering with AI, like **agentic platforms**, **scalable backends**, and **predictive models** built around real client cases. My team won **1st Place in the Industry Sector** and **Overall Winner in the General Category** at AI Open Innovation Challenge 2026, and placed **Top 5** with [SIGAP](https://github.com/raihanpka/sigap) at BKN's ASN Digital AI Hackathon and **Top 10** with [SATRIA](https://github.com/raihanpka/satria-ml) at Astranauts 2025. Whatever the size, I build with the product in mind, because good engineering only matters when it makes an impact.
   highlights:
     - icon: 'lucide:boxes'
-      title: 'Modular by default'
-      text: 'Clean codebases, clear boundaries, and systems that scale, even for some projects in college.'
+      title: 'Production, not prototypes'
+      text: 'Every project held to production standards, even the ones I started back in college.'
     - icon: 'lucide:trophy'
       title: 'Competitive spirit'
       text: 'With a passion for hackathons since my very first competition, with a finalist and podium along the way.'

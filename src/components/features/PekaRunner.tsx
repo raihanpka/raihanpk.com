@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { PLAYER_X, createRunner, jump, step, type ObstacleSize } from '@/lib/runner'
+import { PLAYER_X, createRunner, jump, settle, step, type ObstacleSize } from '@/lib/runner'
 import { BASE as CITY_ROWS, COLS as CITY_COLS, createSkyline, createSkylineFrame } from '@/lib/skyline'
 
 const BASE = '/static/sprites'
@@ -213,6 +213,9 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
       if (!talking) {
         animT += dt
         step(runner, dt, w / s)
+      } else {
+        // the world stands still, but a jump already in the air still lands
+        settle(runner, dt)
       }
       draw(talking)
     }
@@ -301,7 +304,7 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
         <p className="text-base font-semibold tracking-wide text-muted-foreground">{label}</p>
         <p className="font-title text-2xl text-foreground sm:text-3xl">{nickname}</p>
       </div>
-      <div className="pointer-events-none absolute bottom-[38%] left-6 z-20 flex max-w-44 flex-col items-start gap-2">
+      <div className="pointer-events-none absolute bottom-[46%] left-6 z-20 flex w-max max-w-64 flex-col items-start gap-3">
         {bubbles.map((text, i) => (
           <p
             key={text}

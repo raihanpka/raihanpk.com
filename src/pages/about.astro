@@ -3,7 +3,7 @@ import EditorialProfileCard from '@/components/EditorialProfileCard.astro'
 import PhotoCollage from '@/components/features/PhotoCollage.astro'
 import Breadcrumbs from '@/components/Breadcrumbs.astro'
 import Container from '@/components/Container.astro'
-import AboutScene from '@/components/features/AboutScene.astro'
+import RunnerScene from '@/components/features/RunnerScene.astro'
 import { renderInline } from '@/lib/inline-markup'
 import { Icon } from 'astro-icon/components'
 import { SITE } from '@/consts'
@@ -61,7 +61,7 @@ const jsonLd = [
           <p class="text-base text-muted-foreground" set:html={renderInline(about.intro)} />
         </article>
 
-        <AboutScene class="lg:col-span-5" label={about.sceneLabel} nickname={about.nickname} bubbles={about.bubbles} />
+        <RunnerScene class="lg:col-span-5" label={about.sceneLabel} nickname={about.nickname} bubbles={about.bubbles} />
 
         <article class="about-card flex flex-col gap-4 p-6 lg:col-span-12">
           <p class="font-mono text-xs uppercase tracking-widest text-muted-foreground">{about.buildLabel}</p>

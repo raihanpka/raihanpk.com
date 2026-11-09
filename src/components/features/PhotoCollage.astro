@@ -1,8 +1,8 @@
 ---
 /**
- * Aesthetic Photo Collage component for Core Memories with friends.
- * Follows clean uniform aspect ratios, enlarged 2-line wrapped captions,
- * no AI-slop dots, and auto marquee if photos > 3.
+ * Core Memories: each photo is a postage stamp, perforated edge, a postmark over one corner, and a
+ * caption under it. The stamps sit on a plain grid inside the content container and keep a fixed,
+ * slight tilt so the sheet looks hand-placed. Nothing moves on hover or on its own.
  * Photos are plain <img> tags. Build-time image optimization fetched remote photos, which failed on CI runners.
  */
 
@@ -19,15 +19,29 @@ interface Props {
 
 const { photos = memoriesData } = Astro.props
 
-// Always marquee on mobile (< sm). On desktop (sm+), marquee if > 3 photos.
-const isAlwaysMarquee = photos.length > 3
-const marqueeItems = photos.length <= 3
-  ? [...photos, ...photos, ...photos, ...photos]
-  : [...photos, ...photos]
+// Degrees of tilt per stamp, by position. Fixed so the layout is the same on every render.
+const TILT = [-1.2, 0.8, -0.6, 1.1, -0.9, 0.5]
+
+// Perforated edge as a mask: the paper square with a notch (half circle) cut along every side.
+// Built once at build time as an SVG data URI, so the holes scale with the stamp.
+function perforationMask(): string {
+  const S = 100
+  const STEP = 5
+  const R = 1.4
+  const hole = (cx: number, cy: number) =>
+    `M${cx - R} ${cy}a${R} ${R} 0 1 0 ${2 * R} 0a${R} ${R} 0 1 0 ${-2 * R} 0Z`
+  let d = `M0 0H${S}V${S}H0Z`
+  for (let p = STEP / 2; p < S; p += STEP) {
+    d += hole(p, 0) + hole(p, S) + hole(0, p) + hole(S, p)
+  }
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}" preserveAspectRatio="none"><path fill-rule="evenodd" d="${d}"/></svg>`
+  return `url('data:image/svg+xml,${encodeURIComponent(svg)}')`
+}
+const PERFORATION = perforationMask()
 ---
 
 <section class="mt-2 pt-4 border-t border-border/50">
-  <div class="mb-5">
+  <div class="mb-6">
     <h2 class="font-title text-2xl max-sm:leading-tight sm:text-display-sm text-foreground">
       Core Memories
     </h2>
@@ -36,103 +50,59 @@ const marqueeItems = photos.length <= 3
     </p>
   </div>
 
-  {/* Mobile Marquee (always active on mobile < sm, and everywhere if > 3 photos) */}
-  <div class={`group relative overflow-hidden py-2 ${isAlwaysMarquee ? 'block' : 'block sm:hidden'}`}>
-    {/* Gradient edge fades */}
-    <div class="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 sm:w-12 bg-linear-to-r from-background to-transparent" />
-    <div class="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 sm:w-12 bg-linear-to-l from-background to-transparent" />
-
-    <div class="animate-core-marquee gap-4 sm:gap-5">
-      {marqueeItems.map((item) => (
-        <figure class="memory-stamp w-72 sm:w-84 shrink-0 flex flex-col overflow-hidden rounded-lg border border-border/80 bg-card/80 p-3 sm:p-4 shadow-1 transition-all duration-150 hover:border-foreground/40 hover:shadow-2">
-          {/* Uniform Aspect Ratio Photo (3:2 auto fit center) */}
-          <div class="relative w-full aspect-3/2 overflow-hidden rounded-md bg-secondary/50 border border-border/40">
-            <img
-              src={item.src}
-              alt={item.caption}
-              width={600}
-              height={400}
-              loading="lazy"
-              decoding="async"
-              class="h-full w-full object-cover object-center grayscale contrast-110 transition-all duration-200 ease-out hover:grayscale-0"
-            />
-            <div class="pointer-events-none absolute inset-0 bg-linear-to-t from-black/25 via-transparent to-transparent opacity-40" />
-          </div>
-
-          {/* Aesthetic Caption */}
-          <figcaption class="mt-2.5 sm:mt-3 w-full">
-            <p class="text-xs sm:text-sm text-muted-foreground sm:text-foreground/80 leading-relaxed font-normal">
+  <ul class="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4 sm:gap-x-6">
+    {
+      photos.map((item, i) => (
+        <li>
+          <figure class="memory-stamp relative flex flex-col" style={`--tilt:${TILT[i % TILT.length]}deg`}>
+            <div class="stamp-paper bg-card p-2 sm:p-3" style={`--perforation:${PERFORATION}`}>
+              <div class="aspect-square overflow-hidden bg-secondary/50">
+                <img
+                  src={item.src}
+                  alt={item.caption}
+                  width={600}
+                  height={600}
+                  loading="lazy"
+                  decoding="async"
+                  class="h-full w-full object-cover object-center"
+                />
+              </div>
+            </div>
+            {/* Postmark: a cancellation over the top corner. Outside the perforated paper, so the mask does not cut it. */}
+            <svg
+              viewBox="0 0 120 80"
+              aria-hidden="true"
+              class="pointer-events-none absolute -right-4 -top-5 w-20 text-foreground/30 sm:w-24"
+            >
+              <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M6 22 Q 16 14 26 22 T 46 22 T 66 22 T 86 22" />
+                <path d="M6 34 Q 16 26 26 34 T 46 34 T 66 34 T 86 34" />
+                <path d="M6 46 Q 16 38 26 46 T 46 46 T 66 46 T 86 46" />
+                <circle cx="96" cy="40" r="22" />
+              </g>
+            </svg>
+            <figcaption class="mt-3 text-xs sm:text-sm leading-relaxed text-muted-foreground">
               {item.caption}
-            </p>
-          </figcaption>
-        </figure>
-      ))}
-    </div>
-  </div>
-
-  {/* Desktop Grid (rendered only when <= 3 photos on screens >= sm) */}
-  {!isAlwaysMarquee && (
-    <div class="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-      {photos.map((item) => (
-        <figure class="memory-stamp group flex flex-col overflow-hidden rounded-lg border border-border/80 bg-card/80 p-4 shadow-1 transition-all duration-150 hover:border-foreground/40 hover:shadow-2">
-          {/* Uniform Aspect Ratio Photo (3:2 auto fit center) */}
-          <div class="relative w-full aspect-3/2 overflow-hidden rounded-md bg-secondary/50 border border-border/40">
-            <img
-              src={item.src}
-              alt={item.caption}
-              width={600}
-              height={400}
-              loading="lazy"
-              decoding="async"
-              class="h-full w-full object-cover object-center grayscale contrast-110 transition-all duration-200 ease-out group-hover:grayscale-0"
-            />
-            <div class="pointer-events-none absolute inset-0 bg-linear-to-t from-black/25 via-transparent to-transparent opacity-40 group-hover:opacity-10 transition-opacity duration-150" />
-          </div>
-
-          {/* Aesthetic Caption */}
-          <figcaption class="mt-2.5 sm:mt-3 w-full">
-            <p class="text-xs sm:text-sm text-muted-foreground sm:text-foreground/80 leading-relaxed font-normal">
-              {item.caption}
-            </p>
-          </figcaption>
-        </figure>
-      ))}
-    </div>
-  )}
+            </figcaption>
+          </figure>
+        </li>
+      ))
+    }
+  </ul>
 </section>
 
 <style>
-  @keyframes core-memories-marquee {
-    0% {
-      transform: translate3d(0, 0, 0);
-    }
-    100% {
-      transform: translate3d(-50%, 0, 0);
-    }
-  }
-
-  /* Stamp prototype: dashed perforation inset on each photo card. Static, no hover motion. */
   .memory-stamp {
-    position: relative;
+    transform: rotate(var(--tilt));
+    /* on the figure, not the paper: the paper's mask would cut a shadow away. token-ok: drop-shadow filter, box-shadow tokens cannot follow a mask */
+    filter: drop-shadow(0 1px 2px hsl(var(--foreground) / 0.12));
   }
 
-  .memory-stamp::after {
-    content: '';
-    position: absolute;
-    inset: 0.375rem;
-    border: 1px dashed var(--color-border);
-    pointer-events: none;
-  }
-
-  .animate-core-marquee {
-    display: flex;
-    width: max-content;
-    will-change: transform;
-    animation: core-memories-marquee 30s linear infinite;
-  }
-
-  .animate-core-marquee:hover,
-  .group:hover .animate-core-marquee {
-    animation-play-state: paused;
+  /* Perforated edge: small holes along all four sides, cut with a mask. The paper keeps its
+     padding, so the holes only nick the edge and never reach the photo. */
+  .stamp-paper {
+    mask-image: var(--perforation);
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
   }
 </style>

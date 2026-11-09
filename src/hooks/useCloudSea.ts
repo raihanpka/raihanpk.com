@@ -2,7 +2,10 @@ import { useEffect, type RefObject } from 'react'
 import { COLS, ROWS, DOT_SIZE, createCloudSea, createCloudSeaFrame, type CloudSeaFrame } from '@/lib/cloud-sea'
 
 /** Buffer pixels per scene cell. The dots are drawn here, then scaled up to the viewport. */
-const SCALE = 4
+const SCALE = 2
+/** Each scene cell is halftoned as DETAIL x DETAIL dots, sampled from the scene's lum, so the dots are finer. */
+const DETAIL = 2
+const BAYER4 = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map((v) => v / 16 - 0.47)
 /** The sun's place in the scene grid, from the cloud sea source (x 150 of 200, y 41.5 of 100). */
 const SUN_COL = 150
 const SUN_ROW = 41.5
@@ -38,8 +41,10 @@ export function useCloudSea(canvasRef: RefObject<HTMLCanvasElement | null>) {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    const bw = COLS * SCALE
-    const bh = ROWS * SCALE
+    const TW = COLS * DETAIL
+    const TH = ROWS * DETAIL
+    const bw = TW * SCALE
+    const bh = TH * SCALE
     const buffer = document.createElement('canvas')
     buffer.width = bw
     buffer.height = bh
@@ -71,28 +76,35 @@ export function useCloudSea(canvasRef: RefObject<HTMLCanvasElement | null>) {
     const paint = () => {
       pixels.fill(0)
 
-      for (let cy = 0; cy < ROWS; cy++) {
-        for (let cx = 0; cx < COLS; cx++) {
-          const k = cy * COLS + cx
-          const step = frame.steps[k]
+      // Finer dots: each target cell takes its lum from a bilinear sample of the scene, then dithers on its own grid.
+      for (let ty = 0; ty < TH; ty++) {
+        const sy = (ty + 0.5) / DETAIL - 0.5
+        const y0c = Math.max(0, Math.min(ROWS - 1, Math.floor(sy)))
+        const y1c = Math.min(ROWS - 1, y0c + 1)
+        const fy = Math.min(1, Math.max(0, sy - y0c))
+        for (let tx = 0; tx < TW; tx++) {
+          const sx = (tx + 0.5) / DETAIL - 0.5
+          const x0c = Math.max(0, Math.min(COLS - 1, Math.floor(sx)))
+          const x1c = Math.min(COLS - 1, x0c + 1)
+          const fx = Math.min(1, Math.max(0, sx - x0c))
+          const lt = frame.lum[y0c * COLS + x0c] * (1 - fx) + frame.lum[y0c * COLS + x1c] * fx
+          const lb = frame.lum[y1c * COLS + x0c] * (1 - fx) + frame.lum[y1c * COLS + x1c] * fx
+          const lum = lt * (1 - fy) + lb * fy
           // dark sky stays empty: only the brighter cells and the sea draw a dot
-          if (step === 0 || (frame.lum[k] < 0.12 && frame.warm[k] < 0.05)) continue
+          if (lum < 0.12) continue
+          const step = Math.max(0, Math.min(3, Math.round(lum * 3 + BAYER4[(ty & 3) * 4 + (tx & 3)])))
+          if (step === 0) continue
           const radius = (DOT_SIZE[step] * SCALE) / 2
-          const cxp = (cx + 0.5) * SCALE
-          const cyp = (cy + 0.5) * SCALE
-          const lum = frame.lum[k]
-          // tone: muted grey in the shade, foreground on the lit edges, then pushed toward the sun
+          const cxp = (tx + 0.5) * SCALE
+          const cyp = (ty + 0.5) * SCALE
+          // tone: muted grey in the shade, foreground on the lit edges
           const tr = inks.muted[0] + (inks.fg[0] - inks.muted[0]) * lum
           const tg = inks.muted[1] + (inks.fg[1] - inks.muted[1]) * lum
           const tb = inks.muted[2] + (inks.fg[2] - inks.muted[2]) * lum
-          // monochrome: the warm value is not used, every cell stays in the muted-to-foreground range
-          const ir = Math.round(tr)
-          const ig = Math.round(tg)
-          const ib = Math.round(tb)
-          const ink = (ir | (ig << 8) | (ib << 16)) >>> 0
+          const ink = (Math.round(tr) | (Math.round(tg) << 8) | (Math.round(tb) << 16)) >>> 0
           const alphaK = 0.35 + 0.65 * lum
-          const x0 = cx * SCALE
-          const y0 = cy * SCALE
+          const x0 = tx * SCALE
+          const y0 = ty * SCALE
           for (let py = y0; py < y0 + SCALE; py++) {
             const dy = py + 0.5 - cyp
             for (let px = x0; px < x0 + SCALE; px++) {

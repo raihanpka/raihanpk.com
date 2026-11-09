@@ -6,7 +6,9 @@ const BASE = '/static/sprites'
 // the character frames, cut from the avatar sheet by grid cell (row, column). Every frame except the
 // front one faces right, so the run only ever faces one way: r1c1 faces the viewer, r4c3 and r4c4 are the
 // run cycle, r4c5 is the jump with one arm up.
-const FRAMES = { front: 'r1c1.png', runA: 'r4c3.png', runB: 'r4c4.png', jump: 'r4c5.png' } as const
+// the run is four frames, so the arm swings through a full stride: r4c3, r4c4, r4c5, then back through r4c4
+const FRAMES = { front: 'r1c1.png', runA: 'r4c3.png', runB: 'r4c4.png', runC: 'r4c5.png', jump: 'r4c5.png' } as const
+const RUN_CYCLE = ['runA', 'runB', 'runC', 'runB'] as const
 const GROUND = 0.92 // the ground line, as a share of the card height
 const BAND = 0.45 // the share of the card the run uses for the figure's size
 const FRAME_MS = 1000 / 30
@@ -164,9 +166,7 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
         ? frameImgs.front
         : runner.y > 0
           ? frameImgs.jump
-          : Math.floor(animT * 8) % 2
-            ? frameImgs.runB
-            : frameImgs.runA
+          : frameImgs[RUN_CYCLE[Math.floor(animT * 8) % RUN_CYCLE.length]]
       const dx = PLAYER_X * s
       const dh = frame.height * s
       const dy = groundY - runner.y * s - dh

@@ -29,7 +29,7 @@ export default function GithubGraph({ weeks: initialWeeks, total: initialTotal, 
   const [active, setActive] = React.useState<{ w: number; d: number } | null>(null)
 
   React.useEffect(() => {
-    fetch('/api/contributions')
+    fetch('/api/contributions', { signal: AbortSignal.timeout(8000) })
       .then((res) => (res.ok ? (res.json() as Promise<Contributions>) : null))
       .then((fresh) => {
         if (fresh?.weeks.length) setData({ weeks: fresh.weeks, total: fresh.total })

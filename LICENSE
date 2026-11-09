@@ -1,14 +1,51 @@
 Copyright (c) 2026 Raihan Putra Kirana. All rights reserved.
 
-All materials contained in this repository, including but not limited to the source 
-code, visual design, user interface layout, typography, graphics, and written content, 
-are the exclusive intellectual property of Raihan Putra Kirana.
+This repository is public so the site can be deployed and the code can be read as a reference.
+Being public does not give any permission to use it. Only the rights stated below apply.
 
-NO PERMISSION is granted to copy, reproduce, modify, adapt, distribute, sublicense, 
-or create derivative works of this project, or to host or deploy this code publicly 
-or privately for personal or commercial representation, without prior written 
-permission from the copyright owner.
+1. Ownership
+All content in this repository is owned by the copyright holder and protected by copyright,
+trademark, and other laws. This includes the source code, visual design, layout, interaction
+design, typography, colours, icons, graphics, illustrations, photographs, written content, and
+the names "Raihan Putra Kirana" and "raihanpk" (together, the "Materials"). The third-party
+components listed in NOTICE are excepted, see section 5.
 
-Unauthorized deployment, duplication, or reproduction of this design constitutes 
-an infringement of copyright law and is subject to immediate takedown notices (DMCA) 
-and legal action.
+2. What you may do
+You may view and read the Materials, and study them for learning. You may link to the deployed
+website. You may quote a short excerpt of code, with attribution and a link back to this repository.
+
+3. What you may not do
+Without prior written permission from the copyright holder, you may not:
+a. copy, reproduce, or redistribute the Materials, in whole or in part;
+b. modify, adapt, or create a derivative work from the Materials, including a work that
+   reproduces the visual design, layout, interaction patterns, or creative assets;
+c. use the design, layout, copy, images, or name to build, deploy, host, or present any
+   website, app, product, or service, personal or commercial, including one that is "inspired by"
+   the Materials in a way that looks the same or nearly the same;
+d. fork, mirror, or publish a copy of this repository anywhere else;
+e. use the Materials to train, fine-tune, or evaluate machine-learning models, or to generate
+   content;
+f. remove or alter this notice or any copyright notice.
+
+4. Ideas are not restricted
+General ideas, techniques, and programming concepts are not protected by this licence. The
+restriction applies to the specific expression above: the code as written, the visual design, the
+layout, and the creative assets.
+
+5. Third-party components
+Some files contain code from third-party projects under the MIT License. These are listed in
+NOTICE. Those files remain under their own licence, and that licence applies to them only.
+
+6. Credit is not permission
+Crediting the author in another project's README or documentation does not give a licence to use
+the Materials.
+
+7. Requests for permission
+To ask for permission, contact the copyright holder at me@raihanpk.com. Permission, if given,
+must be in writing and is limited to what it states.
+
+8. No warranty
+The Materials are provided "as is", without warranty of any kind.
+
+9. Governing law
+This licence is governed by the laws of the Republic of Indonesia.

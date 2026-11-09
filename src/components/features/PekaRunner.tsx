@@ -2,14 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 import { PLAYER_X, createRunner, jump, step, type ObstacleSize } from '@/lib/runner'
 
 const BASE = '/static/sprites'
-// the character frames, cut from the avatar sheet by grid cell (row, column):
-// r1c1 faces the viewer, r4c2 and r4c4 are the run, r5c2 has the arms out
-const FRAMES = { front: 'r1c1.png', runA: 'r4c2.png', runB: 'r4c4.png', jump: 'r5c2.png' } as const
+// the character frames, cut from the avatar sheet by grid cell (row, column). Every frame except the
+// front one faces right, so the run only ever faces one way: r1c1 faces the viewer, r4c3 and r4c4 are the
+// run cycle, r4c5 is the jump with one arm up.
+const FRAMES = { front: 'r1c1.png', runA: 'r4c3.png', runB: 'r4c4.png', jump: 'r4c5.png' } as const
 const GROUND = 0.9 // the ground line, as a share of the band height
 const FRAME_MS = 1000 / 30
 const MAX_OBSTACLE_W = 44 // the compact obstacles only, so each one can be cleared
 const TALK_MS = 3500 // how long a tap keeps the runner facing the viewer and the bubbles open
-const LEAVE_MS = 1200 // how long the bubbles stay open after the pointer leaves
 
 interface ObstacleFile extends ObstacleSize {
   file: string
@@ -31,9 +31,9 @@ interface Props {
 
 /**
  * The About runner. The character and the obstacles are static sprites cut from the sprite sheets
- * (scripts/slice-sprites.ts). It runs and jumps by itself and obstacles come in at random. A tap, click or
- * hover turns it to face the viewer for a moment: the run pauses, the speech frames open, and then it turns
- * back and carries on. It pauses off screen and shows one still frame under reduced motion.
+ * (scripts/slice-sprites.ts). It runs and jumps by itself and obstacles come in at random. A tap or click
+ * turns it to face the viewer for a moment: the run pauses, the speech frames open, and then it turns back
+ * and carries on. It pauses off screen and shows one still frame under reduced motion.
  */
 export default function PekaRunner({ label, nickname, bubbles }: Props) {
   const ref = useRef<HTMLCanvasElement>(null)
@@ -60,10 +60,14 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
     let runner: ReturnType<typeof createRunner> | null = null
     let obstacleImgs: HTMLImageElement[] = []
     let frameImgs: Record<keyof typeof FRAMES, HTMLImageElement> | null = null
-    // talk state: a tap sets `until`, hovering keeps `hover` on, and `open` mirrors what the React side shows
-    const talk = { until: 0, hover: false, open: false }
+    // background decor: scenery that scrolls slower than the run and never collides
+    let decorImgs: HTMLImageElement[] = []
+    let decor: { x: number; kind: number; w: number; h: number }[] = []
+    let decorNext = 0
+    // talk state: a tap sets `until`, and `open` mirrors what the React side shows
+    const talk = { until: 0, open: false }
 
-    const isTalking = (now: number) => talk.hover || now < talk.until
+    const isTalking = (now: number) => now < talk.until
     const setOpen = (open: boolean) => {
       if (talk.open === open) return
       talk.open = open
@@ -98,6 +102,13 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
       ctx.globalAlpha = 0.25
       for (let x = -offset + dash * 0.5; x < w; x += dash * 2.3) ctx.fillRect(x, groundY + s * 4, s * 2, s)
 
+      // background decor, behind everything else
+      ctx.globalAlpha = 0.4
+      for (const d of decor) {
+        const img = decorImgs[d.kind]
+        if (img) ctx.drawImage(img, d.x * s, groundY - d.h * s, d.w * s, d.h * s)
+      }
+
       // obstacles, from their sprites
       ctx.globalAlpha = 1
       for (const o of runner.obstacles) {
@@ -120,6 +131,25 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
       ctx.drawImage(frame, dx, dy, frame.naturalWidth * s, dh)
     }
 
+    // decor moves at about a third of the run's speed; new pieces come in from the right
+    const moveDecor = (dt: number) => {
+      if (!runner) return
+      const move = runner.speed * 0.35 * dt
+      for (const d of decor) d.x -= move
+      decor = decor.filter((d) => d.x + d.w > -4)
+      decorNext -= move
+      spawnDecor(w / s)
+    }
+    const spawnDecor = (viewW: number) => {
+      while (decorNext < viewW + 20 && decorMeta.length) {
+        const kind = Math.floor(Math.random() * decorMeta.length)
+        const { w, h } = decorMeta[kind]
+        decor.push({ x: decorNext, kind, w, h })
+        decorNext += 50 + Math.random() * 90
+      }
+    }
+    let decorMeta: ObstacleFile[] = []
+
     const loop = (now: number) => {
       rafId = requestAnimationFrame(loop)
       if (!running || !runner) return
@@ -132,6 +162,7 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
       if (!talking) {
         animT += dt
         step(runner, dt, w / s)
+        moveDecor(dt)
       }
       draw(talking)
     }
@@ -139,14 +170,19 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
     const start = async () => {
       const index: ObstacleFile[] = await fetch(`${BASE}/obstacles/index.json`).then((r) => r.json())
       const compact = index.filter((o) => o.w <= MAX_OBSTACLE_W)
-      const [imgs, frames] = await Promise.all([
+      const background: ObstacleFile[] = await fetch(`${BASE}/background/index.json`).then((r) => r.json())
+      const [imgs, frames, scenery] = await Promise.all([
         Promise.all(compact.map((o) => loadImage(`${BASE}/obstacles/${o.file}`))),
         Promise.all(Object.entries(FRAMES).map(async ([k, f]) => [k, await loadImage(`${BASE}/peka/${f}`)] as const)),
+        Promise.all(background.map((o) => loadImage(`${BASE}/background/${o.file}`))),
       ])
       if (disposed) return
       obstacleImgs = imgs
+      decorImgs = scenery
+      decorMeta = background
       frameImgs = Object.fromEntries(frames) as Record<keyof typeof FRAMES, HTMLImageElement>
       runner = createRunner(compact, Math.floor(Math.random() * 1e9) + 1)
+      spawnDecor(w / s || 60)
       resize()
       if (!reduceMotion) {
         io = new IntersectionObserver(([entry]) => {
@@ -171,17 +207,8 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
         jump(runner)
       }
     }
-    const onEnter = (e: PointerEvent) => {
-      if (e.pointerType === 'mouse') talk.hover = true
-    }
-    const onLeave = () => {
-      talk.hover = false
-      talk.until = performance.now() + LEAVE_MS
-    }
     const onResize = () => resize()
     canvas.addEventListener('pointerdown', onDown)
-    canvas.addEventListener('pointerenter', onEnter)
-    canvas.addEventListener('pointerleave', onLeave)
     window.addEventListener('resize', onResize)
 
     return () => {
@@ -190,8 +217,6 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
       window.clearTimeout(timer)
       io?.disconnect()
       canvas.removeEventListener('pointerdown', onDown)
-      canvas.removeEventListener('pointerenter', onEnter)
-      canvas.removeEventListener('pointerleave', onLeave)
       window.removeEventListener('resize', onResize)
     }
   }, [])
@@ -201,14 +226,15 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
       <canvas
         ref={ref}
         aria-hidden="true"
-        className="pointer-events-auto absolute inset-x-0 bottom-0 h-[45%] w-full text-foreground"
+        className="pointer-events-auto absolute inset-x-0 bottom-0 z-10 h-[45%] w-full text-foreground"
       />
-      {/* the nickname and the bubbles share the right side: the nickname shows at rest, the bubbles replace it while the runner talks */}
+      {/* the nickname and the bubbles share the right side: the nickname shows at rest, the bubbles replace it while the runner talks.
+          They sit under the canvas, so the runner stays visible when it jumps up into their area. */}
       <div
-        className={`absolute right-5 top-5 flex flex-col items-end gap-1 text-right transition duration-200 ease-out ${talking ? 'opacity-0' : 'opacity-100'}`}
+        className={`pointer-events-none absolute right-5 top-5 flex flex-col items-end gap-1 text-right transition duration-200 ease-out ${talking ? 'opacity-0' : 'opacity-100'}`}
       >
-        <p className="text-sm text-muted-foreground">{label}</p>
-        <p className="font-title text-4xl sm:text-display text-foreground">{nickname}</p>
+        <p className="text-base font-semibold tracking-wide text-muted-foreground">{label}</p>
+        <p className="font-title text-2xl text-foreground sm:text-3xl">{nickname}</p>
       </div>
       <div className="pointer-events-none absolute inset-y-4 right-4 left-[44%] flex flex-col justify-center gap-2">
         {bubbles.map((text, i) => (

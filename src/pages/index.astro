@@ -39,7 +39,7 @@ const blog = (await getCollection('blog'))
 
 const rawProjects = (await getCollection('projects'))
   .sort((a, b) => {
-    // date is 'Month Year' string e.g. 'May 2025' — parse to Date for comparison
+    // date is a 'Month Year' string, e.g. 'May 2025', parsed to a Date for comparison
     const toDate = (d?: string) => d ? new Date(d) : new Date(0)
     return toDate(b.data.date).valueOf() - toDate(a.data.date).valueOf()
   })

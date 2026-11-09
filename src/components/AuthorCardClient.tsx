@@ -68,7 +68,7 @@ export function AuthorCardClient({
       initial="hidden"
       animate="visible"
     >
-      {/* Subtle top highlight — minimal Vercel-style accent */}
+      {/* Subtle top highlight, minimal Vercel-style accent */}
       <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-foreground/20 to-transparent" />
 
       <div className="p-4">

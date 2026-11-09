@@ -573,7 +573,7 @@ html[data-reveal] .reveal-stack > :nth-child(n + 5) { --i: 4; }
 .pixel-frame::after {
   content: '';
   position: absolute;
-  left: calc(var(--pixel) * 4);
+  left: calc(var(--pixel) * 9);
   bottom: calc(var(--pixel) * -3);
   width: var(--pixel);
   height: var(--pixel);

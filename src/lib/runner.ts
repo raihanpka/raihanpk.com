@@ -8,11 +8,12 @@ export const PLAYER_X = 8 // world units from the left edge of the view
 const HITBOX_W = 16 // world units of the body that can hit an obstacle (the sprite is 24 wide)
 const HITBOX_H = 32 // world units of the body and head that can hit an obstacle (the sprite is 36 tall)
 const GRAVITY = 200 // world units per second squared
-const JUMP_V = 170 // world units per second, at take-off
+const JUMP_V = 190 // world units per second, at take-off
 const SPEED_MIN = 40
 const SPEED_MAX = 80
 const SPEED_UP = 1.5 // world units per second gained per second of play
-const JUMP_AHEAD = 0.3 // seconds before an obstacle at which the auto-jump fires
+const MIN_GAP_S = 2.0 // seconds between obstacles at least: a full jump plus landing
+const JUMP_AHEAD = 0.2 // seconds before an obstacle at which the auto-jump fires
 
 /** The size of one obstacle sprite, in world units. */
 export interface ObstacleSize {
@@ -82,7 +83,12 @@ export function step(r: Runner, dt: number, viewW: number): void {
     const { w, h } = r.sizes[kind]
     r.obstacles.push({ x: r.nextSpawn, kind, w, h })
     // random gaps, long enough that the character lands before the next one is in reach
-    r.nextSpawn += 110 + r.rng() * 50 + r.speed * 1.3
+    // the gap is at least the time a jump takes at this speed, so every obstacle can be cleared; the
+    // extra room is uneven: often close, sometimes a long breather, so the rhythm is not a metronome
+    const u = r.rng()
+    const extra = u < 0.3 ? 0 : u < 0.85 ? r.rng() * 80 : 140 + r.rng() * 160
+    // the gap is measured from the end of this obstacle, so the room between two obstacles is what is clear
+    r.nextSpawn += w + r.speed * MIN_GAP_S + extra
   }
 
   // physics

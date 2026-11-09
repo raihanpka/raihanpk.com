@@ -10,7 +10,7 @@
 export const COLS = 200
 export const ROWS = 100
 
-const BASE = 84 // the street line: towers stand on it, the sky is above
+export const BASE = 84 // the street line: towers stand on it, the sky is above
 const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5].map((v) => v / 16 - 0.47)
 
 /** Per-cell output of one frame: the dot size step, the brightness, and how warm it is (always 0 here). */

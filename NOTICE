@@ -3,10 +3,7 @@ NOTICE
 
 This repository contains the following third-party code under the MIT License.
 
-1. Cloud sea frame generator (src/lib/cloud-sea.ts), ported from bas3line/ascii (src/pieces/cloud-sea.ts).
-   The full notice is in the header of src/lib/cloud-sea.ts.
-
-2. Built-in features of Astro Erudite (https://github.com/jktrn/astro-erudite), which the site was started from:
+1. Built-in features of Astro Erudite (https://github.com/jktrn/astro-erudite), which the site was started from:
 
 MIT License
 

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { PLAYER_X, createRunner, jump, step, type ObstacleSize } from '@/lib/runner'
+import { BASE as CITY_ROWS, COLS as CITY_COLS, createSkyline, createSkylineFrame } from '@/lib/skyline'
 
 const BASE = '/static/sprites'
 // the character frames, cut from the avatar sheet by grid cell (row, column). Every frame except the
@@ -9,27 +10,34 @@ const FRAMES = { front: 'r1c1.png', runA: 'r4c3.png', runB: 'r4c4.png', jump: 'r
 const GROUND = 0.92 // the ground line, as a share of the card height
 const BAND = 0.45 // the share of the card the run uses for the figure's size
 const FRAME_MS = 1000 / 30
-const CLOUDS = [
-  ['  ####  ', ' ###### ', '########', '########', ' ###### '],
-  ['   ###   ', ' ####### ', '#########', ' ####### '],
-]
-const CLOUD_W = 9
-// deterministic value noise on a line: the same ridge every visit
-const hash1 = (n: number) => {
-  const x = Math.sin(n * 127.1) * 43758.5453
-  return x - Math.floor(x)
-}
-const valueNoise = (x: number) => {
-  const i = Math.floor(x)
-  const f = x - i
-  const t = f * f * (3 - 2 * f)
-  return hash1(i) + (hash1(i + 1) - hash1(i)) * t
-}
 const MAX_OBSTACLE_W = 44 // the compact obstacles only, so each one can be cleared
 const TALK_MS = 2000 // how long a tap or a hover keeps the runner facing the viewer; then it turns back by itself
 
 interface ObstacleFile extends ObstacleSize {
   file: string
+}
+
+/**
+ * The sprite's own colours, put through a grayscale filter: the luma of each pixel becomes its grey, so the
+ * shading and the full tonal range survive. Alpha is kept, so the silhouette stays as drawn.
+ */
+const tint = (img: HTMLImageElement): HTMLCanvasElement => {
+  const c = document.createElement('canvas')
+  c.width = img.naturalWidth
+  c.height = img.naturalHeight
+  const x = c.getContext('2d')
+  if (!x) return c
+  x.drawImage(img, 0, 0)
+  const data = x.getImageData(0, 0, c.width, c.height)
+  const px = data.data
+  for (let i = 0; i < px.length; i += 4) {
+    const lum = Math.round(px[i] * 0.3 + px[i + 1] * 0.59 + px[i + 2] * 0.11)
+    px[i] = lum
+    px[i + 1] = lum
+    px[i + 2] = lum
+  }
+  x.putImageData(data, 0, 0)
+  return c
 }
 
 const loadImage = (src: string) =>
@@ -75,11 +83,22 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
     let timer = 0
     let io: IntersectionObserver | null = null
     let runner: ReturnType<typeof createRunner> | null = null
-    let obstacleImgs: HTMLImageElement[] = []
-    let frameImgs: Record<keyof typeof FRAMES, HTMLImageElement> | null = null
-    // the world behind the run: dot-matrix hills and pixel clouds, slower than the run and never in the way
-    let clouds: { x: number; y: number; shape: number }[] = []
-    let cloudNext = 0
+    let obstacleImgs: HTMLCanvasElement[] = []
+    let frameImgs: Record<keyof typeof FRAMES, HTMLCanvasElement> | null = null
+    // the raw sprite images, kept so they can be greyed again if the sprites ever change
+    let rawObstacles: HTMLImageElement[] = []
+    let rawFrames: Record<keyof typeof FRAMES, HTMLImageElement> | null = null
+    const retint = () => {
+      obstacleImgs = rawObstacles.map((img) => tint(img))
+      if (rawFrames) {
+        frameImgs = Object.fromEntries(Object.entries(rawFrames).map(([k, img]) => [k, tint(img)])) as Record<keyof typeof FRAMES, HTMLCanvasElement>
+      }
+    }
+    // the city and clouds behind the run: a static skyline, repainted twice a second so the windows flicker
+    const sky = createSkyline()
+    const skyFrame = createSkylineFrame()
+    let skyCanvas: HTMLCanvasElement | null = null
+    let skyAt = -1
     // talk state: a tap sets `until`, and `open` mirrors what the React side shows
     const talk = { until: 0, open: false }
 
@@ -91,6 +110,7 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
     }
 
     const resize = () => {
+      skyAt = -1
       const rect = canvas.getBoundingClientRect()
       dpr = Math.min(window.devicePixelRatio || 1, 2)
       w = rect.width
@@ -125,6 +145,7 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
       for (const o of runner.obstacles) {
         const img = obstacleImgs[o.kind]
         if (!img) continue
+        if (!img) continue
         ctx.drawImage(img, o.x * s, groundY - o.h * s, o.w * s, o.h * s)
       }
 
@@ -137,47 +158,47 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
             ? frameImgs.runB
             : frameImgs.runA
       const dx = PLAYER_X * s
-      const dh = frame.naturalHeight * s
+      const dh = frame.height * s
       const dy = groundY - runner.y * s - dh
-      ctx.drawImage(frame, dx, dy, frame.naturalWidth * s, dh)
+      ctx.drawImage(frame, dx, dy, frame.width * s, dh)
     }
 
-    // clouds drift at a tenth of the run's speed; new ones come in from the right at random heights
-    const moveClouds = (dt: number) => {
-      if (!runner) return
-      const move = runner.speed * 0.1 * dt
-      for (const c of clouds) c.x -= move
-      clouds = clouds.filter((c) => c.x + CLOUD_W > -4)
-      cloudNext -= move
-      spawnClouds(w / s)
-    }
-    const spawnClouds = (viewW: number) => {
-      while (cloudNext < viewW + 20) {
-        clouds.push({ x: cloudNext, y: 34 + Math.random() * 22, shape: Math.floor(Math.random() * CLOUDS.length) })
-        cloudNext += 120 + Math.random() * 200
+    // paint the skyline into its own canvas, sized to the sky band above the ground
+    const paintSky = (t: number, groundY: number) => {
+      if (!skyCanvas) skyCanvas = document.createElement('canvas')
+      skyCanvas.width = Math.max(1, Math.round(w * dpr))
+      skyCanvas.height = Math.max(1, Math.round(groundY * dpr))
+      const sctx = skyCanvas.getContext('2d')
+      if (!sctx) return
+      sctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+      sctx.clearRect(0, 0, w, groundY)
+      sctx.fillStyle = getComputedStyle(canvas).color
+      sky(t, skyFrame)
+      const cw = w / CITY_COLS
+      const ch = groundY / CITY_ROWS
+      for (let r = 0; r < CITY_ROWS; r++) {
+        for (let c = 0; c < CITY_COLS; c++) {
+          const k = r * CITY_COLS + c
+          const step = skyFrame.steps[k]
+          if (step === 0) continue
+          const size = [0, 0.3, 0.56, 0.8][step]
+          const lum = skyFrame.lum[k]
+          sctx.globalAlpha = 0.25 + 0.75 * lum
+          const x = c * cw + (cw * (1 - size)) / 2
+          const y = r * ch + (ch * (1 - size)) / 2
+          sctx.fillRect(x, y, cw * size, ch * size)
+        }
       }
+      sctx.globalAlpha = 1
     }
 
-    // hills: a dot-matrix ridge line built from value noise, scrolling at the far parallax speed
     const drawWorld = (groundY: number) => {
       if (!runner) return
-      const far = runner.distance * 0.15
-      const step = 3 * s
-      ctx.globalAlpha = 0.16
-      for (let px = 0; px < w; px += step) {
-        const wx = (px / s + far) / 46
-        const hgt = 8 + 16 * valueNoise(wx)
-        for (let py = groundY - hgt * s; py < groundY; py += step) ctx.fillRect(px, py, s, s)
+      if (skyAt < 0 || animT - skyAt >= 0.5) {
+        paintSky(animT, groundY)
+        skyAt = animT
       }
-      // clouds: small pixel shapes, a little more visible than the hills
-      ctx.globalAlpha = 0.2
-      for (const c of clouds) {
-        CLOUDS[c.shape].forEach((row, r) => {
-          for (let i = 0; i < row.length; i++) {
-            if (row[i] === '#') ctx.fillRect((c.x + i) * s, groundY - (c.y - r) * s, s, s)
-          }
-        })
-      }
+      if (skyCanvas) ctx.drawImage(skyCanvas, 0, 0, w, groundY)
     }
 
     const loop = (now: number) => {
@@ -192,7 +213,6 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
       if (!talking) {
         animT += dt
         step(runner, dt, w / s)
-        moveClouds(dt)
       }
       draw(talking)
     }
@@ -205,10 +225,10 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
         Promise.all(Object.entries(FRAMES).map(async ([k, f]) => [k, await loadImage(`${BASE}/peka/${f}`)] as const)),
       ])
       if (disposed) return
-      obstacleImgs = imgs
-      frameImgs = Object.fromEntries(frames) as Record<keyof typeof FRAMES, HTMLImageElement>
+      rawObstacles = imgs
+      rawFrames = Object.fromEntries(frames) as Record<keyof typeof FRAMES, HTMLImageElement>
+      retint()
       runner = createRunner(compact, Math.floor(Math.random() * 1e9) + 1)
-      spawnClouds(w / s || 60)
       resize()
       if (!reduceMotion) {
         io = new IntersectionObserver(([entry]) => {
@@ -240,6 +260,12 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
       if (e.pointerType === 'mouse') startTalk()
     }
     const onResize = () => resize()
+    // the theme can flip while the page is open: repaint with the current text colour
+    const themeObserver = new MutationObserver(() => {
+      retint()
+      draw(talk.open)
+    })
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
     canvas.addEventListener('pointerdown', onDown)
     canvas.addEventListener('pointerenter', onEnter)
     window.addEventListener('resize', onResize)
@@ -252,11 +278,16 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
       canvas.removeEventListener('pointerdown', onDown)
       canvas.removeEventListener('pointerenter', onEnter)
       window.removeEventListener('resize', onResize)
+      themeObserver.disconnect()
     }
   }, [])
 
   return (
     <>
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute inset-0 z-[5] backdrop-blur-sm transition-opacity duration-200 ${talking ? 'opacity-100' : 'opacity-0'}`}
+      />
       <canvas
         ref={ref}
         aria-hidden="true"
@@ -270,7 +301,7 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
         <p className="text-base font-semibold tracking-wide text-muted-foreground">{label}</p>
         <p className="font-title text-2xl text-foreground sm:text-3xl">{nickname}</p>
       </div>
-      <div className="pointer-events-none absolute bottom-[38%] left-3 flex max-w-44 flex-col items-start gap-2">
+      <div className="pointer-events-none absolute bottom-[38%] left-6 z-20 flex max-w-44 flex-col items-start gap-2">
         {bubbles.map((text, i) => (
           <p
             key={text}

@@ -14,7 +14,7 @@ const JUMP_V = (GRAVITY * JUMP_T) / 2 // take-off speed, from T = 2 v / g
 const SPEED_MIN = 75
 const SPEED_MAX = 120
 const SPEED_UP = 1.0 // world units per second gained per second of play
-const MIN_GAP_S = 1.4 // seconds of clear room between two obstacles at least: landing and the next take-off fit in it
+const MIN_GAP_S = 2.1 // seconds of clear room between two obstacles at least: a landing, a breath, then the next take-off
 const JUMP_AHEAD = 0.28 // seconds before an obstacle at which the auto-jump fires, so the rise clears it
 
 /** The size of one obstacle sprite, in world units. */
@@ -123,7 +123,7 @@ export function step(r: Runner, dt: number, viewW: number): void {
     r.obstacles.push({ x: r.nextSpawn, kind, w, h })
     // the clear room after this obstacle is at least MIN_GAP_S at this speed; a random extra spreads the rhythm
     const u = r.rng()
-    const extra = u < 0.35 ? 0 : u < 0.85 ? r.rng() * 0.6 * r.speed : r.rng() * 2 * r.speed
+    const extra = u < 0.3 ? 0 : u < 0.85 ? r.rng() * 0.8 * r.speed : r.rng() * 2.5 * r.speed
     r.nextSpawn += w + r.speed * MIN_GAP_S + extra
   }
 

@@ -8,14 +8,14 @@ export const PLAYER_X = 8 // world units from the left edge of the view
 const HITBOX_W = 10 // world units of the body that can hit an obstacle (the sprite is 24 wide)
 const HITBOX_H = 32 // world units of the body and head that can hit an obstacle (the sprite is 36 tall)
 const JUMP_H = 48 // peak height of a jump, world units: about 1.3 sprite heights, enough to clear a 28 high obstacle
-const JUMP_T = 1.2 // seconds in the air, a natural arc at this speed
+const JUMP_T = 1.35 // seconds in the air, a natural arc at this speed
 const GRAVITY = (8 * JUMP_H) / (JUMP_T * JUMP_T) // from h = g T^2 / 8, world units per second squared
 const JUMP_V = (GRAVITY * JUMP_T) / 2 // take-off speed, from T = 2 v / g
 const SPEED_MIN = 75
 const SPEED_MAX = 120
 const SPEED_UP = 1.0 // world units per second gained per second of play
 const MIN_GAP_S = 2.1 // seconds of clear room between two obstacles at least: a landing, a breath, then the next take-off
-const JUMP_AHEAD = 0.28 // seconds before an obstacle at which the auto-jump fires, so the rise clears it
+const JUMP_AHEAD = 0.38 // seconds before an obstacle at which the auto-jump fires: the take-off comes earlier, with the rise still clearing it
 
 /** The size of one obstacle sprite, in world units. */
 export interface ObstacleSize {

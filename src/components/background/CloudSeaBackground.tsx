@@ -1,13 +1,10 @@
 import { useRef } from 'react'
-import { useWaterDither } from '@/hooks/useWaterDither'
-
-const SRC = '/assets/sea.webp'
-const SIZE: [number, number] = [851, 360]
+import { useCloudSea } from '@/hooks/useCloudSea'
 
 /** Fixed, decorative background. Not interactive, so it is hidden from assistive tech. */
-export default function WaterDitherBackground() {
+export default function CloudSeaBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  useWaterDither(canvasRef, { src: SRC, imageSize: SIZE, rippleSpeed: 0.25 })
+  useCloudSea(canvasRef)
 
   return (
     <canvas

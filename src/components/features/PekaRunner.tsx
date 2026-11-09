@@ -24,6 +24,8 @@ const loadImage = (src: string) =>
   })
 
 interface Props {
+  label: string
+  nickname: string
   bubbles: string[]
 }
 
@@ -33,7 +35,7 @@ interface Props {
  * hover turns it to face the viewer for a moment: the run pauses, the speech frames open, and then it turns
  * back and carries on. It pauses off screen and shows one still frame under reduced motion.
  */
-export default function PekaRunner({ bubbles }: Props) {
+export default function PekaRunner({ label, nickname, bubbles }: Props) {
   const ref = useRef<HTMLCanvasElement>(null)
   const [talking, setTalking] = useState(false)
 
@@ -201,13 +203,20 @@ export default function PekaRunner({ bubbles }: Props) {
         aria-hidden="true"
         className="pointer-events-auto absolute inset-x-0 bottom-0 h-[45%] w-full text-foreground"
       />
-      <div className="pointer-events-none absolute inset-x-5 bottom-[45%] top-28 flex flex-col items-start justify-end gap-4 sm:inset-x-6">
+      {/* the nickname and the bubbles share the right side: the nickname shows at rest, the bubbles replace it while the runner talks */}
+      <div
+        className={`absolute right-5 top-5 flex flex-col items-end gap-1 text-right transition duration-200 ease-out ${talking ? 'opacity-0' : 'opacity-100'}`}
+      >
+        <p className="text-sm text-muted-foreground">{label}</p>
+        <p className="font-title text-4xl sm:text-display text-foreground">{nickname}</p>
+      </div>
+      <div className="pointer-events-none absolute inset-y-4 right-4 left-[44%] flex flex-col justify-center gap-2">
         {bubbles.map((text, i) => (
           <p
             key={text}
             data-open={talking}
             style={{ transitionDelay: talking ? `${i * 120}ms` : '0ms' }}
-            className={`pixel-frame max-w-72 px-4 py-3 text-sm leading-snug opacity-0 transition duration-200 ease-out data-[open=true]:opacity-100 ${i % 2 ? 'ml-10' : ''} ${talking ? '' : 'translate-y-2'}`}
+            className={`pixel-frame max-w-full px-4 py-3 text-sm leading-snug opacity-0 transition duration-200 ease-out data-[open=true]:opacity-100 ${i % 2 ? 'ml-6' : ''} ${talking ? '' : 'translate-y-2'}`}
           >
             {text}
           </p>

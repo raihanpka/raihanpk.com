@@ -15,12 +15,8 @@ interface Props {
 const { label, nickname, bubbles, class: className } = Astro.props
 ---
 
-<section class:list={['about-card relative isolate min-h-[30rem] overflow-hidden p-5 sm:p-6', className]}>
-  <div class="flex flex-col items-end gap-1 text-right">
-    <p class="text-sm text-muted-foreground">{label}</p>
-    <p class="font-title text-4xl sm:text-display text-foreground">{nickname}</p>
-  </div>
-  <PekaRunner client:visible bubbles={bubbles} />
+<section class:list={['about-card relative isolate min-h-60 overflow-hidden p-5 sm:p-6', className]}>
+  <PekaRunner client:visible label={label} nickname={nickname} bubbles={bubbles} />
 </section>
 
 

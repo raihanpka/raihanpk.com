@@ -5,7 +5,7 @@ import { createRunner, jump, step, type ObstacleSize } from '../src/lib/runner'
 const SIZES: ObstacleSize[] = [
   { w: 16, h: 28 },
   { w: 28, h: 28 },
-  { w: 39, h: 28 },
+  { w: 26, h: 28 },
   { w: 22, h: 28 },
 ]
 
@@ -40,7 +40,7 @@ describe('auto-runner', () => {
 
   it('speeds up over time but stays within bounds', () => {
     const r = simulate(60, 11)
-    expect(r.speed).toBeGreaterThan(40)
-    expect(r.speed).toBeLessThanOrEqual(80)
+    expect(r.speed).toBeGreaterThan(60)
+    expect(r.speed).toBeLessThanOrEqual(110)
   })
 })

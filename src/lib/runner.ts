@@ -5,15 +5,17 @@
  */
 
 export const PLAYER_X = 8 // world units from the left edge of the view
-const HITBOX_W = 16 // world units of the body that can hit an obstacle (the sprite is 24 wide)
+const HITBOX_W = 10 // world units of the body that can hit an obstacle (the sprite is 24 wide)
 const HITBOX_H = 32 // world units of the body and head that can hit an obstacle (the sprite is 36 tall)
-const GRAVITY = 200 // world units per second squared
-const JUMP_V = 190 // world units per second, at take-off
-const SPEED_MIN = 40
-const SPEED_MAX = 80
+const JUMP_H = 44 // peak height of a jump, world units: about 1.2 sprite heights, enough to clear a 28 high obstacle
+const JUMP_T = 1.2 // seconds in the air, a natural arc at this speed
+const GRAVITY = (8 * JUMP_H) / (JUMP_T * JUMP_T) // from h = g T^2 / 8, world units per second squared
+const JUMP_V = (GRAVITY * JUMP_T) / 2 // take-off speed, from T = 2 v / g
+const SPEED_MIN = 60
+const SPEED_MAX = 110
 const SPEED_UP = 1.5 // world units per second gained per second of play
-const MIN_GAP_S = 2.0 // seconds between obstacles at least: a full jump plus landing
-const JUMP_AHEAD = 0.2 // seconds before an obstacle at which the auto-jump fires
+const MIN_GAP_S = 1.3 // seconds between the starts of two obstacles at least: a little more than a jump, so the landing comes first
+const JUMP_AHEAD = 0.3 // seconds before an obstacle at which the auto-jump fires: early enough for the rise to clear it, with room for the frame step
 
 /** The size of one obstacle sprite, in world units. */
 export interface ObstacleSize {
@@ -86,9 +88,9 @@ export function step(r: Runner, dt: number, viewW: number): void {
     // the gap is at least the time a jump takes at this speed, so every obstacle can be cleared; the
     // extra room is uneven: often close, sometimes a long breather, so the rhythm is not a metronome
     const u = r.rng()
-    const extra = u < 0.3 ? 0 : u < 0.85 ? r.rng() * 80 : 140 + r.rng() * 160
+    const extra = u < 0.3 ? 0 : u < 0.85 ? r.rng() * 90 : 120 + r.rng() * 180
     // the gap is measured from the end of this obstacle, so the room between two obstacles is what is clear
-    r.nextSpawn += w + r.speed * MIN_GAP_S + extra
+    r.nextSpawn += Math.max(w + 8, r.speed * MIN_GAP_S) + extra
   }
 
   // physics

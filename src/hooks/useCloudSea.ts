@@ -1,9 +1,11 @@
 import { useEffect, type RefObject } from 'react'
-import { DOT_SIZE } from '@/lib/cloud-sea'
-import { COLS, ROWS, createSkyline, createSkylineFrame, type SkylineFrame } from '@/lib/skyline'
+import { COLS, ROWS, DOT_SIZE, createCloudSea, createCloudSeaFrame, type CloudSeaFrame } from '@/lib/cloud-sea'
 
 /** Buffer pixels per scene cell. The dots are drawn here, then scaled up to the viewport. */
 const SCALE = 4
+/** The sun's place in the scene grid, from the cloud sea source (x 150 of 200, y 41.5 of 100). */
+const SUN_COL = 150
+const SUN_ROW = 41.5
 /** 30 fps: the frame is computed in about 1 ms, so the cap is the only cost to limit. */
 const FRAME_MS = 1000 / 30
 /** Reads an HSL token ("h s% l%", see global.css) as an RGB triple. */
@@ -47,8 +49,8 @@ export function useCloudSea(canvasRef: RefObject<HTMLCanvasElement | null>) {
     // one Uint32 per pixel: a single write sets all four RGBA bytes (little-endian)
     const pixels = new Uint32Array(image.data.buffer)
 
-    const render = createSkyline()
-    const frame: SkylineFrame = createSkylineFrame()
+    const render = createCloudSea()
+    const frame: CloudSeaFrame = createCloudSeaFrame()
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
     const startedAt = performance.now()
@@ -114,6 +116,17 @@ export function useCloudSea(canvasRef: RefObject<HTMLCanvasElement | null>) {
       const oy = (canvas.height - dh) / 2
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
+      // the sun as a soft glow, in the foreground tone so the scene stays monochrome
+      const sx = ox + (SUN_COL / COLS) * dw
+      const sy = oy + (SUN_ROW / ROWS) * dh
+      const r = dw * 0.3
+      const [sr, sg, sb] = inks.fg
+      const glow = ctx.createRadialGradient(sx, sy, 0, sx, sy, r)
+      glow.addColorStop(0, `rgba(${sr}, ${sg}, ${sb}, 0.9)`)
+      glow.addColorStop(0.3, `rgba(${sr}, ${sg}, ${sb}, 0.4)`)
+      glow.addColorStop(1, `rgba(${sr}, ${sg}, ${sb}, 0)`)
+      ctx.fillStyle = glow
+      ctx.fillRect(sx - r, sy - r, r * 2, r * 2)
 
       ctx.drawImage(buffer, ox, oy, dw, dh)
 

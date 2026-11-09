@@ -34,7 +34,7 @@ const SpotifyPresence = () => {
 
     // Fetch fresh data if stale or no cache
     if (isStale) {
-      fetch('https://lastfm-last-played.biancarosa.com.br/raihanpka/latest-song')
+      fetch('https://lastfm-last-played.biancarosa.com.br/raihanpka/latest-song', { signal: AbortSignal.timeout(5000) })
         .then((response) => response.json())
         .then((data) => {
           setCachedData(CACHE_KEYS.LASTFM, data.track, CACHE_TTL.LASTFM)

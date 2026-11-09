@@ -14,7 +14,7 @@ export default function CloudSeaBackground() {
       ref={canvasRef}
       aria-hidden="true"
       style={{ opacity: 0, WebkitMaskImage: MASK, maskImage: MASK }}
-      className="pointer-events-none fixed inset-0 z-0 h-full w-full opacity-[0.55] transition-opacity duration-700 dark:opacity-[0.7]"
+      className="pointer-events-none fixed inset-x-0 bottom-0 z-0 h-1/2 w-full sm:h-[60%] opacity-[0.55] transition-opacity duration-700 dark:opacity-[0.7]"
     />
   )
 }

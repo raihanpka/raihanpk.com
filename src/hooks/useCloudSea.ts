@@ -2,7 +2,7 @@ import { useEffect, type RefObject } from 'react'
 import { COLS, ROWS, DOT_SIZE, createCloudSea, createCloudSeaFrame, type CloudSeaFrame } from '@/lib/cloud-sea'
 
 /** Buffer pixels per scene cell. The dots are drawn here, then scaled up to the viewport. */
-const SCALE = 6
+const SCALE = 4
 /** The sun's place in the scene grid, from the cloud sea source (x 150 of 200, y 41.5 of 100). */
 const SUN_COL = 150
 const SUN_ROW = 41.5
@@ -60,8 +60,10 @@ export function useCloudSea(canvasRef: RefObject<HTMLCanvasElement | null>) {
     let revealed = false
 
     const resize = () => {
-      canvas.width = Math.round(window.innerWidth * dpr)
-      canvas.height = Math.round(window.innerHeight * dpr)
+      // the canvas is a band at the bottom of the viewport, so it sizes to its own box
+      const rect = canvas.getBoundingClientRect()
+      canvas.width = Math.round(rect.width * dpr)
+      canvas.height = Math.round(rect.height * dpr)
     }
 
     // Rasterise the frame's dots into the buffer, then cover-fit it to the canvas.

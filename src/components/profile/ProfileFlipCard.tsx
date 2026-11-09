@@ -138,7 +138,7 @@ export default function ProfileFlipCard({ name, role, pronunciation, avatar, lin
               <div className="min-w-0 flex flex-col justify-between">
                 <h2 className="font-title text-2xl max-sm:leading-tight sm:text-display-sm text-foreground">{name}</h2>
                 <p className="text-sm font-medium text-foreground sm:text-base">{role}</p>
-                {pronunciation && <p className="font-mono text-xs text-muted-foreground">{pronunciation}</p>}
+                {pronunciation && <p className="text-sm italic text-muted-foreground">{pronunciation}</p>}
               </div>
             </div>
 

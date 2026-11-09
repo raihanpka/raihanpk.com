@@ -68,7 +68,8 @@ Never use `shadow`, `shadow-sm|md|lg|xl|2xl`, or `shadow-[...]`.
 
 ## Colors
 
-Semantic tokens only: background, foreground, card, primary, secondary, muted, accent, border, additive, destructive, ring, sun.
+Semantic tokens only: background, foreground, card, primary, secondary, muted, accent, border, additive, destructive, ring, sun, paper.
+`paper` is the stamp paper of Core Memories: a broken white in light, a lifted charcoal in dark, so the stamps never go pure black or pure white.
 `sun` is the one warm accent, used only as a hint in the cloud sea background (the sun and the lit sea). Everything else stays monochrome.
 Never use raw hex in components.
 

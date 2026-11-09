@@ -67,4 +67,6 @@ Environment variables go in `.env`. Names only, never commit values: `DATABASE_U
 
 <div align="center">
 <sub>Copyright &copy; 2026 Raihan Putra Kirana. All rights reserved.</sub>
+<br>
+<sub>Public for reference only. Not licensed for reuse. See <a href="LICENSE">LICENSE</a> and <a href="NOTICE">NOTICE</a>.</sub>
 </div>

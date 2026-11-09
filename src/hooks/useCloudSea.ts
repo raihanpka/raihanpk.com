@@ -5,12 +5,9 @@ import { COLS, ROWS, DOT_SIZE, createCloudSea, createCloudSeaFrame, type CloudSe
 const SCALE = 6
 /** 30 fps: the frame is computed in about 1 ms, so the cap is the only cost to limit. */
 const FRAME_MS = 1000 / 30
-/**
- * The dots take the theme's foreground token, so they match the text in both themes.
- * The token is stored as "h s% l%" (see global.css), so it is parsed from there.
- */
-function readInk(): [number, number, number] {
-  const raw = getComputedStyle(document.documentElement).getPropertyValue('--foreground').trim()
+/** Reads an HSL token ("h s% l%", see global.css) as an RGB triple. */
+function tokenRgb(name: string): [number, number, number] {
+  const raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
   const [h, s, l] = raw.split(/\s+/).map((v) => parseFloat(v))
   const sat = s / 100
   const lig = l / 100
@@ -20,6 +17,11 @@ function readInk(): [number, number, number] {
   const [r1, g1, b1] = hp < 1 ? [c, x, 0] : hp < 2 ? [x, c, 0] : hp < 3 ? [0, c, x] : hp < 4 ? [0, x, c] : hp < 5 ? [x, 0, c] : [c, 0, x]
   const m = lig - c / 2
   return [Math.round((r1 + m) * 255), Math.round((g1 + m) * 255), Math.round((b1 + m) * 255)]
+}
+
+/** The dots take the foreground token, and the sun's warm cells take the sun token. */
+function readInks(): { ink: [number, number, number]; sun: [number, number, number] } {
+  return { ink: tokenRgb('--foreground'), sun: tokenRgb('--sun') }
 }
 
 /**
@@ -60,10 +62,8 @@ export function useCloudSea(canvasRef: RefObject<HTMLCanvasElement | null>) {
     }
 
     // Rasterise the frame's dots into the buffer, then cover-fit it to the canvas.
-    let inkRgb = readInk()
+    let inks = readInks()
     const paint = () => {
-      const [ir, ig, ib] = inkRgb
-      const ink = ir | (ig << 8) | (ib << 16)
       pixels.fill(0)
 
       for (let cy = 0; cy < ROWS; cy++) {
@@ -74,7 +74,13 @@ export function useCloudSea(canvasRef: RefObject<HTMLCanvasElement | null>) {
           const radius = (DOT_SIZE[step] * SCALE) / 2
           const cxp = (cx + 0.5) * SCALE
           const cyp = (cy + 0.5) * SCALE
-          const alphaK = 0.15 + 0.85 * frame.lum[k]
+          const alphaK = 0.25 + 0.75 * frame.lum[k]
+          // the warm cells (sun and lit sea) take the sun token, the rest stay ink
+          const w = frame.warm[k]
+          const ir = Math.round(inks.ink[0] + (inks.sun[0] - inks.ink[0]) * w)
+          const ig = Math.round(inks.ink[1] + (inks.sun[1] - inks.ink[1]) * w)
+          const ib = Math.round(inks.ink[2] + (inks.sun[2] - inks.ink[2]) * w)
+          const ink = (ir | (ig << 8) | (ib << 16)) >>> 0
           const x0 = cx * SCALE
           const y0 = cy * SCALE
           for (let py = y0; py < y0 + SCALE; py++) {
@@ -135,7 +141,7 @@ export function useCloudSea(canvasRef: RefObject<HTMLCanvasElement | null>) {
     }
     window.addEventListener('resize', onResize)
     const mo = new MutationObserver(() => {
-      inkRgb = readInk()
+      inks = readInks()
       still()
     })
     mo.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })

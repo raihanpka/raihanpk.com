@@ -41,10 +41,12 @@ export const DOT_SIZE = [0, 0.3, 0.56, 0.8] as const
 export interface CloudSeaFrame {
   steps: Uint8Array
   lum: Float32Array
+  /** how warm the cell is, 0 for grey, 1 for the sun's orange */
+  warm: Float32Array
 }
 
 export function createCloudSeaFrame(): CloudSeaFrame {
-  return { steps: new Uint8Array(COLS * ROWS), lum: new Float32Array(COLS * ROWS) }
+  return { steps: new Uint8Array(COLS * ROWS), lum: new Float32Array(COLS * ROWS), warm: new Float32Array(COLS * ROWS) }
 }
 
 const W = COLS
@@ -382,6 +384,7 @@ export function createCloudSea(): (t: number, out: CloudSeaFrame) => void {
         const step = Math.max(0, Math.min(3, Math.round(level * 3 + BAYER[(r & 3) * 4 + (x & 3)])))
         out.steps[k] = step
         out.lum[k] = clamp(0.3 * cr + 0.59 * cg + 0.11 * cb)
+        out.warm[k] = clamp((cr - cb - 0.05) * 2.4)
       }
     }
   }

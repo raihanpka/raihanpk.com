@@ -5,10 +5,22 @@ import { COLS, ROWS, DOT_SIZE, createCloudSea, createCloudSeaFrame, type CloudSe
 const SCALE = 6
 /** 30 fps: the frame is computed in about 1 ms, so the cap is the only cost to limit. */
 const FRAME_MS = 1000 / 30
-const INK_LIGHT = [0x1f, 0x1f, 0x24] as const
-const INK_DARK = [0xeb, 0xeb, 0xf0] as const
-
-const isDark = () => document.documentElement.classList.contains('dark')
+/**
+ * The dots take the theme's foreground token, so they match the text in both themes.
+ * The token is stored as "h s% l%" (see global.css), so it is parsed from there.
+ */
+function readInk(): [number, number, number] {
+  const raw = getComputedStyle(document.documentElement).getPropertyValue('--foreground').trim()
+  const [h, s, l] = raw.split(/\s+/).map((v) => parseFloat(v))
+  const sat = s / 100
+  const lig = l / 100
+  const c = (1 - Math.abs(2 * lig - 1)) * sat
+  const hp = (((h % 360) + 360) % 360) / 60
+  const x = c * (1 - Math.abs((hp % 2) - 1))
+  const [r1, g1, b1] = hp < 1 ? [c, x, 0] : hp < 2 ? [x, c, 0] : hp < 3 ? [0, c, x] : hp < 4 ? [0, x, c] : hp < 5 ? [x, 0, c] : [c, 0, x]
+  const m = lig - c / 2
+  return [Math.round((r1 + m) * 255), Math.round((g1 + m) * 255), Math.round((b1 + m) * 255)]
+}
 
 /**
  * Draws the cloud sea as halftone dots behind the page, at 30 fps.
@@ -48,8 +60,9 @@ export function useCloudSea(canvasRef: RefObject<HTMLCanvasElement | null>) {
     }
 
     // Rasterise the frame's dots into the buffer, then cover-fit it to the canvas.
+    let inkRgb = readInk()
     const paint = () => {
-      const [ir, ig, ib] = isDark() ? INK_DARK : INK_LIGHT
+      const [ir, ig, ib] = inkRgb
       const ink = ir | (ig << 8) | (ib << 16)
       pixels.fill(0)
 
@@ -120,7 +133,10 @@ export function useCloudSea(canvasRef: RefObject<HTMLCanvasElement | null>) {
       still()
     }
     window.addEventListener('resize', onResize)
-    const mo = new MutationObserver(still)
+    const mo = new MutationObserver(() => {
+      inkRgb = readInk()
+      still()
+    })
     mo.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
 
     return () => {

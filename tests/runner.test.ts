@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'bun:test'
-import { createRunner, headMask, jump, step } from '../src/lib/runner'
+import { createRunner, jump, step } from '../src/lib/runner'
 
 function simulate(seconds: number, seed: number, fps = 30, viewW = 90) {
   const r = createRunner(seed)
@@ -10,7 +10,7 @@ function simulate(seconds: number, seed: number, fps = 30, viewW = 90) {
 
 describe('auto-runner', () => {
   it('auto-jumps every cactus over two minutes of play', () => {
-    for (const seed of [1, 7, 42, 99]) {
+    for (const seed of [1, 7, 42, 99, 123, 2026]) {
       expect(simulate(120, seed).crashes).toBe(0)
     }
   })
@@ -33,19 +33,8 @@ describe('auto-runner', () => {
 
   it('speeds up over time but stays within bounds', () => {
     const r = simulate(60, 11)
-    expect(r.speed).toBeGreaterThan(26)
-    expect(r.speed).toBeLessThanOrEqual(44)
+    expect(r.speed).toBeGreaterThan(40)
+    expect(r.speed).toBeLessThanOrEqual(80)
   })
 })
 
-describe('head mask', () => {
-  it('marks dark opaque pixels as ink and transparent ones as empty', () => {
-    // 2x2 source: top-left black opaque, the rest transparent
-    const rgba = new Uint8ClampedArray([0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    const mask = headMask(rgba, 2, 2, 2, 2)
-    expect(mask).toEqual([
-      [true, false],
-      [false, false],
-    ])
-  })
-})

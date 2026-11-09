@@ -1,21 +1,31 @@
 /**
- * Auto-runner for the About card: a pixel character runs on a line, and cacti come in from the right.
- * Everything here is in grid cells, so the canvas can resize without touching the game state.
- * The character auto-jumps; a tap or a key also jumps.
+ * Auto-runner for the About card. The character runs on a line and jumps by itself; cacti come in
+ * from the right at random. Everything is in grid cells, so the canvas can resize without touching
+ * the run. A tap or a key also jumps.
  */
 
-export const PLAYER_X = 4 // cells from the left edge of the view
-const HITBOX_W = 12 // cells of the body that can hit a cactus
-const HITBOX_H = 22 // cells of the body and head that can hit a cactus
-const GRAVITY = 170 // cells per second squared
-const JUMP_V = 84 // cells per second, at take-off
-const SPEED_MIN = 26
-const SPEED_MAX = 44
-const SPEED_UP = 0.6 // cells per second gained per second of play
-const JUMP_AHEAD = 0.2 // seconds before a cactus at which the auto-jump fires
+export const PLAYER_X = 8 // world units from the left edge of the view
+const HITBOX_W = 14 // world units of the body that can hit a cactus (the sprite is 24 wide)
+const HITBOX_H = 28 // world units of the body and head that can hit a cactus (the sprite is 32 tall)
+/** Each cactus pixel is this many world units, so cacti read at the same scale as the sprite. */
+export const CACTUS_UNIT = 2
+const GRAVITY = 240 // world units per second squared
+const JUMP_V = 120 // world units per second, at take-off
+const SPEED_MIN = 40
+const SPEED_MAX = 80
+const SPEED_UP = 1.5 // world units per second gained per second of play
+const JUMP_AHEAD = 0.25 // seconds before a cactus at which the auto-jump fires
+
+/** Cactus shapes, top row first. '#' is ink. */
+export const CACTI: string[][] = [
+  ['  #  ', '# # #', '# # #', '#####', '  #  ', '  #  ', '  #  '],
+  ['  ##', ' ###', '## #', '# #', '###', '  #'],
+  ['#  #', '## #', '## #', '#####', '  ###', '  #  ', '  #  ', '  #  '],
+]
 
 export interface Cactus {
   x: number // left edge, in cells, in world space
+  shape: number // index into CACTI
   w: number
   h: number
 }
@@ -32,7 +42,7 @@ export interface Runner {
   rng: () => number
 }
 
-/** Small seeded generator, so the same seed plays the same run. */
+/** Small seeded generator. The same seed plays the same run; pass Math.random for a new run each visit. */
 function random(seed: number): () => number {
   let s = seed >>> 0
   return () => {
@@ -55,6 +65,11 @@ export function createRunner(seed = 7): Runner {
   }
 }
 
+export function cactusSize(shape: number): { w: number; h: number } {
+  const rows = CACTI[shape]
+  return { w: Math.max(...rows.map((r) => r.length)) * CACTUS_UNIT, h: rows.length * CACTUS_UNIT }
+}
+
 export function jump(r: Runner): void {
   if (r.y === 0) r.vy = JUMP_V
 }
@@ -70,11 +85,11 @@ export function step(r: Runner, dt: number, viewW: number): void {
   r.cacti = r.cacti.filter((c) => c.x + c.w > -4)
   r.nextSpawn -= move
   while (r.nextSpawn < viewW + 4) {
-    const w = 3 + Math.floor(r.rng() * 2)
-    const h = 5 + Math.floor(r.rng() * 4)
-    r.cacti.push({ x: r.nextSpawn, w, h })
-    const gap = 30 + r.rng() * 26 + r.speed * 0.4
-    r.nextSpawn += gap
+    const shape = Math.floor(r.rng() * CACTI.length)
+    const { w, h } = cactusSize(shape)
+    r.cacti.push({ x: r.nextSpawn, shape, w, h })
+    // random gaps, longer when the run is fast, so the player always gets room to jump
+    r.nextSpawn += 90 + r.rng() * 40 + r.speed * 1.0
   }
 
   // physics
@@ -91,7 +106,7 @@ export function step(r: Runner, dt: number, viewW: number): void {
   const next = r.cacti.find((c) => c.x + c.w > PLAYER_X)
   if (next && r.y === 0 && next.x - (PLAYER_X + HITBOX_W) <= r.speed * JUMP_AHEAD) jump(r)
 
-  // a hit resets the run's position; the score (distance) keeps counting from there
+  // a hit restarts the run from the left; the distance keeps counting
   for (const c of r.cacti) {
     const overlapX = c.x < PLAYER_X + HITBOX_W && c.x + c.w > PLAYER_X
     if (overlapX && r.y < Math.min(c.h, HITBOX_H)) {
@@ -105,60 +120,3 @@ export function step(r: Runner, dt: number, viewW: number): void {
   }
 }
 
-/**
- * Turn the RGBA pixels of the profile ink into a head mask, one cell per sample.
- * A cell is ink where the drawing is dark and opaque.
- */
-export function headMask(rgba: Uint8ClampedArray, w: number, h: number, cols: number, rows: number): boolean[][] {
-  const out: boolean[][] = []
-  for (let row = 0; row < rows; row++) {
-    const line: boolean[] = []
-    for (let col = 0; col < cols; col++) {
-      // average the block of source pixels that falls in this cell
-      const x0 = Math.floor((col * w) / cols)
-      const x1 = Math.max(x0 + 1, Math.floor(((col + 1) * w) / cols))
-      const y0 = Math.floor((row * h) / rows)
-      const y1 = Math.max(y0 + 1, Math.floor(((row + 1) * h) / rows))
-      let ink = 0
-      let n = 0
-      for (let y = y0; y < y1; y++) {
-        for (let x = x0; x < x1; x++) {
-          const i = (y * w + x) * 4
-          const a = rgba[i + 3] / 255
-          const lum = (rgba[i] + rgba[i + 1] + rgba[i + 2]) / (3 * 255)
-          ink += a * (1 - lum)
-          n += 1
-        }
-      }
-      line.push(ink / n > 0.3)
-    }
-    out.push(line)
-  }
-  return out
-}
-
-// The body under the head, two frames. '#' is ink. The legs swap between frames for the run.
-export const BODY_RUN_A = [
-  '  ########  ',
-  ' ##########  ',
-  '############ ',
-  '  ##    ##  ',
-  '  ##    ##  ',
-  ' ##      ## ',
-]
-export const BODY_RUN_B = [
-  '  ########  ',
-  ' ##########  ',
-  '############ ',
-  '  ##    ##  ',
-  '   ##  ##   ',
-  '   #    #   ',
-]
-export const BODY_JUMP = [
-  '  ########  ',
-  ' ##########  ',
-  '############ ',
-  ' ##      ## ',
-  '##        ##',
-  '#          #',
-]

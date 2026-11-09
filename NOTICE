@@ -3,8 +3,8 @@ NOTICE
 
 This repository contains the following third-party code under the MIT License.
 
-1. Cloud sea scene (src/lib/cloud-sea.ts), ported to TypeScript from the cloud sea piece in
-   https://github.com/bas3line/ascii (https://ascii.rest/). Copyright (c) 2026 bas3line.
+1. Cloud sea scene (src/lib/cloud-sea.ts) and city layout (src/lib/skyline.ts), ported to TypeScript from
+   the cloud sea and skyline pieces in https://github.com/bas3line/ascii (https://ascii.rest/). Copyright (c) 2026 bas3line.
    The full MIT License text is below.
 
 MIT License

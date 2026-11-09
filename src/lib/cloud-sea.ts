@@ -1,5 +1,6 @@
 /*
- * Cloud sea: ported to TypeScript from bas3line/ascii (src/pieces/cloud-sea.ts).
+ * Cloud sea: ported to TypeScript from the cloud sea piece on ascii.rest (https://ascii.rest/),
+ * source at https://github.com/bas3line/ascii (src/pieces/cloud-sea.ts).
  *
  * MIT License
  * Copyright (c) 2026 bas3line (https://github.com/bas3line)

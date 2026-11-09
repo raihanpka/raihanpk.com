@@ -3,6 +3,9 @@ import { COLS, ROWS, DOT_SIZE, createCloudSea, createCloudSeaFrame, type CloudSe
 
 /** Buffer pixels per scene cell. The dots are drawn here, then scaled up to the viewport. */
 const SCALE = 6
+/** The sun's place in the scene grid, from the cloud sea source (x 150 of 200, y 41.5 of 100). */
+const SUN_COL = 150
+const SUN_ROW = 41.5
 /** 30 fps: the frame is computed in about 1 ms, so the cap is the only cost to limit. */
 const FRAME_MS = 1000 / 30
 /** Reads an HSL token ("h s% l%", see global.css) as an RGB triple. */
@@ -19,9 +22,9 @@ function tokenRgb(name: string): [number, number, number] {
   return [Math.round((r1 + m) * 255), Math.round((g1 + m) * 255), Math.round((b1 + m) * 255)]
 }
 
-/** The dots take the foreground token, and the sun's warm cells take the sun token. */
-function readInks(): { ink: [number, number, number]; sun: [number, number, number] } {
-  return { ink: tokenRgb('--foreground'), sun: tokenRgb('--sun') }
+/** Three tones from the tokens: muted for the far sky, foreground for the lit edges, sun for the warm cells. */
+function readInks(): { muted: [number, number, number]; fg: [number, number, number]; sun: [number, number, number] } {
+  return { muted: tokenRgb('--muted-foreground'), fg: tokenRgb('--foreground'), sun: tokenRgb('--sun') }
 }
 
 /**
@@ -70,17 +73,22 @@ export function useCloudSea(canvasRef: RefObject<HTMLCanvasElement | null>) {
         for (let cx = 0; cx < COLS; cx++) {
           const k = cy * COLS + cx
           const step = frame.steps[k]
-          if (step === 0) continue
+          // dark sky stays empty: only the brighter cells and the sea draw a dot
+          if (step === 0 || (frame.lum[k] < 0.12 && frame.warm[k] < 0.05)) continue
           const radius = (DOT_SIZE[step] * SCALE) / 2
           const cxp = (cx + 0.5) * SCALE
           const cyp = (cy + 0.5) * SCALE
-          const alphaK = 0.25 + 0.75 * frame.lum[k]
-          // the warm cells (sun and lit sea) take the sun token, the rest stay ink
-          const w = frame.warm[k]
-          const ir = Math.round(inks.ink[0] + (inks.sun[0] - inks.ink[0]) * w)
-          const ig = Math.round(inks.ink[1] + (inks.sun[1] - inks.ink[1]) * w)
-          const ib = Math.round(inks.ink[2] + (inks.sun[2] - inks.ink[2]) * w)
+          const lum = frame.lum[k]
+          const warm = frame.warm[k]
+          // tone: muted grey in the shade, foreground on the lit edges, then pushed toward the sun
+          const tr = inks.muted[0] + (inks.fg[0] - inks.muted[0]) * lum
+          const tg = inks.muted[1] + (inks.fg[1] - inks.muted[1]) * lum
+          const tb = inks.muted[2] + (inks.fg[2] - inks.muted[2]) * lum
+          const ir = Math.round(tr + (inks.sun[0] - tr) * warm)
+          const ig = Math.round(tg + (inks.sun[1] - tg) * warm)
+          const ib = Math.round(tb + (inks.sun[2] - tb) * warm)
           const ink = (ir | (ig << 8) | (ib << 16)) >>> 0
+          const alphaK = 0.35 + 0.65 * lum
           const x0 = cx * SCALE
           const y0 = cy * SCALE
           for (let py = y0; py < y0 + SCALE; py++) {
@@ -102,8 +110,23 @@ export function useCloudSea(canvasRef: RefObject<HTMLCanvasElement | null>) {
       const scale = Math.max(canvas.width / bw, canvas.height / bh)
       const dw = bw * scale
       const dh = bh * scale
+      const ox = (canvas.width - dw) / 2
+      const oy = (canvas.height - dh) / 2
       ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.drawImage(buffer, (canvas.width - dw) / 2, (canvas.height - dh) / 2, dw, dh)
+
+      // the sun as a soft glow, under the dots
+      const sx = ox + (SUN_COL / COLS) * dw
+      const sy = oy + (SUN_ROW / ROWS) * dh
+      const r = dw * 0.3
+      const [sr, sg, sb] = inks.sun
+      const glow = ctx.createRadialGradient(sx, sy, 0, sx, sy, r)
+      glow.addColorStop(0, `rgba(${sr}, ${sg}, ${sb}, 0.9)`)
+      glow.addColorStop(0.3, `rgba(${sr}, ${sg}, ${sb}, 0.4)`)
+      glow.addColorStop(1, `rgba(${sr}, ${sg}, ${sb}, 0)`)
+      ctx.fillStyle = glow
+      ctx.fillRect(sx - r, sy - r, r * 2, r * 2)
+
+      ctx.drawImage(buffer, ox, oy, dw, dh)
 
       if (!revealed) {
         revealed = true

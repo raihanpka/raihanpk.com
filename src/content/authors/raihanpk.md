@@ -27,7 +27,7 @@ about:
   greeting: "Hello, I'm Raihan."
   intro: >-
     My name is Raihan Putra Kirana. I am currently a **final year student majoring in Computer Science** at [IPB University](https://ipb.ac.id). I'd say I'm a person who enjoys **bridging the gap between scalable software systems and real-world business impact**.
-  sceneLabel: 'PLAYER 1'
+  sceneLabel: 'MENTION ME AS'
   nickname: '@peka'
   bubbles:
     - >-

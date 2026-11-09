@@ -4,7 +4,7 @@ import { useCloudSea } from '@/hooks/useCloudSea'
 /** The top of the scene fades out, so the dense sky does not sit behind the header. */
 const MASK = 'linear-gradient(to bottom, transparent 0%, hsl(0 0% 0%) 42%)'
 /** Soft enough that the dots still read as ASCII, so the text on top stays the focus. */
-const BLUR = 'blur(1px)'
+const BLUR = 'blur(0.5px)'
 /** How far the scene drifts behind the pointer, in px at the edges. Small on purpose. */
 const DRIFT_X = 10
 const DRIFT_Y = 6

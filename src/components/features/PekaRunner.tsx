@@ -1,17 +1,29 @@
 import { useEffect, useRef } from 'react'
-import { CACTI, CACTUS_UNIT, PLAYER_X, createRunner, jump, step } from '@/lib/runner'
+import { PLAYER_X, createRunner, jump, step, type ObstacleSize } from '@/lib/runner'
 
-const SHEET = '/static/runner/peka-sheet.png'
-// the sheet is four 24x32 frames side by side: idle, run A, run B, jump
-const FRAME_W = 24
-const FRAME_H = 32
-const FRAME = { idle: 0, runA: 1, runB: 2, jump: 3 } as const
+const BASE = '/static/sprites'
+// the character frames, cut from the avatar sheet by grid cell (row, column):
+// r1c1 stands, r4c2 and r4c4 are the run, r5c2 has the arms out
+const FRAMES = { idle: 'r1c1.png', runA: 'r4c2.png', runB: 'r4c4.png', jump: 'r5c2.png' } as const
 const GROUND = 0.9 // the ground line, as a share of the band height
 const FRAME_MS = 1000 / 30
+const MAX_OBSTACLE_W = 44 // the compact obstacles only, so each one can be cleared
+
+interface ObstacleFile extends ObstacleSize {
+  file: string
+}
+
+const loadImage = (src: string) =>
+  new Promise<HTMLImageElement>((resolve, reject) => {
+    const img = new Image()
+    img.onload = () => resolve(img)
+    img.onerror = reject
+    img.src = src
+  })
 
 /**
- * The About runner. The character is a static sprite sheet built from the profile photo
- * (scripts/make-runner-sprite.ts). It runs and jumps by itself, cacti come in at random, and a tap or
+ * The About runner. The character and the obstacles are static sprites cut from the sprite sheets
+ * (scripts/slice-sprites.ts). It runs and jumps by itself and obstacles come in at random. A tap or
  * click jumps too. It pauses off screen and shows one still frame under reduced motion.
  */
 export default function PekaRunner() {
@@ -24,10 +36,7 @@ export default function PekaRunner() {
     if (!ctx) return
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    // a new run on every visit
-    const runner = createRunner(Math.floor(Math.random() * 1e9) + 1)
-    const sheet = new Image()
-    let loaded = false
+    let disposed = false
     let dpr = 1
     let w = 0
     let h = 0
@@ -37,6 +46,9 @@ export default function PekaRunner() {
     let last = -Infinity
     let rafId = 0
     let io: IntersectionObserver | null = null
+    let runner: ReturnType<typeof createRunner> | null = null
+    let obstacleImgs: HTMLImageElement[] = []
+    let frameImgs: Record<keyof typeof FRAMES, HTMLImageElement> | null = null
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect()
@@ -45,13 +57,13 @@ export default function PekaRunner() {
       h = rect.height
       canvas.width = Math.round(w * dpr)
       canvas.height = Math.round(h * dpr)
-      // the figure is 32 sprite pixels tall and takes about 80% of the band
-      s = Math.max(2, Math.min(6, Math.floor((h * 0.8) / FRAME_H)))
+      // the character is 36 sprite pixels tall and takes about 80% of the band
+      s = Math.max(2, Math.min(5, Math.floor((h * 0.8) / 36)))
       draw()
     }
 
     const draw = () => {
-      if (!loaded) return
+      if (!runner || !frameImgs) return
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       ctx.imageSmoothingEnabled = false
       ctx.clearRect(0, 0, w, h)
@@ -66,30 +78,25 @@ export default function PekaRunner() {
       ctx.globalAlpha = 0.25
       for (let x = -offset + dash * 0.5; x < w; x += dash * 2.3) ctx.fillRect(x, groundY + s * 4, s * 2, s)
 
-      // cacti, drawn from their pixel shapes
-      ctx.globalAlpha = 0.75
-      for (const c of runner.cacti) {
-        const rows = CACTI[c.shape]
-        const x0 = c.x * s
-        const y0 = groundY - c.h * s
-        rows.forEach((row, r) => {
-          for (let i = 0; i < row.length; i++) {
-            if (row[i] === '#') ctx.fillRect(x0 + i * CACTUS_UNIT * s, y0 + r * CACTUS_UNIT * s, CACTUS_UNIT * s, CACTUS_UNIT * s)
-          }
-        })
+      // obstacles, from their sprites
+      ctx.globalAlpha = 1
+      for (const o of runner.obstacles) {
+        const img = obstacleImgs[o.kind]
+        if (!img) continue
+        ctx.drawImage(img, o.x * s, groundY - o.h * s, o.w * s, o.h * s)
       }
 
-      // the character, from the sheet
-      ctx.globalAlpha = 1
-      const frame = runner.y > 0 ? FRAME.jump : reduceMotion ? FRAME.idle : Math.floor(animT * 8) % 2 ? FRAME.runB : FRAME.runA
+      // the character
+      const frame = runner.y > 0 ? frameImgs.jump : reduceMotion ? frameImgs.idle : Math.floor(animT * 8) % 2 ? frameImgs.runB : frameImgs.runA
       const dx = PLAYER_X * s
-      const dy = groundY - runner.y * s - FRAME_H * s
-      ctx.drawImage(sheet, frame * FRAME_W, 0, FRAME_W, FRAME_H, dx, dy, FRAME_W * s, FRAME_H * s)
+      const dh = frame.naturalHeight * s
+      const dy = groundY - runner.y * s - dh
+      ctx.drawImage(frame, dx, dy, frame.naturalWidth * s, dh)
     }
 
     const loop = (now: number) => {
       rafId = requestAnimationFrame(loop)
-      if (!running) return
+      if (!running || !runner) return
       if (now - last < FRAME_MS - 4) return
       const dt = last === -Infinity ? 1 / 30 : Math.min(0.1, (now - last) / 1000)
       last = now
@@ -98,8 +105,17 @@ export default function PekaRunner() {
       draw()
     }
 
-    sheet.onload = () => {
-      loaded = true
+    const start = async () => {
+      const index: ObstacleFile[] = await fetch(`${BASE}/obstacles/index.json`).then((r) => r.json())
+      const compact = index.filter((o) => o.w <= MAX_OBSTACLE_W)
+      const [imgs, frames] = await Promise.all([
+        Promise.all(compact.map((o) => loadImage(`${BASE}/obstacles/${o.file}`))),
+        Promise.all(Object.entries(FRAMES).map(async ([k, f]) => [k, await loadImage(`${BASE}/peka/${f}`)] as const)),
+      ])
+      if (disposed) return
+      obstacleImgs = imgs
+      frameImgs = Object.fromEntries(frames) as Record<keyof typeof FRAMES, HTMLImageElement>
+      runner = createRunner(compact, Math.floor(Math.random() * 1e9) + 1)
       resize()
       if (!reduceMotion) {
         io = new IntersectionObserver(([entry]) => {
@@ -110,14 +126,15 @@ export default function PekaRunner() {
         rafId = requestAnimationFrame(loop)
       }
     }
-    sheet.src = SHEET
+    start().catch(() => {})
 
-    const onTap = () => jump(runner)
+    const onTap = () => runner && jump(runner)
     const onResize = () => resize()
     canvas.addEventListener('pointerdown', onTap)
     window.addEventListener('resize', onResize)
 
     return () => {
+      disposed = true
       cancelAnimationFrame(rafId)
       io?.disconnect()
       canvas.removeEventListener('pointerdown', onTap)

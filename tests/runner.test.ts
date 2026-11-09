@@ -1,16 +1,24 @@
 import { describe, it, expect } from 'bun:test'
-import { createRunner, jump, step } from '../src/lib/runner'
+import { createRunner, jump, step, type ObstacleSize } from '../src/lib/runner'
 
-function simulate(seconds: number, seed: number, fps = 30, viewW = 90) {
-  const r = createRunner(seed)
+// the sizes the component passes in: the compact obstacle sprites, in world units
+const SIZES: ObstacleSize[] = [
+  { w: 16, h: 28 },
+  { w: 28, h: 28 },
+  { w: 39, h: 28 },
+  { w: 22, h: 28 },
+]
+
+function simulate(seconds: number, seed: number, fps = 30, viewW = 120) {
+  const r = createRunner(SIZES, seed)
   const dt = 1 / fps
   for (let i = 0; i < seconds * fps; i++) step(r, dt, viewW)
   return r
 }
 
 describe('auto-runner', () => {
-  it('auto-jumps every cactus over two minutes of play', () => {
-    for (const seed of [1, 7, 42, 99, 123, 2026]) {
+  it('auto-jumps every obstacle over two minutes of play', () => {
+    for (const seed of [1, 7, 42, 99, 123, 2026, 5, 8, 13, 21]) {
       expect(simulate(120, seed).crashes).toBe(0)
     }
   })
@@ -19,15 +27,14 @@ describe('auto-runner', () => {
     const a = simulate(20, 5)
     const b = simulate(20, 5)
     expect(a.distance).toBe(b.distance)
-    expect(a.cacti).toEqual(b.cacti)
+    expect(a.obstacles).toEqual(b.obstacles)
   })
 
   it('returns to the ground after a jump', () => {
-    const r = createRunner(3)
-    r.cacti = []
+    const r = createRunner(SIZES, 3)
     r.nextSpawn = 1e9
     jump(r)
-    for (let i = 0; i < 90; i++) step(r, 1 / 30, 90)
+    for (let i = 0; i < 120; i++) step(r, 1 / 30, 120)
     expect(r.y).toBe(0)
   })
 
@@ -37,4 +44,3 @@ describe('auto-runner', () => {
     expect(r.speed).toBeLessThanOrEqual(80)
   })
 })
-

@@ -40,6 +40,15 @@ const tint = (img: HTMLImageElement): HTMLCanvasElement => {
   return c
 }
 
+/** The sprite as it is, drawn to its own canvas so it can be used like the greyed ones. */
+const copy = (img: HTMLImageElement): HTMLCanvasElement => {
+  const c = document.createElement('canvas')
+  c.width = img.naturalWidth
+  c.height = img.naturalHeight
+  c.getContext('2d')?.drawImage(img, 0, 0)
+  return c
+}
+
 const loadImage = (src: string) =>
   new Promise<HTMLImageElement>((resolve, reject) => {
     const img = new Image()
@@ -91,7 +100,8 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
     const retint = () => {
       obstacleImgs = rawObstacles.map((img) => tint(img))
       if (rawFrames) {
-        frameImgs = Object.fromEntries(Object.entries(rawFrames).map(([k, img]) => [k, tint(img)])) as Record<keyof typeof FRAMES, HTMLCanvasElement>
+        // the character keeps its colours; only the obstacles are greyed
+        frameImgs = Object.fromEntries(Object.entries(rawFrames).map(([k, img]) => [k, copy(img)])) as Record<keyof typeof FRAMES, HTMLCanvasElement>
       }
     }
     // the city and clouds behind the run: a static skyline, repainted twice a second so the windows flicker
@@ -100,9 +110,9 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
     let skyCanvas: HTMLCanvasElement | null = null
     let skyAt = -1
     // talk state: a tap sets `until`, and `open` mirrors what the React side shows
-    const talk = { until: 0, open: false }
+    const talk = { until: 0, open: false, hover: false }
 
-    const isTalking = (now: number) => now < talk.until
+    const isTalking = (now: number) => talk.hover || now < talk.until
     const setOpen = (open: boolean) => {
       if (talk.open === open) return
       talk.open = open
@@ -258,9 +268,16 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
       startTalk()
       if (!reduceMotion) jump(runner)
     }
-    // a mouse hover turns it round for the same two seconds, then it turns back even if the mouse is still there
+    // a mouse hover turns it round and keeps it turned while the mouse stays over it; it turns back when the mouse leaves
     const onEnter = (e: PointerEvent) => {
-      if (e.pointerType === 'mouse') startTalk()
+      if (e.pointerType !== 'mouse') return
+      talk.hover = true
+      if (reduceMotion) setOpen(true)
+    }
+    const onLeave = () => {
+      talk.hover = false
+      talk.until = 0
+      if (reduceMotion) setOpen(false)
     }
     const onResize = () => resize()
     // the theme can flip while the page is open: repaint with the current text colour
@@ -271,6 +288,7 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
     themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
     canvas.addEventListener('pointerdown', onDown)
     canvas.addEventListener('pointerenter', onEnter)
+    canvas.addEventListener('pointerleave', onLeave)
     window.addEventListener('resize', onResize)
 
     return () => {
@@ -280,6 +298,7 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
       io?.disconnect()
       canvas.removeEventListener('pointerdown', onDown)
       canvas.removeEventListener('pointerenter', onEnter)
+      canvas.removeEventListener('pointerleave', onLeave)
       window.removeEventListener('resize', onResize)
       themeObserver.disconnect()
     }

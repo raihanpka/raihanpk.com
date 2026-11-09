@@ -79,14 +79,14 @@ export function useCloudSea(canvasRef: RefObject<HTMLCanvasElement | null>) {
           const cxp = (cx + 0.5) * SCALE
           const cyp = (cy + 0.5) * SCALE
           const lum = frame.lum[k]
-          const warm = frame.warm[k]
           // tone: muted grey in the shade, foreground on the lit edges, then pushed toward the sun
           const tr = inks.muted[0] + (inks.fg[0] - inks.muted[0]) * lum
           const tg = inks.muted[1] + (inks.fg[1] - inks.muted[1]) * lum
           const tb = inks.muted[2] + (inks.fg[2] - inks.muted[2]) * lum
-          const ir = Math.round(tr + (inks.sun[0] - tr) * warm)
-          const ig = Math.round(tg + (inks.sun[1] - tg) * warm)
-          const ib = Math.round(tb + (inks.sun[2] - tb) * warm)
+          // monochrome: the warm value is not used, every cell stays in the muted-to-foreground range
+          const ir = Math.round(tr)
+          const ig = Math.round(tg)
+          const ib = Math.round(tb)
           const ink = (ir | (ig << 8) | (ib << 16)) >>> 0
           const alphaK = 0.35 + 0.65 * lum
           const x0 = cx * SCALE
@@ -114,11 +114,11 @@ export function useCloudSea(canvasRef: RefObject<HTMLCanvasElement | null>) {
       const oy = (canvas.height - dh) / 2
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      // the sun as a soft glow, under the dots
+      // the sun as a soft glow, in the foreground tone so the scene stays monochrome
       const sx = ox + (SUN_COL / COLS) * dw
       const sy = oy + (SUN_ROW / ROWS) * dh
       const r = dw * 0.3
-      const [sr, sg, sb] = inks.sun
+      const [sr, sg, sb] = inks.fg
       const glow = ctx.createRadialGradient(sx, sy, 0, sx, sy, r)
       glow.addColorStop(0, `rgba(${sr}, ${sg}, ${sb}, 0.9)`)
       glow.addColorStop(0.3, `rgba(${sr}, ${sg}, ${sb}, 0.4)`)

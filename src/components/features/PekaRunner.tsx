@@ -6,7 +6,8 @@ const BASE = '/static/sprites'
 // front one faces right, so the run only ever faces one way: r1c1 faces the viewer, r4c3 and r4c4 are the
 // run cycle, r4c5 is the jump with one arm up.
 const FRAMES = { front: 'r1c1.png', runA: 'r4c3.png', runB: 'r4c4.png', jump: 'r4c5.png' } as const
-const GROUND = 0.9 // the ground line, as a share of the band height
+const GROUND = 0.92 // the ground line, as a share of the card height
+const BAND = 0.45 // the share of the card the run uses for the figure's size
 const FRAME_MS = 1000 / 30
 const CLOUDS = [
   ['  ####  ', ' ###### ', '########', '########', ' ###### '],
@@ -96,8 +97,8 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
       h = rect.height
       canvas.width = Math.round(w * dpr)
       canvas.height = Math.round(h * dpr)
-      // the character is 36 sprite pixels tall and takes about 80% of the band
-      s = Math.max(2, Math.min(5, Math.floor((h * 0.8) / 36)))
+      // the character is 36 sprite pixels tall and takes about 80% of the run band at the bottom
+      s = Math.max(2, Math.min(5, Math.floor((h * BAND * 0.8) / 36)))
       draw(talk.open)
     }
 
@@ -251,7 +252,7 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
       <canvas
         ref={ref}
         aria-hidden="true"
-        className="pointer-events-auto absolute inset-x-0 bottom-0 z-10 h-[45%] w-full text-foreground"
+        className="pointer-events-auto absolute inset-0 z-10 h-full w-full text-foreground"
       />
       {/* the nickname and the bubbles share the right side: the nickname shows at rest, the bubbles replace it while the runner talks.
           They sit under the canvas, so the runner stays visible when it jumps up into their area. */}

@@ -26,7 +26,7 @@ const valueNoise = (x: number) => {
   return hash1(i) + (hash1(i + 1) - hash1(i)) * t
 }
 const MAX_OBSTACLE_W = 44 // the compact obstacles only, so each one can be cleared
-const TALK_MS = 3500 // how long a tap keeps the runner facing the viewer and the bubbles open
+const TALK_MS = 2000 // how long a tap or a hover keeps the runner facing the viewer; then it turns back by itself
 
 interface ObstacleFile extends ObstacleSize {
   file: string
@@ -222,19 +222,26 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
     start().catch(() => {})
 
     // a tap starts a talk; under reduced motion there is no loop, so the open state is set directly
-    const onDown = () => {
-      if (!runner) return
+    const startTalk = () => {
       talk.until = performance.now() + TALK_MS
       if (reduceMotion) {
         setOpen(true)
         window.clearTimeout(timer)
         timer = window.setTimeout(() => setOpen(false), TALK_MS)
-      } else {
-        jump(runner)
       }
+    }
+    const onDown = () => {
+      if (!runner) return
+      startTalk()
+      if (!reduceMotion) jump(runner)
+    }
+    // a mouse hover turns it round for the same two seconds, then it turns back even if the mouse is still there
+    const onEnter = (e: PointerEvent) => {
+      if (e.pointerType === 'mouse') startTalk()
     }
     const onResize = () => resize()
     canvas.addEventListener('pointerdown', onDown)
+    canvas.addEventListener('pointerenter', onEnter)
     window.addEventListener('resize', onResize)
 
     return () => {
@@ -243,6 +250,7 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
       window.clearTimeout(timer)
       io?.disconnect()
       canvas.removeEventListener('pointerdown', onDown)
+      canvas.removeEventListener('pointerenter', onEnter)
       window.removeEventListener('resize', onResize)
     }
   }, [])
@@ -262,13 +270,13 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
         <p className="text-base font-semibold tracking-wide text-muted-foreground">{label}</p>
         <p className="font-title text-2xl text-foreground sm:text-3xl">{nickname}</p>
       </div>
-      <div className="pointer-events-none absolute inset-y-4 right-4 left-[44%] flex flex-col justify-center gap-2">
+      <div className="pointer-events-none absolute bottom-[38%] left-3 flex max-w-44 flex-col items-start gap-2">
         {bubbles.map((text, i) => (
           <p
             key={text}
             data-open={talking}
             style={{ transitionDelay: talking ? `${i * 120}ms` : '0ms' }}
-            className={`pixel-frame max-w-full px-4 py-3 text-sm leading-snug opacity-0 transition duration-200 ease-out data-[open=true]:opacity-100 ${i % 2 ? 'ml-6' : ''} ${talking ? '' : 'translate-y-2'}`}
+            className={`pixel-frame px-3 py-2 text-xs leading-snug opacity-0 transition duration-200 ease-out data-[open=true]:opacity-100 ${i % 2 ? 'ml-4' : ''} ${i < bubbles.length - 1 ? 'after:hidden' : ''} ${talking ? '' : 'translate-y-1'}`}
           >
             {text}
           </p>

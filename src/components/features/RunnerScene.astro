@@ -1,7 +1,7 @@
 ---
 /**
- * The About card's scene: the runner along the bottom, the nickname top right, and the two bubble
- * lines as chat bubbles above the runner's line. Same card surface as the other About cards.
+ * The About card's scene: the runner along the bottom and the nickname top right. The two bubble lines are
+ * pixel speech frames that open when the runner is tapped or hovered. Same card surface as the other About cards.
  */
 import PekaRunner from '@/components/features/PekaRunner.tsx'
 
@@ -15,36 +15,12 @@ interface Props {
 const { label, nickname, bubbles, class: className } = Astro.props
 ---
 
-<section class:list={['about-card relative isolate min-h-[28rem] overflow-hidden p-5 sm:p-6', className]}>
+<section class:list={['about-card relative isolate min-h-[30rem] overflow-hidden p-5 sm:p-6', className]}>
   <div class="flex flex-col items-end gap-1 text-right">
     <p class="text-sm text-muted-foreground">{label}</p>
     <p class="font-title text-4xl sm:text-display text-foreground">{nickname}</p>
   </div>
-  <div class="absolute inset-x-5 bottom-[45%] top-28 flex flex-col justify-end items-start gap-3 sm:inset-x-6">
-    {bubbles.map((text, i) => (
-      <p class:list={['bubble relative max-w-72 rounded-lg border border-border bg-card px-4 py-3 text-sm leading-snug text-foreground shadow-1', i % 2 ? 'ml-10' : '']}>
-        {text}
-      </p>
-    ))}
-  </div>
-  <PekaRunner client:visible />
+  <PekaRunner client:visible bubbles={bubbles} />
 </section>
 
-<style>
-  .bubble::after {
-    content: '';
-    position: absolute;
-    left: 1.25rem;
-    bottom: -0.4375rem;
-    width: 0.75rem;
-    height: 0.75rem;
-    background: hsl(var(--card));
-    border-right: 1px solid hsl(var(--border));
-    border-bottom: 1px solid hsl(var(--border));
-    transform: rotate(45deg);
-  }
-  .bubble:nth-child(2)::after {
-    left: auto;
-    right: 1.25rem;
-  }
-</style>
+

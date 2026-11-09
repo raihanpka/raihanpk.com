@@ -553,3 +553,30 @@ html[data-reveal] .reveal-stack > :nth-child(n + 5) { --i: 4; }
   box-shadow: var(--shadow-1);
   backdrop-filter: blur(8px);
 }
+
+/* Pixel speech frame: a card-coloured box with a stepped ink outline, built from box-shadows so the
+   corners are notched like pixel art. --pixel is one pixel of the outline. */
+.pixel-frame {
+  --pixel: 3px;
+  position: relative;
+  background: hsl(var(--card));
+  color: hsl(var(--foreground));
+  box-shadow:
+    0 calc(var(--pixel) * -1) 0 0 hsl(var(--foreground)),
+    0 var(--pixel) 0 0 hsl(var(--foreground)),
+    calc(var(--pixel) * -1) 0 0 0 hsl(var(--foreground)),
+    var(--pixel) 0 0 0 hsl(var(--foreground));
+  margin: var(--pixel);
+}
+
+/* The tail: a pixel step under the frame, pointing at the runner. */
+.pixel-frame::after {
+  content: '';
+  position: absolute;
+  left: calc(var(--pixel) * 4);
+  bottom: calc(var(--pixel) * -3);
+  width: var(--pixel);
+  height: var(--pixel);
+  background: hsl(var(--foreground));
+  box-shadow: var(--pixel) 0 0 0 hsl(var(--foreground)), calc(var(--pixel) * 2) 0 0 0 hsl(var(--foreground)), calc(var(--pixel) * -1) calc(var(--pixel) * -1) 0 0 hsl(var(--foreground));
+}

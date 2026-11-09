@@ -37,7 +37,7 @@ const marqueeItems = photos.length <= 3
   </div>
 
   {/* Mobile Marquee (always active on mobile < sm, and everywhere if > 3 photos) */}
-  <div class={`group relative -mx-4 sm:-mx-6 px-4 sm:px-6 overflow-hidden py-2 ${isAlwaysMarquee ? 'block' : 'block sm:hidden'}`}>
+  <div class={`group relative overflow-hidden py-2 ${isAlwaysMarquee ? 'block' : 'block sm:hidden'}`}>
     {/* Gradient edge fades */}
     <div class="pointer-events-none absolute inset-y-0 left-0 z-10 w-10 sm:w-12 bg-linear-to-r from-background to-transparent" />
     <div class="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 sm:w-12 bg-linear-to-l from-background to-transparent" />

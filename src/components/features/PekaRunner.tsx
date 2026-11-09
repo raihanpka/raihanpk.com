@@ -25,7 +25,7 @@ const valueNoise = (x: number) => {
   const t = f * f * (3 - 2 * f)
   return hash1(i) + (hash1(i + 1) - hash1(i)) * t
 }
-const MAX_OBSTACLE_W = 44 // the compact obstacles only, so each one can be cleared
+const MAX_OBSTACLE_W = 26 // the compact obstacles only, so each one can be cleared
 const TALK_MS = 3500 // how long a tap keeps the runner facing the viewer and the bubbles open
 
 interface ObstacleFile extends ObstacleSize {

@@ -43,6 +43,14 @@ import {
 } from 'react-icons/si'
 import { FaJava } from 'react-icons/fa'
 import { TbBrandCSharp, TbSql } from 'react-icons/tb'
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from 'recharts'
+import {
+  type ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '@/components/ui/Chart'
+import { motion } from 'motion/react'
 import {
   getCachedData,
   setCachedData,
@@ -136,6 +144,23 @@ const colors = [
   'hsl(var(--chart-4))',
 ]
 
+const chartConfig: ChartConfig = {
+  hours: {
+    label: 'Hours',
+    color: 'hsl(var(--primary))',
+  },
+  label: {
+    color: 'hsl(var(--primary))',
+  },
+  ...colors.reduce(
+    (acc, color, index) => ({
+      ...acc,
+      [`language${index}`]: { label: `Language ${index + 1}`, color },
+    }),
+    {},
+  ),
+}
+
 const WakatimeBox = ({ omitLanguages = [] }: Props) => {
   const [languages, setLanguages] = useState<Language[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -181,6 +206,35 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
       })
   }, [])
 
+  const CustomYAxisTick = ({ x, y, payload }: any) => {
+    const icon = getLanguageIcon(payload.value.toLowerCase())
+    return (
+      <g transform={`translate(${x},${y})`}>
+        <title>{payload.value}</title>
+        <foreignObject width={22} height={22} x={-28} y={-11}>
+          {icon ? (
+            React.cloneElement(icon, {
+              size: 22,
+              className: 'text-neutral-900 dark:text-white',
+              'aria-hidden': 'true',
+            })
+          ) : (
+            <text
+              x={11}
+              y={11}
+              className="fill-neutral-900 dark:fill-white font-mono font-bold"
+              fontSize="14"
+              textAnchor="middle"
+              dominantBaseline="central"
+            >
+              {payload.value.charAt(0).toUpperCase()}
+            </text>
+          )}
+        </foreignObject>
+      </g>
+    )
+  }
+
   if (isLoading)
     return (
       // Mirrors the real chart: p-4 content box split into four equal bands, a 22px icon slot, and bars
@@ -205,25 +259,48 @@ const WakatimeBox = ({ omitLanguages = [] }: Props) => {
 
   if (error) return <div>Error: {error}</div>
 
-  // Plain bars: a row per language with its icon, a bar scaled to the largest value, and the hours.
-  const max = Math.max(...languages.map((l) => l.hours), 1)
   return (
-    <div className="flex h-full w-full flex-col justify-around p-4" role="list" aria-label="Coding hours by language">
-      {languages.map((lang) => {
-        const icon = getLanguageIcon(lang.name.toLowerCase())
-        return (
-          <div key={lang.name} role="listitem" className="flex items-center gap-2" title={`${lang.name}: ${Math.round(lang.hours)}h`}>
-            <span className="flex size-[22px] shrink-0 items-center justify-center text-foreground" aria-hidden="true">
-              {icon ? React.cloneElement(icon, { size: 22 }) : <span className="font-mono text-xs font-bold">{lang.name.charAt(0).toUpperCase()}</span>}
-            </span>
-            <div className="h-4 min-w-0 flex-1">
-              <div className="h-full rounded-md bg-primary transition-[width] duration-500" style={{ width: `${(lang.hours / max) * 100}%` }} />
-            </div>
-            <span className="w-10 shrink-0 text-right text-xs text-foreground">{Math.round(lang.hours)}h</span>
-          </div>
-        )
-      })}
-    </div>
+    <motion.div
+      className="h-full w-full"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <ChartContainer config={chartConfig} className="h-full w-full p-4">
+        <BarChart
+          accessibilityLayer
+          data={languages}
+          layout="vertical"
+          margin={{ left: -10, right: 35 }}
+        >
+          <CartesianGrid horizontal={false} />
+          <YAxis
+            dataKey="name"
+            type="category"
+            tickLine={false}
+            axisLine={false}
+            width={50}
+            tick={<CustomYAxisTick />}
+          />
+          <XAxis type="number" hide />
+          <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+          <Bar
+            dataKey="hours"
+            fill="var(--color-hours)"
+            radius={[8, 8, 8, 8]}
+            isAnimationActive={true}
+          >
+            <LabelList
+              dataKey="hours"
+              position="right"
+              formatter={(value: unknown) => `${Math.round(Number(value))}h`}
+              className="fill-foreground"
+              fontSize={12}
+            />
+          </Bar>
+        </BarChart>
+      </ChartContainer>
+    </motion.div>
   )
 }
 

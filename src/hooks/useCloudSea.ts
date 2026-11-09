@@ -107,7 +107,8 @@ export function useCloudSea(canvasRef: RefObject<HTMLCanvasElement | null>) {
 
     const loop = (now: number) => {
       rafId = requestAnimationFrame(loop)
-      if (now - last < FRAME_MS) return
+      // 4 ms slack: a 60 Hz display steps by 16.7 ms, so a frame landing just early would otherwise be skipped
+      if (now - last < FRAME_MS - 4) return
       last = now
       render((now - startedAt) / 1000, frame)
       paint()

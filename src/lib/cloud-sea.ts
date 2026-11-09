@@ -384,7 +384,7 @@ export function createCloudSea(): (t: number, out: CloudSeaFrame) => void {
         const step = Math.max(0, Math.min(3, Math.round(level * 3 + BAYER[(r & 3) * 4 + (x & 3)])))
         out.steps[k] = step
         out.lum[k] = clamp(0.3 * cr + 0.59 * cg + 0.11 * cb)
-        out.warm[k] = clamp((cr - cb - 0.05) * 2.4)
+        out.warm[k] = clamp((cr - cb - 0.03) * 3)
       }
     }
   }

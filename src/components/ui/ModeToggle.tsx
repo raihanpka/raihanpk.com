@@ -14,6 +14,8 @@ export function ModeToggle() {
   }, [])
 
   const toggleTheme = () => {
+    // the blog is always dark, so the toggle does nothing there
+    if (window.location.pathname.startsWith('/blog')) return
     const next = theme === 'light' ? 'dark' : 'light'
     document.documentElement.classList.add('disable-transitions')
     document.documentElement.classList.toggle('dark', next === 'dark')

@@ -85,7 +85,10 @@ const { title, description, image = '/static/profile/twitter-card.png', jsonLd =
 </script>
 
 <script is:inline>
-  function setDarkMode(document) {
+  // The blog is always dark, whatever the visitor's browser or saved choice. Other pages keep the visitor's choice.
+  const isBlogPath = (path) => path.startsWith('/blog')
+
+  function setDarkMode(document, path) {
     const getThemePreference = () => {
       if (
         typeof localStorage !== 'undefined' &&
@@ -97,12 +100,16 @@ const { title, description, image = '/static/profile/twitter-card.png', jsonLd =
         ? 'dark'
         : 'theme-light'
     }
-    const isDark = getThemePreference() === 'dark'
+    const forced = isBlogPath(path)
+    window.__themeForced = forced
+    const isDark = forced || getThemePreference() === 'dark'
     document.documentElement.classList[isDark ? 'add' : 'remove']('dark')
 
     // Attach the observer once. Each page change would otherwise add another one.
+    // On the blog the observer does not save the theme, so the visitor's own choice is kept for other pages.
     if (typeof localStorage !== 'undefined' && !window.__themeObserver) {
       window.__themeObserver = new MutationObserver(() => {
+        if (window.__themeForced) return
         const isDark = document.documentElement.classList.contains('dark')
         localStorage.setItem('theme', isDark ? 'dark' : 'theme-light')
       })
@@ -113,11 +120,11 @@ const { title, description, image = '/static/profile/twitter-card.png', jsonLd =
     }
   }
 
-  setDarkMode(document)
+  setDarkMode(document, window.location.pathname)
 
   document.addEventListener('astro:before-swap', (ev) => {
     // Pass the incoming document to set the theme on it
-    setDarkMode(ev.newDocument)
+    setDarkMode(ev.newDocument, ev.to ? ev.to.pathname : window.location.pathname)
   })
 
   document.addEventListener('astro:after-swap', () => {

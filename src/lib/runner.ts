@@ -74,6 +74,18 @@ export function jump(r: Runner): void {
   if (r.y === 0) r.vy = JUMP_V
 }
 
+/** Gravity only, for when the world stands still: a jump in progress still lands, nothing else moves. */
+export function settle(r: Runner, dt: number): void {
+  if (r.y > 0 || r.vy > 0) {
+    r.vy -= GRAVITY * dt
+    r.y += r.vy * dt
+    if (r.y <= 0) {
+      r.y = 0
+      r.vy = 0
+    }
+  }
+}
+
 /**
  * Pick the next obstacle kind from a shuffled deck: every kind comes up once before any repeats, and the
  * same kind never comes up twice in a row.

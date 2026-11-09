@@ -8,6 +8,22 @@ const BASE = '/static/sprites'
 const FRAMES = { front: 'r1c1.png', runA: 'r4c3.png', runB: 'r4c4.png', jump: 'r4c5.png' } as const
 const GROUND = 0.9 // the ground line, as a share of the band height
 const FRAME_MS = 1000 / 30
+const CLOUDS = [
+  ['  ####  ', ' ###### ', '########', '########', ' ###### '],
+  ['   ###   ', ' ####### ', '#########', ' ####### '],
+]
+const CLOUD_W = 9
+// deterministic value noise on a line: the same ridge every visit
+const hash1 = (n: number) => {
+  const x = Math.sin(n * 127.1) * 43758.5453
+  return x - Math.floor(x)
+}
+const valueNoise = (x: number) => {
+  const i = Math.floor(x)
+  const f = x - i
+  const t = f * f * (3 - 2 * f)
+  return hash1(i) + (hash1(i + 1) - hash1(i)) * t
+}
 const MAX_OBSTACLE_W = 44 // the compact obstacles only, so each one can be cleared
 const TALK_MS = 3500 // how long a tap keeps the runner facing the viewer and the bubbles open
 
@@ -60,10 +76,9 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
     let runner: ReturnType<typeof createRunner> | null = null
     let obstacleImgs: HTMLImageElement[] = []
     let frameImgs: Record<keyof typeof FRAMES, HTMLImageElement> | null = null
-    // background decor: scenery that scrolls slower than the run and never collides
-    let decorImgs: HTMLImageElement[] = []
-    let decor: { x: number; kind: number; w: number; h: number }[] = []
-    let decorNext = 0
+    // the world behind the run: dot-matrix hills and pixel clouds, slower than the run and never in the way
+    let clouds: { x: number; y: number; shape: number }[] = []
+    let cloudNext = 0
     // talk state: a tap sets `until`, and `open` mirrors what the React side shows
     const talk = { until: 0, open: false }
 
@@ -102,12 +117,7 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
       ctx.globalAlpha = 0.25
       for (let x = -offset + dash * 0.5; x < w; x += dash * 2.3) ctx.fillRect(x, groundY + s * 4, s * 2, s)
 
-      // background decor, behind everything else
-      ctx.globalAlpha = 0.4
-      for (const d of decor) {
-        const img = decorImgs[d.kind]
-        if (img) ctx.drawImage(img, d.x * s, groundY - d.h * s, d.w * s, d.h * s)
-      }
+      drawWorld(groundY)
 
       // obstacles, from their sprites
       ctx.globalAlpha = 1
@@ -131,24 +141,43 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
       ctx.drawImage(frame, dx, dy, frame.naturalWidth * s, dh)
     }
 
-    // decor moves at about a third of the run's speed; new pieces come in from the right
-    const moveDecor = (dt: number) => {
+    // clouds drift at a tenth of the run's speed; new ones come in from the right at random heights
+    const moveClouds = (dt: number) => {
       if (!runner) return
-      const move = runner.speed * 0.35 * dt
-      for (const d of decor) d.x -= move
-      decor = decor.filter((d) => d.x + d.w > -4)
-      decorNext -= move
-      spawnDecor(w / s)
+      const move = runner.speed * 0.1 * dt
+      for (const c of clouds) c.x -= move
+      clouds = clouds.filter((c) => c.x + CLOUD_W > -4)
+      cloudNext -= move
+      spawnClouds(w / s)
     }
-    const spawnDecor = (viewW: number) => {
-      while (decorNext < viewW + 20 && decorMeta.length) {
-        const kind = Math.floor(Math.random() * decorMeta.length)
-        const { w, h } = decorMeta[kind]
-        decor.push({ x: decorNext, kind, w, h })
-        decorNext += 50 + Math.random() * 90
+    const spawnClouds = (viewW: number) => {
+      while (cloudNext < viewW + 20) {
+        clouds.push({ x: cloudNext, y: 34 + Math.random() * 22, shape: Math.floor(Math.random() * CLOUDS.length) })
+        cloudNext += 120 + Math.random() * 200
       }
     }
-    let decorMeta: ObstacleFile[] = []
+
+    // hills: a dot-matrix ridge line built from value noise, scrolling at the far parallax speed
+    const drawWorld = (groundY: number) => {
+      if (!runner) return
+      const far = runner.distance * 0.15
+      const step = 3 * s
+      ctx.globalAlpha = 0.16
+      for (let px = 0; px < w; px += step) {
+        const wx = (px / s + far) / 46
+        const hgt = 8 + 16 * valueNoise(wx)
+        for (let py = groundY - hgt * s; py < groundY; py += step) ctx.fillRect(px, py, s, s)
+      }
+      // clouds: small pixel shapes, a little more visible than the hills
+      ctx.globalAlpha = 0.2
+      for (const c of clouds) {
+        CLOUDS[c.shape].forEach((row, r) => {
+          for (let i = 0; i < row.length; i++) {
+            if (row[i] === '#') ctx.fillRect((c.x + i) * s, groundY - (c.y - r) * s, s, s)
+          }
+        })
+      }
+    }
 
     const loop = (now: number) => {
       rafId = requestAnimationFrame(loop)
@@ -162,7 +191,7 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
       if (!talking) {
         animT += dt
         step(runner, dt, w / s)
-        moveDecor(dt)
+        moveClouds(dt)
       }
       draw(talking)
     }
@@ -170,19 +199,15 @@ export default function PekaRunner({ label, nickname, bubbles }: Props) {
     const start = async () => {
       const index: ObstacleFile[] = await fetch(`${BASE}/obstacles/index.json`).then((r) => r.json())
       const compact = index.filter((o) => o.w <= MAX_OBSTACLE_W)
-      const background: ObstacleFile[] = await fetch(`${BASE}/background/index.json`).then((r) => r.json())
-      const [imgs, frames, scenery] = await Promise.all([
+      const [imgs, frames] = await Promise.all([
         Promise.all(compact.map((o) => loadImage(`${BASE}/obstacles/${o.file}`))),
         Promise.all(Object.entries(FRAMES).map(async ([k, f]) => [k, await loadImage(`${BASE}/peka/${f}`)] as const)),
-        Promise.all(background.map((o) => loadImage(`${BASE}/background/${o.file}`))),
       ])
       if (disposed) return
       obstacleImgs = imgs
-      decorImgs = scenery
-      decorMeta = background
       frameImgs = Object.fromEntries(frames) as Record<keyof typeof FRAMES, HTMLImageElement>
       runner = createRunner(compact, Math.floor(Math.random() * 1e9) + 1)
-      spawnDecor(w / s || 60)
+      spawnClouds(w / s || 60)
       resize()
       if (!reduceMotion) {
         io = new IntersectionObserver(([entry]) => {

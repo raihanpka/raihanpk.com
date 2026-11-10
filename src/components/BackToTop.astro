@@ -48,18 +48,20 @@ const { float = false } = Astro.props
   .btt-label { opacity: 0; transform: translateY(8px); }
   .back-to-top:hover .btt-icon, .back-to-top:focus-visible .btt-icon { opacity: 0; transform: translate(-50%, calc(-50% - 1.25rem)); }
   .back-to-top:hover .btt-label, .back-to-top:focus-visible .btt-label { opacity: 1; transform: none; }
-  /* Two variants. The footer one shows from sm up. The float one shows below sm: round, icon only,
-     centered, and fixed to the screen. It is rendered outside the footer panel on purpose, because the
-     panel's backdrop-filter would make a fixed child follow the panel instead of the screen. */
-  @media (min-width: 640px) {
+  /* Two variants. The footer one shows on desktop (lg and up). The float one shows below lg, on phones and
+     tablets: round, icon only, fixed to the right of the screen where the old square button sat. It is
+     rendered outside the footer panel on purpose, because the panel's backdrop-filter would make a fixed
+     child follow the panel instead of the screen. */
+  @media (min-width: 1024px) {
     .back-to-top--float { display: none; }
   }
-  @media (max-width: 639px) {
+  @media (max-width: 1023px) {
     .back-to-top:not(.back-to-top--float) { display: none; }
     .back-to-top--float {
       position: fixed;
-      left: calc(50% - 1.375rem);
-      bottom: calc(1rem + env(safe-area-inset-bottom));
+      left: auto;
+      right: 1.25rem;
+      bottom: 6rem;
       z-index: 40;
       width: 2.75rem;
       border-radius: 9999px;

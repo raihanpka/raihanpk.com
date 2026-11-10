@@ -4,7 +4,6 @@ import Link from '@/components/Link.astro'
 import PostNavigation from '@/components/PostNavigation.astro'
 import TableOfContents from '@/components/TableOfContents.astro'
 import { badgeVariants } from '@/components/ui/Badge'
-import { Button } from '@/components/ui/Button'
 import { Separator } from '@/components/ui/Separator'
 import Layout from '@/layouts/Layout.astro'
 import { parseAuthors } from '@/lib/server-utils'
@@ -192,83 +191,4 @@ const jsonLd = [
     <PostNavigation prevPost={prevPost} nextPost={nextPost} />
   </div>
 
-  <Button
-    variant="outline"
-    size="icon"
-    className="group fixed bottom-24 md:bottom-28 right-5 md:right-8 z-40 hidden shadow-2"
-    id="scroll-to-top"
-    title="Scroll to top"
-    aria-label="Scroll to top"
-  >
-    <Icon
-      name="lucide:arrow-up"
-      class="mx-auto size-4 transition-all group-hover:-translate-y-0.5"
-    />
-  </Button>
-
-  <script>
-    document.addEventListener('astro:page-load', () => {
-      const scrollToTopButton = document.getElementById('scroll-to-top')
-      const footer = document.querySelector('footer')
-      
-      if (!scrollToTopButton || !footer) return
-
-      // Smooth scroll to top on click
-      const onScrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-      }
-      scrollToTopButton.addEventListener('click', onScrollToTop)
-
-      // Cache footer position
-      let footerTop = footer.offsetTop
-      let windowHeight = window.innerHeight
-      
-      // Update cached values on resize with debounce
-      let resizeTimeout: number | null = null
-      const updateSizes = () => {
-        footerTop = footer.offsetTop
-        windowHeight = window.innerHeight
-      }
-      
-      // Debounced resize handler
-      const handleResize = () => {
-        if (resizeTimeout !== null) {
-          window.clearTimeout(resizeTimeout)
-        }
-        resizeTimeout = window.setTimeout(updateSizes, 100)
-      }
-      
-      // Initial setup
-      updateSizes()
-      
-      // Throttled scroll handler
-      let ticking = false
-      const handleScroll = () => {
-        if (!ticking) {
-          window.requestAnimationFrame(() => {
-            const isFooterVisible = footerTop <= (window.scrollY + windowHeight)
-            const shouldShow = window.scrollY > 300 && !isFooterVisible
-            
-            scrollToTopButton.classList.toggle('hidden', !shouldShow)
-            ticking = false
-          })
-          ticking = true
-        }
-      }
-      
-      // Add event listeners
-      window.addEventListener('scroll', handleScroll, { passive: true })
-      window.addEventListener('resize', handleResize, { passive: true })
-      
-      // Cleanup
-      return () => {
-        scrollToTopButton.removeEventListener('click', onScrollToTop)
-        window.removeEventListener('scroll', handleScroll)
-        window.removeEventListener('resize', handleResize)
-        if (resizeTimeout !== null) {
-          window.clearTimeout(resizeTimeout)
-        }
-      }
-    })
-  </script>
 </Layout>
